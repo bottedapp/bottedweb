@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/classes:target/dependency/* app.botted.web
+web: java $JAVA_OPTS -cp target/classes:target/dependency/* app.botted.web -Dserver.port=$PORT
