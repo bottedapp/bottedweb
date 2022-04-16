@@ -1,0 +1,44 @@
+body {
+     margin: 0 auto;
+     background-color: #eb502f;
+}
+.loading, .result {
+    text-align:center;
+    font-face: system-ui;
+}
+
+ .top {
+     height: 53px;
+     width: 100%;
+     background-color: white;
+     z-index: 100;
+}
+ .content {
+     margin-top: 68px;
+     height: auto;
+     width: 100%;
+     text-align: center;
+}
+ .form {
+     text-align: center;
+}
+ input[name=u] {
+     height: 30px;
+     width: 200px;
+     background: white;
+     padding: 4px 15px;
+     border-style: none;
+     text-align: center;
+     font-size:1em;
+}
+ input[name=submit] {
+     background-color: white;
+     border: none;
+     color: black;
+     padding: 16px 32px;
+     text-decoration: none;
+     font-weight: 3em;
+     margin: 4px 2px;
+     cursor: pointer;
+     width: 134px;
+}
