@@ -57,7 +57,7 @@ public class User extends Reddit {
     //getters
 
     public String getName() {
-        return name;
+        return name.replace("\"","");
     }
 
     public String getId() {
@@ -222,7 +222,7 @@ public class User extends Reddit {
     @Override
     public String toString() {
         return "<h3 style=\"font-family:system-ui;\">User</h3><h4 style=\"font-family:system-ui;color:#fccfa6;\">" +
-                "<span style=\"color:#000000;\">user: </span>" + name.replace("\"","") + "<br>" +
+                "<span style=\"color:#000000;\">user: </span>" + name + "<br>" +
                 "<span style=\"color:#000000;\">id: </span>" + id.replace("\"","") + "<br>" +
                 "<span style=\"color:#000000;\">verified: </span>" + verified + "<br>" +
                 "<span style=\"color:#000000;\">has verified email: </span>" + has_verified_email + "<br>" +
