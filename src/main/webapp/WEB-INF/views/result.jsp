@@ -45,7 +45,7 @@
 	</div>
 	</div>
 	<div class="loading"><p th:utext="${isBot}"></div>
-	<table style="vertical-align: text-top;"><tr>
+	<table class="layout"><tr>
 	<td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${user}"></div></td>
 	<td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${comments}"></div></td>
 	<td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${submissions}"></div></td>

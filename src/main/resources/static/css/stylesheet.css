@@ -2,11 +2,6 @@ body {
      margin: 0 auto;
      background-color: #eb502f;
 }
-.loading, .result {
-    text-align:center;
-    font-face: system-ui;
-}
-
  .top {
      height: 53px;
      width: 100%;
@@ -41,4 +36,12 @@ body {
      margin: 4px 2px;
      cursor: pointer;
      width: 134px;
+}
+.loading, .result {
+    text-align:center;
+    font-face: system-ui;
+}
+.layout {
+    vertical-align: text-top;
+    width:100%;
 }
