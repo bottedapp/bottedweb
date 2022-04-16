@@ -21,19 +21,20 @@
 	<div class="top"><img src="/images/botted.png" width="140px"></div>
 	<div class="content"><img src="/images/bot.png" width="200px" align="center"><br>
 	<form action="/" method="post">
-	<input type="text" name="u" class="u" placeholder="user/comment/post/url"><br><br>
-	<input type="submit" name="submit" class="submit" value="Bot or Not?"><br><br>
+        <input type="text" name="u" class="u" placeholder="user/comment/post/url"><br><br>
+        <input type="submit" name="submit" class="submit" value="Bot or Not?"><br>
 	</form>
+	<div class="loading"><p th:utext="${isBot}"><br></div>
+	<input type="button" name="showdata" class="showdata" value="show data"><br>
 	</div>
-	</div>
-	<div class="loading"><p th:utext="${isBot}"></div>
-	<table class="layout"><tr>
-	<td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${user}"></div></td>
-	<td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${comments}"></div></td>
-	<td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${submissions}"></div></td>
-	</tr>
-	</table>
-	</div>
-	</div>
+	<div class="results">
+        <table class="layout">
+            <tr>
+                <td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${user}"></div></td>
+                <td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${comments}"></div></td>
+                <td width="33%" style="vertical-align: text-top;"><div class="result"><p th:utext="${submissions}"></div></td>
+                </tr>
+        </table>
+    </div>
 </body>
 </html>

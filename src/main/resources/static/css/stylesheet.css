@@ -9,7 +9,7 @@ body {
      z-index: 100;
 }
  .content {
-     margin-top: 68px;
+     margin-top: 30px;
      height: auto;
      width: 100%;
      text-align: center;
@@ -44,4 +44,8 @@ body {
 .layout {
     vertical-align: text-top;
     width:100%;
+}
+
+.results {
+    visibility: hidden;
 }
