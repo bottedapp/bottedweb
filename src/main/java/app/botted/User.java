@@ -56,9 +56,7 @@ public class User extends Reddit {
 
     //getters
 
-    public String getName() {
-        return name.replace("\"","");
-    }
+    public String getName() { return name; }
 
     public String getId() {
         return id;
@@ -202,8 +200,8 @@ public class User extends Reddit {
         JsonObject about = useEndpoint("/user/" + user +"/about");
         JsonObject data = (JsonObject) about.get("data");
         //User Info
-        name = String.valueOf(data.get("name"));
-        id = String.valueOf(data.get("id"));
+        name = String.valueOf(data.get("name")).replace("\"","");
+        id = String.valueOf(data.get("id")).replace("\"","");
         long utc = Long.parseLong(String.valueOf(data.get("created_utc").getAsInt()));
         created = new Date(utc * 1000);
         verified = Boolean.valueOf(String.valueOf(data.get("verified")));
@@ -223,7 +221,7 @@ public class User extends Reddit {
     public String toString() {
         return "<h3 style=\"font-family:system-ui;\">User</h3><h4 style=\"font-family:system-ui;color:#fccfa6;\">" +
                 "<span style=\"color:#000000;\">user: </span>" + name + "<br>" +
-                "<span style=\"color:#000000;\">id: </span>" + id.replace("\"","") + "<br>" +
+                "<span style=\"color:#000000;\">id: </span>" + id + "<br>" +
                 "<span style=\"color:#000000;\">verified: </span>" + verified + "<br>" +
                 "<span style=\"color:#000000;\">has verified email: </span>" + has_verified_email + "<br>" +
                 "<span style=\"color:#000000;\">premium: </span>" + is_gold + "<br>" +
