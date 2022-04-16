@@ -143,12 +143,14 @@ public class Submission extends User {
 
     @Override
     public String toString() {
-        return "<h2 style=\"font-family:system-ui;\">Submissions</h2><h3 style=\"font-family:system-ui;color:#fccfa6;\">" +
+        submissionSubredditss();
+        return "<h3 style=\"font-family:system-ui;\">Submissions</h3><h4 style=\"font-family:system-ui;color:#fccfa6;\">" +
                 "<span style=\"color:#000000;\">submission score: </span>" + submissionTotalScore + "<br>" +
+                "<span style=\"color:#000000;\">submissions compared: </span>" + subSubreddits.size() + "<br>" +
                 "<span style=\"color:#000000;\">popular subreddit: </span>" + popularSubmissionSubreddit.replace("\"","") + "<br>" +
                 "<span style=\"color:#000000;\">popular Subreddit count: </span>" + submissionSubredditCount + "<br>" +
                 "<span style=\"color:#000000;\">posts in r/FreeKarma4u: </span>" + freeKarma + "<br>" +
-                "<span style=\"color:#000000;\">submission subreddits: </span>" + subSubs + "</h3>";
+                "<span style=\"color:#000000;\">submission subreddits: </span>" + subSubs + "</h4>";
     }
 
     public String getResponse(String[] keyPhrase) {
