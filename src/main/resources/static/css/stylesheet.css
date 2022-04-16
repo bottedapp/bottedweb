@@ -2,6 +2,11 @@ body {
      margin: 0 auto;
      background-color: #eb502f;
 }
+.loading, .result {
+    text-align:center;
+    font-face: system-ui;
+}
+
  .top {
      height: 53px;
      width: 100%;
@@ -17,12 +22,14 @@ body {
  .form {
      text-align: center;
 }
- input[name=uname] {
+ input[name=u] {
      height: 30px;
      width: 200px;
      background: white;
      padding: 4px 15px;
      border-style: none;
+     text-align: center;
+     font-size:1em;
 }
  input[name=submit] {
      background-color: white;
