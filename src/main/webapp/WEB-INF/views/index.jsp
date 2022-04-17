@@ -18,12 +18,33 @@
 	<script src="/js/botted.js" defer></script>
 </head>
 <body>
-	<div class="top"><img src="/images/botted.png" width="140px"></div>
-	<div class="content"><img src="/images/bot.png" width="200px" align="center"><br>
-	<form action="/" method="post">
-	<input type="text" name="u" class="u" placeholder="user/comment/post/url"><br><br>
-	<input type="submit" name="submit" class="submit" value="Bot or Not?"><br><br>
-	</form>
+	<div class="top"><img src="/images/botted.png" width="140px">
+		<div class="hamburger" id="hamburger_menu">
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+		</div>
+		<section class="menu_body" id="menubody">
+			<div class="menu_body_item_wrapper">
+				<ul class="menu_list">
+					<li><a href="#">Home</a></li>
+					<li><a href="#">About</a></li>
+					<li><a href="http://github.com/bottedapp/botted">Github</a></li>
+					<li><a href="#">FAQ</a></li>
+					<li><a href="#">Contact Us</a></li>
+				</ul>
+			</div>
+		</section>
+	</div>
+	<div class="content"><img src="/images/bot.png" width="200px" align="center">
+		<br>
+		<form action="/" method="post">
+			<input type="text" name="u" class="u" placeholder="user/comment/post/url">
+			<br>
+			<br>
+			<input type="submit" name="submit" class="submit" value="Bot or Not?">
+			<br>
+			<br> </form>
 	</div>
 	</div>
 	<div class="loading"></div>

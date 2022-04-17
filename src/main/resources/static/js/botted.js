@@ -16,5 +16,11 @@ jQuery(document).ready(function($) {
         $('.results').toggle();
     });
 
+   var hamburger = $("#hamburger_menu");
+   var menu = $("#menubody");
+   $(hamburger).click(function (e) {
+     menu.toggleClass("open");
+     hamburger.toggleClass("open");
+   });
 
 });
