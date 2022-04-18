@@ -18,7 +18,7 @@
 	<script src="/js/botted.js" defer></script>
 </head>
 <body>
-	<div class="top"><img src="/images/botted.png" width="140px">
+	<div class="top"><img src="/images/logo.png">
 		<div class="hamburger" id="hamburger_menu">
 			<div class="line"></div>
 			<div class="line"></div>
@@ -36,7 +36,7 @@
 			</div>
 		</section>
 	</div>
-	<div class="content"><img src="/images/bot.png" width="200px" align="center">
+	<div class="content"><img src="/images/botted.png">
 		<br>
 		<form action="/" method="post">
 			<input type="text" name="u" class="u" placeholder="user/comment/post/url">

@@ -219,7 +219,7 @@ public class User extends Reddit {
 
     @Override
     public String toString() {
-        return "<h4 style=\"font-family:system-ui;\">User</h4><span style=\"font-family:system-ui;color:#fccfa6;\">" +
+        return "<h4 style=\"font-family:system-ui;\">User</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#000000;\">user: </span>" + name + "<br>" +
                 "<span style=\"color:#000000;\">id: </span>" + id + "<br>" +
                 "<span style=\"color:#000000;\">verified: </span>" + verified + "<br>" +

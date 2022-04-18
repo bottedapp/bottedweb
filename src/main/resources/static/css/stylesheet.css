@@ -1,13 +1,18 @@
 body {
 	margin: 0 auto;
-	background-color: #eb502f;
+	background-color: #dbe0e5;
 }
 
 .top {
-	height: 53px;
+	height: 48px;
 	width: 100%;
 	background-color: white;
 	z-index: 100;
+}
+.top img {
+    margin-top: 8px;
+    margin-left: 20px;
+    width: 100px;
 }
 
 .content {
@@ -15,6 +20,9 @@ body {
 	height: auto;
 	width: 100%;
 	text-align: center;
+}
+.content img {
+    width:120px;
 }
 
 .form {
@@ -44,7 +52,9 @@ input[name=submit] {
 }
 
 .loading,
-.result {
+.result,
+.isbot,
+.data {
 	text-align: center;
 	font-face: system-ui;
 }
@@ -59,8 +69,8 @@ input[name=submit] {
 }
 
 .hamburger {
-	width: 26px;
-	height: 18px;
+	width: 21px;
+	height: 14px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -69,7 +79,7 @@ input[name=submit] {
 	right: 8px;
 	top: 17px;
 	cursor: pointer;
-	transition: 0.3s all ease-in;
+	transition: 0s all ease-in;
 	z-index: 5555;
 }
 
@@ -78,7 +88,7 @@ input[name=submit] {
 	width: 100%;
 	background: #000000;
 	display: flex;
-	transition: 0.3s all ease-in;
+	transition: 0s all ease-in;
 	position: relative;
 	z-index: 2;
 }
@@ -92,7 +102,7 @@ input[name=submit] {
 	bottom: 0;
 	background: white;
 	width: 0;
-	transition: 0.3s all ease-in-out;
+	transition: 0s all ease-in-out;
 	z-index: 1;
 }
 
@@ -101,7 +111,7 @@ input[name=submit] {
 }
 
 .hamburger.open .line:nth-of-type(1) {
-	transform: translate(0px, 8px) rotate(45deg);
+	transform: translate(0px, 6px) rotate(45deg);
 }
 
 .hamburger.open .line:nth-of-type(2) {
@@ -110,12 +120,12 @@ input[name=submit] {
 }
 
 .hamburger.open .line:nth-of-type(3) {
-	transform: translate(0px, -7px) rotate(135deg);
+	transform: translate(0px, -5px) rotate(-45deg);
 }
 
 .menu_body {
 	position: fixed;
-	top: 53px;
+	top: 48px;
 	right: 0;
 	bottom: 0;
 	width: 200px;
@@ -123,7 +133,7 @@ input[name=submit] {
 	display: flex;
 	background: rgb(15 15 15 / 60%);
 	transform: translateX(100%);
-	transition: 0.3s all ease;
+	transition: 0s all ease;
 }
 
 .menu_body.open {

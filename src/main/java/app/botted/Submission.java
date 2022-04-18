@@ -144,7 +144,7 @@ public class Submission extends User {
     @Override
     public String toString() {
         submissionSubredditss();
-        return "<h4 style=\"font-family:system-ui;\">Submissions</h4><span style=\"font-family:system-ui;color:#fccfa6;\">" +
+        return "<h4 style=\"font-family:system-ui;\">Submissions</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#000000;\">submission score: </span>" + submissionTotalScore + "<br>" +
                 "<span style=\"color:#000000;\">posts compared: </span>" + subSubreddits.size() + "<br>" +
                 "<span style=\"color:#000000;\">popular subreddit: </span>" + popularSubmissionSubreddit.replace("\"","") + "<br>" +

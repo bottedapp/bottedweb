@@ -18,7 +18,7 @@
 	<script src="/js/botted.js" defer></script>
 </head>
 <body>
-	<div class="top"><img src="/images/botted.png" width="140px">
+	<div class="top"><img src="/images/logo.png">
 		<div class="hamburger" id="hamburger_menu">
 			<div class="line"></div>
 			<div class="line"></div>
@@ -36,7 +36,7 @@
 			</div>
 		</section>
 	</div>
-	<div class="content"><img src="/images/bot.png" width="200px" align="center">
+	<div class="content"><img src="/images/botted.png">
 		<br>
 		<form action="/" method="post">
 			<input type="text" name="u" class="u" placeholder="user/comment/post/url">
@@ -44,12 +44,12 @@
 			<br>
 			<input type="submit" name="submit" class="submit" value="Bot or Not?">
 			<br> </form>
-		<div class="loading">
-			<p th:utext="${isBot}">
-				<br>
-		</div>
+	</div>
+	<div class="loading"></div>
+	<div class="isbot"><p th:utext="${isBot}"></div>
+	<div class="data">
 		<input type="button" name="showdata" class="showdata" value="show data">
-		<br> </div>
+	</div>
 	<div class="results">
 		<table class="layout">
 			<tr>

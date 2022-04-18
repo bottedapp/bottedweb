@@ -123,7 +123,7 @@ public class Comment extends User {
     @Override
     public String toString() {
         commentSubredditss();
-        return "<h4 style=\"font-family:system-ui;\">Comments</h4><span style=\"font-family:system-ui;color:#fccfa6;\">" +
+        return "<h4 style=\"font-family:system-ui;\">Comments</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#000000;\">comment score: </span>" + commentTotalScore + "<br>" +
                 "<span style=\"color:#000000;\">comments compared: </span>" + commentSubreddits.size() + "<br>" +
                 "<span style=\"color:#000000;\">popular subreddit: </span>" + popularCommentSubreddit.replace("\"","") + "<br>" +
