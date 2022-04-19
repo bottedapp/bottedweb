@@ -37,12 +37,11 @@ input[name=u] {
     line-height: 17px;
     text-transform: unset;
     min-height: 32px;
-    min-width: 32px;
-    padding: 4px 16px;
+    min-width: 206px;
+    padding: 4px 20px;
     position: relative;
     border: 1px solid #d7dadc;
     background: #1A1A1B;
-    canvas: #030303;
     text-align: center;
     border-radius: 999px;
     box-sizing: border-box;
@@ -69,6 +68,10 @@ input[name=submit] {
     color: #000000;
 }
 
+button {
+    color: #000000;
+}
+
 .loading,
 .result,
 .isbot,
@@ -88,19 +91,20 @@ input[name=submit] {
 
 .showdata {
     font-family: Noto Sans,Arial,sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: unset;
     line-height: 17px;
     text-transform: unset;
-    padding: 2px 4px;
+    padding: 2px 5px;
     align-items: center;
     border-radius: 999px;
     box-sizing: border-box;
     position: relative;
-    background-color: #eb5528;
+    background-color: #d7dadc;
     border: none;
     color: #000000;
+    min-width:69px;
 }
 
 .hamburger {
