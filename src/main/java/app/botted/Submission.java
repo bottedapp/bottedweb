@@ -144,13 +144,13 @@ public class Submission extends User {
     @Override
     public String toString() {
         submissionSubredditss();
-        return "<h4 style=\"font-family:system-ui;\">Submissions</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
-                "<span style=\"color:#000000;\">submission score: </span>" + submissionTotalScore + "<br>" +
-                "<span style=\"color:#000000;\">posts compared: </span>" + subSubreddits.size() + "<br>" +
-                "<span style=\"color:#000000;\">popular subreddit: </span>" + popularSubmissionSubreddit.replace("\"","") + "<br>" +
-                "<span style=\"color:#000000;\">popular subreddit count: </span>" + submissionSubredditCount + "<br>" +
-                "<span style=\"color:#000000;\">posts in r/FreeKarma4u: </span>" + freeKarma + "<br>" +
-                "<span style=\"color:#000000;\">submission subreddits: </span>" + subSubs + "</span>";
+        return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Submissions</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
+                "<span style=\"color:#d7dadc;\">submission score: </span>" + submissionTotalScore + "<br>" +
+                "<span style=\"color:#d7dadc;\">posts compared: </span>" + subSubreddits.size() + "<br>" +
+                "<span style=\"color:#d7dadc;\">popular subreddit: </span>" + popularSubmissionSubreddit.replace("\"","") + "<br>" +
+                "<span style=\"color:#d7dadc;\">popular subreddit count: </span>" + submissionSubredditCount + "<br>" +
+                "<span style=\"color:#d7dadc;\">posts in r/FreeKarma4u: </span>" + freeKarma + "<br>" +
+                "<span style=\"color:#d7dadc;\">submission subreddits: </span>" + subSubs + "</span>";
     }
 
     public String getResponse(String[] keyPhrase) {

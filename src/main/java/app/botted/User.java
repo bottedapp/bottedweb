@@ -219,19 +219,19 @@ public class User extends Reddit {
 
     @Override
     public String toString() {
-        return "<h4 style=\"font-family:system-ui;\">User</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
-                "<span style=\"color:#000000;\">user: </span>" + name + "<br>" +
-                "<span style=\"color:#000000;\">id: </span>" + id + "<br>" +
-                "<span style=\"color:#000000;\">verified: </span>" + verified + "<br>" +
-                "<span style=\"color:#000000;\">has verified email: </span>" + has_verified_email + "<br>" +
-                "<span style=\"color:#000000;\">premium: </span>" + is_gold + "<br>" +
-                "<span style=\"color:#000000;\">mod: </span>" + is_mod + "<br>" +
-                "<span style=\"color:#000000;\">employee: </span>" + is_employee + "<br>" +
-                "<span style=\"color:#000000;\">awardee karma: </span>" + awardee_karma + "<br>" +
-                "<span style=\"color:#000000;\">awarder karma: </span>" + awarder_karma + "<br>" +
-                "<span style=\"color:#000000;\">link karma: </span>" + link_karma + "<br>" +
-                "<span style=\"color:#000000;\">comment_karma: </span>" + comment_karma + "<br>" +
-                "<span style=\"color:#000000;\">total karma: </span>" + total_karma + "<br>" +
-                "<span style=\"color:#000000;\">created: </span>" + sdf.format(created) + "</span>";
+        return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">User</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
+                "<span style=\"color:#d7dadc;\">user: </span>" + name + "<br>" +
+                "<span style=\"color:#d7dadc;\">id: </span>" + id + "<br>" +
+                "<span style=\"color:#d7dadc;\">verified: </span>" + verified + "<br>" +
+                "<span style=\"color:#d7dadc;\">has verified email: </span>" + has_verified_email + "<br>" +
+                "<span style=\"color:#d7dadc;\">premium: </span>" + is_gold + "<br>" +
+                "<span style=\"color:#d7dadc;\">mod: </span>" + is_mod + "<br>" +
+                "<span style=\"color:#d7dadc;\">employee: </span>" + is_employee + "<br>" +
+                "<span style=\"color:#d7dadc;\">awardee karma: </span>" + awardee_karma + "<br>" +
+                "<span style=\"color:#d7dadc;\">awarder karma: </span>" + awarder_karma + "<br>" +
+                "<span style=\"color:#d7dadc;\">link karma: </span>" + link_karma + "<br>" +
+                "<span style=\"color:#d7dadc;\">comment_karma: </span>" + comment_karma + "<br>" +
+                "<span style=\"color:#d7dadc;\">total karma: </span>" + total_karma + "<br>" +
+                "<span style=\"color:#d7dadc;\">created: </span>" + sdf.format(created) + "</span>";
     }
 }

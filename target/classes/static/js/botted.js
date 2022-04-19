@@ -2,8 +2,9 @@ jQuery(document).ready(function($) {
     $('.results').toggle();
 	$('.submit').click(function() {
         $( ".results" ).css("visibility","hidden");
-        $( ".showdata" ).css("visibility","hidden");
-        $( ".loading" ).html('<img src="/images/loading.gif">');
+        $( ".isbot" ).css("visibility","hidden");
+        $( ".data" ).css("visibility","hidden");
+        $( ".loading" ).html('<br><img src="/images/loading.gif" width="80">');
         $( ".result" ).html('');
     });
 

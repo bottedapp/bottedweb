@@ -18,7 +18,7 @@
 	<script src="/js/botted.js" defer></script>
 </head>
 <body>
-	<div class="top"><img src="/images/logo.png">
+	<div class="top"><img src="/images/bottedlogo-dark.png">
 		<div class="hamburger" id="hamburger_menu">
 			<div class="line"></div>
 			<div class="line"></div>
