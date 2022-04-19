@@ -1,6 +1,6 @@
 body {
 	margin: 0 auto;
-	background-color: #000000;
+	background-color: #363636;
 }
 
 .top {
@@ -8,7 +8,6 @@ body {
 	width: 100%;
 	background-color: #1A1A1B;
 	z-index: 100;
-	border-bottom: 1px solid #343636;
 }
 .top img {
     margin-top: 8px;
@@ -23,7 +22,7 @@ body {
 	text-align: center;
 }
 .content img {
-    width:120px;
+    width:70px;
 }
 
 .form {
@@ -48,6 +47,7 @@ input[name=u] {
     border-radius: 999px;
     box-sizing: border-box;
     color:#d7dadc;
+    margin-top:8px;
 }
 
 input[name=submit] {
@@ -66,6 +66,7 @@ input[name=submit] {
     position: relative;
     background-color: #eb5528;
     border: none;
+    color: #000000;
 }
 
 .loading,
@@ -99,6 +100,7 @@ input[name=submit] {
     position: relative;
     background-color: #eb5528;
     border: none;
+    color: #000000;
 }
 
 .hamburger {
@@ -158,7 +160,7 @@ input[name=submit] {
 
 .menu_body {
 	position: fixed;
-	top: 49px;
+	top: 48px;
 	right: 0;
 	bottom: 0;
 	width: 200px;

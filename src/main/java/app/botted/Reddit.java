@@ -106,10 +106,16 @@ public class Reddit {
         if (input.startsWith("t2_")) {
             //fullname
         }
-        if (input.startsWith("u/") || input.contains("/u/") || input.contains("/user/")) {
+        if (input.startsWith("u/") || input.contains("/u/")) {
             String[] e = input.split("u/");
             String[] f = e[1].split("/");
             user = f[0];
+        }
+
+        if (input.contains("/user/")) {
+            String[] g = input.split("user/");
+            String[] h = g[1].split("/");
+            user = h[0];
         }
 
         if (input.contains("/comments/") && !input.contains("/comment/")) {
