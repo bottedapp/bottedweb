@@ -15,9 +15,10 @@ public class Submission extends User {
      */
     protected String input, result;
     private double submissionTotalScore;
-    private String subSubs, popularSubmissionSubreddit = "";
+    private String popularSubmissionSubreddit = "";
     private int submissionSubredditCount, freeKarma = 0;
     private ArrayList subSubreddits = new ArrayList();
+    private String subSubs = "";
     private int upvotes, downvotes;
 
     /**
@@ -144,10 +145,16 @@ public class Submission extends User {
 
         Map<String, String> submissionMap = new LinkedHashMap<>();
         for (JsonElement item : children) {
+            //posts
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
             String id = String.valueOf(dat.getAsJsonObject().get("id"));
             String body = String.valueOf(dat.getAsJsonObject().get("selftext"));
             submissionMap.put(id, body);
+            //upvotes/downvotes
+            int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
+            int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
+            upvotes += ups;
+            downvotes += downs;
         }
 
         if (submissionMap.size() <= 1) {
@@ -165,15 +172,6 @@ public class Submission extends User {
                     submissionSubredditCount = Collections.frequency(subSubreddits, a);
                     popularSubmissionSubreddit = (String) a;
                 }
-            }
-
-            Map<Integer, Integer> upsDowns = new LinkedHashMap<>();
-            for (JsonElement item : children) {
-                JsonObject dats = (JsonObject) item.getAsJsonObject().get("data");
-                int ups = Integer.valueOf(String.valueOf(dats.getAsJsonObject().get("ups")));
-                int downs = Integer.valueOf(String.valueOf(dats.getAsJsonObject().get("downs")));
-                upvotes += ups;
-                downvotes += downs;
             }
 
             double postScore = 0;

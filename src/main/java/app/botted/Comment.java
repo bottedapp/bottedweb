@@ -16,6 +16,7 @@ public class Comment extends User {
     private int commentSubredditCount = 0;
     private ArrayList commentSubreddits = new ArrayList<>();
     private String commentSubs = "";
+    private int upvotes, downvotes;
 
     /**
      * Default constructor
@@ -125,6 +126,11 @@ public class Comment extends User {
             String id = String.valueOf(dat.getAsJsonObject().get("id"));
             String body = String.valueOf(dat.getAsJsonObject().get("body"));
             commentMap.put(id, body);
+            //upvotes/downvotes
+            int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
+            int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
+            upvotes += ups;
+            downvotes += downs;
         }
 
         if (commentMap.size() <= 1) {
@@ -180,6 +186,8 @@ public class Comment extends User {
                 "<span style=\"color:#d7dadc;\">comments compared: </span>" + commentSubreddits.size() + "<br>" +
                 "<span style=\"color:#d7dadc;\">popular subreddit: </span>" + popularCommentSubreddit.replace("\"","") + "<br>" +
                 "<span style=\"color:#d7dadc;\">popular subreddit count: </span>" + commentSubredditCount + "<br>" +
+                "<span style=\"color:#d7dadc;\">comment upvotes: </span>" + upvotes + "<br>" +
+                "<span style=\"color:#d7dadc;\">comment downvotes: </span>" + downvotes + "<br>" +
                 "<span style=\"color:#d7dadc;\">comment subreddits: </span>" + commentSubs + "</spam>";
     }
 }
