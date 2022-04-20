@@ -191,14 +191,14 @@ public class Submission extends User {
             submissionTotalScore = postScore / postScoreCount;
         }
     }
-    public void submissionSubredditss() {
+    public void subSubredditslist() {
         for (Object subs : subSubreddits)
             subSubs += subs.toString().replace("\"","") + ", ";
     }
 
     @Override
     public String toString() {
-        submissionSubredditss();
+        subSubredditslist();
         return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Submissions</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#d7dadc;\">submission score: </span>" + submissionTotalScore + "<br>" +
                 "<span style=\"color:#d7dadc;\">posts compared: </span>" + subSubreddits.size() + "<br>" +

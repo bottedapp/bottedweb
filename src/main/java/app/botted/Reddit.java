@@ -13,6 +13,9 @@ import com.google.gson.*;
 
 public class Reddit {
 
+    /**
+     * Protected and private variables
+     */
     private final String BASE_URL = "https://www.reddit.com";
     private final String OAUTH_URL = "https://oauth.reddit.com";
     private final String clientId = "GgPNctP2KQdth-iX6aMGUQ";
@@ -22,46 +25,67 @@ public class Reddit {
     private long expirationDate;
     protected String subreddit;
 
+    /**
+     * Default constructor
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public Reddit() throws IOException, InterruptedException {
         ensureConnection();
     }
 
+    /**
+     * Constructor with parameters
+     * @param subreddit The specific subreddit
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public Reddit(String subreddit) throws IOException, InterruptedException {
         this.subreddit = subreddit;
         ensureConnection();
     }
 
-    //getters
+    //getter
 
     public String getSubreddit() {
         return subreddit;
     }
 
-    //setters
+    //setter
 
     public void setSubreddit(String subreddit) {
         this.subreddit = subreddit;
     }
 
+    /**
+     * Gets access token
+     * Generates authorization header
+     * Opens the connection and gets response from the server
+     * Sets access token and expiration time
+     * @throws IOException
+     */
     public void connect() throws IOException {
-        // Get access token
         Connection conn = Jsoup.connect(BASE_URL + "/api/v1/access_token").ignoreContentType(true).ignoreHttpErrors(true).method(Method.POST).userAgent(userAgent);
         conn.data("grant_type", "client_credentials");
 
-        // Generate the Authorization header
         String combination = clientId + ":" + clientSecret;
         combination = Base64.getEncoder().encodeToString(combination.getBytes());
         conn.header("Authorization", "Basic " + combination);
 
-        // Open the connection and get response from server
         Response res = conn.execute();
         JsonObject object = JsonParser.parseString(res.body()).getAsJsonObject();
 
-        // Set access token and expiration time
         this.token = object.get("access_token").getAsString();
         this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
     }
 
+    /**
+     * Use end point to ensure connection
+     * @param endpointPath Path for end point
+     * @return The end point
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public JsonObject useEndpoint(String endpointPath) throws IOException, InterruptedException {
         ensureConnection();
         Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
@@ -69,6 +93,13 @@ public class Reddit {
         return JsonParser.parseString(connection.execute().body()).getAsJsonObject();
     }
 
+    /**
+     * Use end point submission for connection
+     * @param endpointPath Path for end point
+     * @return The end point submission
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public JsonArray useEndpointSubmission(String endpointPath) throws IOException, InterruptedException {
         ensureConnection();
         Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
@@ -77,7 +108,7 @@ public class Reddit {
     }
 
     /**
-     * Ensure the connection is Authenticated
+     * Ensure the connection is authenticated
      * @throws IOException
      * @throws InterruptedException
      * @throws AuthenticationException
@@ -94,7 +125,7 @@ public class Reddit {
     }
 
     /**
-     * Get username from input valie
+     * Get username from input validate it
      * @returns username
      */
     public String readInput(String input) throws IOException, InterruptedException {
@@ -102,9 +133,6 @@ public class Reddit {
         String endpoint = "";
         if (!input.contains("/")) {
             user = input;
-        }
-        if (input.startsWith("t2_")) {
-            //fullname
         }
         if (input.startsWith("u/") || input.contains("/u/")) {
             String[] e = input.split("u/");
@@ -164,6 +192,12 @@ public class Reddit {
         return user;
     }
 
+    /**
+     * Finding similarities between comments (referenced as Strings)
+     * @param x String 1 to compare to
+     * @param y String 2 to compare to
+     * @return
+     */
     public static double findSimilarity(String x, String y) {
         double maxLength = Double.max(x.length(), y.length());
         if (maxLength > 0)
@@ -171,6 +205,10 @@ public class Reddit {
         return 0.0;
     }
 
+    /**
+     * Send results to string
+     * @return BASE_URL, OAUTH_URL, clientId, clientSecret, userAgent, token, expirationDate, and subreddit
+     */
     @Override
     public String toString() {
         return "Reddit{" +

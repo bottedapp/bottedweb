@@ -7,6 +7,9 @@ import java.util.Date;
 
 public class User extends Reddit {
 
+    /**
+     * Protected and private variables
+     */
     protected String name, id, user;
     protected Boolean verified, has_verified_email, is_gold, is_mod, is_employee;
     protected int awardee_karma, awarder_karma, link_karma, comment_karma, total_karma;
@@ -16,16 +19,38 @@ public class User extends Reddit {
     private boolean upvote;
     private boolean downvote;
 
+    /**
+     * Default constructor
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public User() throws IOException, InterruptedException {
         super();
         this.user = "spez";
     }
 
+    /**
+     * Constructor with parameters
+     * @param user The username
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public User(String user) throws IOException, InterruptedException {
         this.user = user;
         value(user);
+        new Submission(user);
+        new Comment(user);
     }
 
+    /**
+     * Constructor for human user
+     * @param subreddit The specific subreddit
+     * @param comment A comment on a post
+     * @param upvote An upvote on a post or comment
+     * @param downvote A downvote on a post or comment
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public User(String subreddit, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException { // human
         super();
         this.subreddit = subreddit;
@@ -33,6 +58,30 @@ public class User extends Reddit {
         this.upvote = upvote;
         this.downvote = downvote;
     }
+
+    /**
+     * Constructor
+     * @param subreddit The specific subreddit
+     * @param name The name associated with the account
+     * @param id The account ID
+     * @param user The username
+     * @param verified If account is verified
+     * @param has_verified_email If E-mail has been verified on account
+     * @param is_gold If account has gold status
+     * @param is_mod Is a moderator
+     * @param is_employee Is an employee
+     * @param awardee_karma Karma gained from awardee
+     * @param awarder_karma Karma gained from awarder
+     * @param link_karma Karma gained from link
+     * @param comment_karma Karma gained from comment
+     * @param total_karma Total karma on account
+     * @param created When the account was created
+     * @param comment A comment on a post
+     * @param upvote An upvote on a post or comment
+     * @param downvote A downvote on a post or comment
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public User(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, Date created, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException {
         super(subreddit);
         this.name = name;
@@ -56,7 +105,9 @@ public class User extends Reddit {
 
     //getters
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     public String getId() {
         return id;
@@ -196,6 +247,12 @@ public class User extends Reddit {
         this.downvote = downvote;
     }
 
+    /**
+     * Collects information about user and user account
+     * @param user Username
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void value(String user) throws IOException, InterruptedException {
         JsonObject about = useEndpoint("/user/" + user +"/about");
         JsonObject data = (JsonObject) about.get("data");
@@ -217,6 +274,10 @@ public class User extends Reddit {
         total_karma = Integer.parseInt(String.valueOf(data.get("total_karma")));
     }
 
+    /**
+     * Send results to string
+     * @return name, id, user, verified, has_verified_email, is_gold, is_mod, is_employee, awardee_karma, awarder_karma, link_karma, created, sdf, comment, upvote, and downvote
+     */
     @Override
     public String toString() {
         return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">User</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +

@@ -27,8 +27,8 @@ public class WebController {
             Reddit reddit = new Reddit();
             String redditor = reddit.readInput(name);
             Reddit user = new User(redditor);
-            Reddit comments = new Comment(redditor);
-            Reddit submissions = new Submission(redditor);
+            User comments = new Comment(redditor);
+            User submissions = new Submission(redditor);
             Reddit bot = new Bot();
             Reddit human = new Human();
             String isaBot = "<h1 style=\"font-family:system-ui;color:#d7dadc\">" + ((User) user).getName() + Bot.isBot(((Comment) comments).getCommentTotalScore()) + "</h1>";
