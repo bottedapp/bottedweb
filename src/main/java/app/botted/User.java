@@ -38,8 +38,6 @@ public class User extends Reddit {
     public User(String user) throws IOException, InterruptedException {
         this.user = user;
         value(user);
-        new Submission(user);
-        new Comment(user);
     }
 
     /**

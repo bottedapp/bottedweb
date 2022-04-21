@@ -2,7 +2,6 @@ package app.botted.controller;
 
 import app.botted.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
@@ -31,7 +30,7 @@ public class WebController {
             User submissions = new Submission(redditor);
             Reddit bot = new Bot();
             Reddit human = new Human();
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#d7dadc\">" + ((User) user).getName() + Bot.isBot(((Comment) comments).getCommentTotalScore()) + "</h1>";
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((User) user).getName() + Bot.isBot(((Comment) comments).getCommentTotalScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
