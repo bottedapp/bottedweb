@@ -17,12 +17,6 @@ public class WebController {
         if (name == null)
             return "index";
         else {
-            ArrayList keyPhrase = new ArrayList();
-            keyPhrase.add("This is a good bot!");
-            keyPhrase.add("This is a bad bot!");
-            keyPhrase.add("This is a human!");
-            keyPhrase.add("Undetermined.");
-
             Reddit reddit = new Reddit();
             String redditor = reddit.readInput(name);
             Reddit user = new User(redditor);

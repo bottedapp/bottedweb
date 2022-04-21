@@ -12,9 +12,14 @@ public class Bot extends User {
     private boolean bot;
     private boolean goodBot;
     private boolean badBot;
+    private static ArrayList keyPhrase = new ArrayList();
 
     public Bot() throws IOException, InterruptedException {
         super();
+        keyPhrase.add("This is a good bot!");
+        keyPhrase.add("This is a bad bot!");
+        keyPhrase.add("This is a human!");
+        keyPhrase.add("Undetermined.");
     }
     public static String isBot(double score) {
         if (score >= 0.4)
