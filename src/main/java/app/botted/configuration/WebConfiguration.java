@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
 public class WebConfiguration {
@@ -23,5 +26,21 @@ public class WebConfiguration {
         resolver.setSuffix(suffix);
         resolver.setViewClass(JstlView.class);
         return resolver;
+    }
+
+    @Bean
+    public SpringResourceTemplateResolver templateResolver() {
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setCacheable(false);
+        templateResolver.setPrefix(prefix);
+        templateResolver.setSuffix(suffix);
+        return templateResolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine springTemplateEngine = new SpringTemplateEngine();
+        springTemplateEngine.addTemplateResolver(templateResolver());
+        return springTemplateEngine;
     }
 }
