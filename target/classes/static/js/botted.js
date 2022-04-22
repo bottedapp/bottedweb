@@ -1,10 +1,11 @@
 jQuery(document).ready(function($) {
     $('.results').toggle();
 	$('.submit').click(function() {
-        $( ".usage" ).css("visibility","hidden");
-        $( ".results" ).css("visibility","hidden");
-        $( ".isbot" ).css("visibility","hidden");
-        $( ".data" ).css("visibility","hidden");
+	    $( ".error" ).detach();
+        $( ".usage" ).detach();
+        $( ".results" ).detach();
+        $( ".isbot" ).detach();
+        $( ".data" ).detach();
         $( ".loading" ).html('<br><img src="/images/loading.gif" width="80">');
         $( ".result" ).html('');
     });

@@ -83,6 +83,18 @@ button {
     font-family: Noto Sans,Arial,sans-serif;
     background: #1a1a1b;
 }
+.error {
+    margin: auto;
+    width: fit-content;
+    border: 2px solid #d7dadc;
+    padding: 10px;
+    font-size: 22px;
+    text-align: left;
+    color: #d7dadc;
+    font-family: Noto Sans,Arial,sans-serif;
+    background: #1a1a1b;
+    margin-bottom:10px;
+}
 
 .loading,
 .result,
