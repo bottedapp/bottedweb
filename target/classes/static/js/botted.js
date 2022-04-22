@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
     $('.results').toggle();
 	$('.submit').click(function() {
+        $( ".usage" ).css("visibility","hidden");
         $( ".results" ).css("visibility","hidden");
         $( ".isbot" ).css("visibility","hidden");
         $( ".data" ).css("visibility","hidden");
