@@ -157,7 +157,7 @@ public class Submission extends User {
             downvotes += downs;
         }
 
-        if (submissionMap.size() <= 1) {
+        if (submissionMap.size() < 1) {
             //do nothing
         } else {
             for (JsonElement item : children) {
@@ -173,7 +173,10 @@ public class Submission extends User {
                     popularSubmissionSubreddit = (String) a;
                 }
             }
-
+        }
+        if (submissionMap.size() <= 1) {
+            //do nothing
+        } else {
             double postScore = 0;
             int postScoreCount = 0;
             for (Map.Entry<String, String> posts : submissionMap.entrySet()) {

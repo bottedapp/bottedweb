@@ -18,7 +18,7 @@
 	<script src="/js/botted.js" defer></script>
 </head>
 <body>
-	<div class="top"><img src="/images/bottedlogo-dark.png">
+	<div class="top"><a href="https://botted.app"><img src="/images/bottedlogo-dark.png"></a>
 		<div class="hamburger" id="hamburger_menu">
 			<div class="line"></div>
 			<div class="line"></div>
@@ -39,7 +39,7 @@
 	<div class="content"><img src="/images/botted.png">
 		<br>
 		<form action="/" method="post">
-			<input type="text" name="u" class="u" placeholder="user/comment/post/url">
+			<input type="text" name="u" class="u" placeholder="user/submission/comment">
 			<br>
 			<br>
 			<input type="submit" name="submit" class="submit" value="Bot or Not?">
@@ -48,5 +48,20 @@
 	</div>
 	</div>
 	<div class="loading"></div>
+	<div class="usage">
+                <b>Usage:</b>
+                <br>
+                <b># username</b><br>
+                <font color="#eb5528">&lt;username&gt;</font> | u/<font color="#eb5528">&lt;username&gt;</font> | reddit.com/u/<font color="#eb5528">&lt;username&gt;</font> | reddit.com/user/<font color="#eb5528">&lt;username&gt;</font><br>
+                https://www.reddit.com/user/bottedapp<br>
+                <br>
+                <b># submission</b><br>
+                reddit.com/r/<font color="#eb5528">&lt;subreddit&gt;</font>/comments/<font color="#eb5528">&lt;id&gt;</font>/<font color="#eb5528">&lt;title&gt;</font><br>
+                https://www.reddit.com/r/test/comments/u8fq2o/comment/i5kycps/<br>
+                <br>
+                <b># comment</b><br>
+                reddit.com/r/<font color="#eb5528">&lt;subreddit&gt;</font>/comments/<font color="#eb5528">&lt;id&gt;</font>/comment/<font color="#eb5528">&lt;id&gt;</font><br>
+                https://www.reddit.com/r/test/comments/u8fq2o/comment/i5kycps/<br>
+    </div>
 </body>
 </html>

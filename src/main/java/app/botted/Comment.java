@@ -133,7 +133,7 @@ public class Comment extends User {
             downvotes += downs;
         }
 
-        if (commentMap.size() <= 1) {
+        if (commentMap.size() < 1) {
             //do nothing
         } else {
             for (JsonElement item : children) {

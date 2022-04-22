@@ -18,7 +18,7 @@
 	<script src="/js/botted.js" defer></script>
 </head>
 <body>
-	<div class="top"><img src="/images/bottedlogo-dark.png">
+	<div class="top"><a href="https://botted.app"><img src="/images/bottedlogo-dark.png"></a>
 		<div class="hamburger" id="hamburger_menu">
 			<div class="line"></div>
 			<div class="line"></div>
@@ -39,7 +39,7 @@
 	<div class="content"><img src="/images/botted.png">
 		<br>
 		<form action="/" method="post">
-			<input type="text" name="u" class="u" placeholder="user/comment/post/url">
+			<input type="text" name="u" class="u" placeholder="user/submission/comment">
 			<br>
 			<br>
 			<input type="submit" name="submit" class="submit" value="Bot or Not?">

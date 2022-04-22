@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Controller
 public class WebController {
