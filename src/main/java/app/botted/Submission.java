@@ -202,10 +202,10 @@ public class Submission extends User {
         subSubredditslist();
         return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Submissions</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#d7dadc;\">submission score: </span>" + submissionTotalScore + "<br>" +
-                "<span style=\"color:#d7dadc;\">posts compared: </span>" + subSubreddits.size() + "<br>" +
+                "<span style=\"color:#d7dadc;\">submissions compared: </span>" + subSubreddits.size() + "<br>" +
                 "<span style=\"color:#d7dadc;\">popular subreddit: </span>" + popularSubmissionSubreddit.replace("\"","") + "<br>" +
                 "<span style=\"color:#d7dadc;\">popular subreddit count: </span>" + submissionSubredditCount + "<br>" +
-                "<span style=\"color:#d7dadc;\">posts in r/FreeKarma4You: </span>" + freeKarma + "<br>" +
+                "<span style=\"color:#d7dadc;\">submissions in r/FreeKarma4You: </span>" + freeKarma + "<br>" +
                 "<span style=\"color:#d7dadc;\">submission upvotes: </span>" + upvotes + "<br>" +
                 "<span style=\"color:#d7dadc;\">submission downvotes: </span>" + downvotes + "<br>" +
                 "<span style=\"color:#d7dadc;\">submission subreddits: </span>" + subSubs + "</span>";
