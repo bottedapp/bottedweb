@@ -289,7 +289,7 @@ public class User extends Reddit {
                 "<span style=\"color:#d7dadc;\">awardee karma: </span>" + awardee_karma + "<br>" +
                 "<span style=\"color:#d7dadc;\">awarder karma: </span>" + awarder_karma + "<br>" +
                 "<span style=\"color:#d7dadc;\">link karma: </span>" + link_karma + "<br>" +
-                "<span style=\"color:#d7dadc;\">comment_karma: </span>" + comment_karma + "<br>" +
+                "<span style=\"color:#d7dadc;\">comment karma: </span>" + comment_karma + "<br>" +
                 "<span style=\"color:#d7dadc;\">total karma: </span>" + total_karma + "<br>" +
                 "<span style=\"color:#d7dadc;\">created: </span>" + sdf.format(created) + "</span>";
     }
