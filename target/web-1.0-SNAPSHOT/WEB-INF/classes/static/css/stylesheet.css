@@ -37,7 +37,7 @@ input[name=u] {
     line-height: 17px;
     text-transform: unset;
     min-height: 32px;
-    min-width: 206px;
+    min-width: 222px;
     padding: 4px 20px;
     position: relative;
     border: 1px solid #d7dadc;
@@ -70,6 +70,18 @@ input[name=submit] {
 
 button {
     color: #000000;
+}
+
+.usage {
+    margin: auto;
+    width: fit-content;
+    border: 2px solid #d7dadc;
+    padding: 10px;
+    font-size: 11px;
+    text-align: left;
+    color: #d7dadc;
+    font-family: Noto Sans,Arial,sans-serif;
+    background: #1a1a1b;
 }
 
 .loading,
