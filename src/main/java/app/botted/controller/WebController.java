@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -43,7 +42,6 @@ public class WebController {
             return "result";
         }
     }
-
 
     private void db() throws SQLException {
             Statement stmt = dataSource.getConnection().createStatement();
