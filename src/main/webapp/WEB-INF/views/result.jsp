@@ -53,17 +53,17 @@
 	<div class="results">
 		<table class="layout">
 			<tr style="width:100%;">
-				<td width="33%" style="max-width:33%;vertical-align: text-top;display:inline-block;">
+				<td width="33%" style="max-width:33%;min-width:33%;vertical-align: text-top;display:inline-block;">
 					<div class="result">
 						<p th:utext="${user}">
 					</div>
 				</td>
-				<td width="33%" style="max-width:33%;vertical-align: text-top;display:inline-block;">
+				<td width="33%" style="max-width:33%;min-width:33%;vertical-align: text-top;display:inline-block;">
 					<div class="result">
 						<p th:utext="${comments}">
 					</div>
 				</td>
-				<td width="33%" style="max-width:33%;vertical-align: text-top;display:inline-block;">
+				<td width="33%" style="max-width:33%;min-width:33%;vertical-align: text-top;display:inline-block;">
 					<div class="result">
 						<p th:utext="${submissions}">
 					</div>

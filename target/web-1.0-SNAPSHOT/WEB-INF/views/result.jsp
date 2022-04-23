@@ -52,18 +52,18 @@
 	</div>
 	<div class="results">
 		<table class="layout">
-			<tr>
-				<td width="33%" style="vertical-align: text-top;">
+			<tr style="width:100%;">
+				<td width="33%" style="max-width:33%;vertical-align: text-top;display:table-cell;">
 					<div class="result">
 						<p th:utext="${user}">
 					</div>
 				</td>
-				<td width="33%" style="vertical-align: text-top;">
+				<td width="33%" style="max-width:33%;vertical-align: text-top;display:table-cell;">
 					<div class="result">
 						<p th:utext="${comments}">
 					</div>
 				</td>
-				<td width="33%" style="vertical-align: text-top;">
+				<td width="33%" style="max-width:33%;vertical-align: text-top;display:table-cell;">
 					<div class="result">
 						<p th:utext="${submissions}">
 					</div>
