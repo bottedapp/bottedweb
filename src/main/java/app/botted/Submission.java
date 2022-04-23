@@ -3,7 +3,7 @@ package app.botted;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -20,6 +20,9 @@ public class Submission extends User {
     private ArrayList subSubreddits = new ArrayList();
     private String subSubs = "";
     private int upvotes, downvotes;
+    Map<String, String> submissionMap = new LinkedHashMap<>();
+    Map<String, String> linkMap = new LinkedHashMap<>();
+    String submissionList;
 
     /**
      * Constructor with parameters
@@ -143,13 +146,14 @@ public class Submission extends User {
         JsonObject data = (JsonObject) submitted.get("data");
         JsonArray children = (JsonArray) data.get("children");
 
-        Map<String, String> submissionMap = new LinkedHashMap<>();
         for (JsonElement item : children) {
             //posts
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
             String id = String.valueOf(dat.getAsJsonObject().get("id"));
             String body = String.valueOf(dat.getAsJsonObject().get("selftext"));
+            String permalink = String.valueOf(dat.getAsJsonObject().get("permalink"));
             submissionMap.put(id, body);
+            linkMap.put(id, permalink);
             //upvotes/downvotes
             int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
             int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
@@ -197,9 +201,23 @@ public class Submission extends User {
             subSubs += subs.toString().replace("\"","") + ", ";
     }
 
+    public void submissionsList() {
+        submissionList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;border: #363636 solid 4px;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
+        int i=0;
+        for (Map.Entry<String, String> post : submissionMap.entrySet()) {
+            if (i%2==0)
+                submissionList += "<tr style=\"display:flex; #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" + StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
+            else
+                submissionList += "<tr style=\"display:flex; #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#d7dadc;width: 100%;max-width: 100%;display: block;word-wrap: break-word;color:#1A1A1B;\">" + StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
+            i++;
+        }
+        submissionList += "</tbody></table>";
+    }
+
     @Override
     public String toString() {
         subSubredditslist();
+        submissionsList();
         return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Submissions</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#d7dadc;\">submission score: </span>" + submissionTotalScore + "<br>" +
                 "<span style=\"color:#d7dadc;\">submissions compared: </span>" + subSubreddits.size() + "<br>" +
@@ -208,7 +226,8 @@ public class Submission extends User {
                 "<span style=\"color:#d7dadc;\">submissions in r/FreeKarma4You: </span>" + freeKarma + "<br>" +
                 "<span style=\"color:#d7dadc;\">submission upvotes: </span>" + upvotes + "<br>" +
                 "<span style=\"color:#d7dadc;\">submission downvotes: </span>" + downvotes + "<br>" +
-                "<span style=\"color:#d7dadc;\">submission subreddits: </span>" + subSubs + "</span>";
+                "<span style=\"color:#d7dadc;\">submission subreddits: </span>" + subSubs + "<br>" +
+                "<span style=\"color:#d7dadc;\">submissions: </span>" + submissionList + "</span>";
     }
 
     public String getResponse(String[] keyPhrase) {

@@ -10,7 +10,7 @@ public class User extends Reddit {
     /**
      * Protected and private variables
      */
-    protected String name, id, user;
+    protected String name, id, user, icon;
     protected Boolean verified, has_verified_email, is_gold, is_mod, is_employee;
     protected int awardee_karma, awarder_karma, link_karma, comment_karma, total_karma;
     protected Date created;
@@ -257,6 +257,7 @@ public class User extends Reddit {
         //User Info
         name = String.valueOf(data.get("name")).replace("\"","");
         id = String.valueOf(data.get("id")).replace("\"","");
+        icon = String.valueOf(data.get("icon_img"));
         long utc = Long.parseLong(String.valueOf(data.get("created_utc").getAsInt()));
         created = new Date(utc * 1000);
         verified = Boolean.valueOf(String.valueOf(data.get("verified")));
@@ -279,6 +280,7 @@ public class User extends Reddit {
     @Override
     public String toString() {
         return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">User</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
+                "<img src=" + icon + " width=\"50px\"><br>" +
                 "<span style=\"color:#d7dadc;\">user: </span>" + name + "<br>" +
                 "<span style=\"color:#d7dadc;\">id: </span>" + id + "<br>" +
                 "<span style=\"color:#d7dadc;\">verified: </span>" + verified + "<br>" +

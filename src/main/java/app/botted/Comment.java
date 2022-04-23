@@ -3,6 +3,8 @@ package app.botted;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -17,6 +19,9 @@ public class Comment extends User {
     private ArrayList commentSubreddits = new ArrayList<>();
     private String commentSubs = "";
     private int upvotes, downvotes;
+    Map<String, String> commentMap = new LinkedHashMap<>();
+    Map<String, String> linkMap = new LinkedHashMap<>();
+    String commentList = "";
 
     /**
      * Default constructor
@@ -120,12 +125,13 @@ public class Comment extends User {
         JsonObject data = comments.getAsJsonObject("data");
         JsonArray children = data.getAsJsonArray("children");
 
-        Map<String, String> commentMap = new LinkedHashMap<>();
         for (JsonElement item : children) {
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
             String id = String.valueOf(dat.getAsJsonObject().get("id"));
             String body = String.valueOf(dat.getAsJsonObject().get("body"));
+            String permalink = String.valueOf(dat.getAsJsonObject().get("permalink"));
             commentMap.put(id, body);
+            linkMap.put(id, permalink);
             //upvotes/downvotes
             int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
             int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
@@ -174,6 +180,21 @@ public class Comment extends User {
             commentSubs += comment.toString().replace("\"","") + ", ";
     }
 
+    public void commentsList() {
+        commentList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;border: #363636 solid 4px;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
+        int i=0;
+        for (Map.Entry<String, String> comment : commentMap.entrySet()) {
+            if (i%2==0)
+                commentList += "<tr style=\"display:flex;border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"><td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" + StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(comment.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
+            else
+                commentList += "<tr style=\"display:flex;border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"><td style=\"background:#d7dadc;width: 100%;max-width: 100%;display: block;word-wrap: break-word;color:#1A1A1B;\">" + StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(comment.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
+        i++;
+        }
+        commentList += "</tbody></table>";
+    }
+
+
+
     /**
      * Send results to string
      * @return commentTotalScore, popularCommentSubreddit, commentSubredditCount, and commentSubreddits
@@ -181,13 +202,16 @@ public class Comment extends User {
     @Override
     public String toString() {
         commentSubredditsList();
-        return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Comments</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
+        commentsList();
+        String s = "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Comments</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#d7dadc;\">comment score: </span>" + commentTotalScore + "<br>" +
                 "<span style=\"color:#d7dadc;\">comments compared: </span>" + commentSubreddits.size() + "<br>" +
-                "<span style=\"color:#d7dadc;\">popular subreddit: </span>" + popularCommentSubreddit.replace("\"","") + "<br>" +
+                "<span style=\"color:#d7dadc;\">popular subreddit: </span>" + popularCommentSubreddit.replace("\"", "") + "<br>" +
                 "<span style=\"color:#d7dadc;\">popular subreddit count: </span>" + commentSubredditCount + "<br>" +
                 "<span style=\"color:#d7dadc;\">comment upvotes: </span>" + upvotes + "<br>" +
                 "<span style=\"color:#d7dadc;\">comment downvotes: </span>" + downvotes + "<br>" +
-                "<span style=\"color:#d7dadc;\">comment subreddits: </span>" + commentSubs + "</spam>";
+                "<span style=\"color:#d7dadc;\">comment subreddits: </span>" + commentSubs + "<br>" +
+                "<span style=\"color:#d7dadc;\">comments: </span>" + commentList + "</span>";
+        return s;
     }
 }
