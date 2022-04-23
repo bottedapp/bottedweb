@@ -206,9 +206,9 @@ public class Submission extends User {
         int i=0;
         for (Map.Entry<String, String> post : submissionMap.entrySet()) {
             if (i%2==0)
-                submissionList += "<tr style=\"display:flex; #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" + StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
+                submissionList += "<tr style=\"display:block; #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" + StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
             else
-                submissionList += "<tr style=\"display:flex; #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#d7dadc;width: 100%;max-width: 100%;display: block;word-wrap: break-word;color:#1A1A1B;\">" + StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
+                submissionList += "<tr style=\"display:block; #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#d7dadc;width: 100%;max-width: 100%;display: block;word-wrap: break-word;color:#1A1A1B;\">" + StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
             i++;
         }
         submissionList += "</tbody></table>";

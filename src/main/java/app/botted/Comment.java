@@ -185,9 +185,9 @@ public class Comment extends User {
         int i=0;
         for (Map.Entry<String, String> comment : commentMap.entrySet()) {
             if (i%2==0)
-                commentList += "<tr style=\"display:flex;border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"><td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" + StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(comment.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
+                commentList += "<tr style=\"display:block;border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"><td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" + StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(comment.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
             else
-                commentList += "<tr style=\"display:flex;border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"><td style=\"background:#d7dadc;width: 100%;max-width: 100%;display: block;word-wrap: break-word;color:#1A1A1B;\">" + StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(comment.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
+                commentList += "<tr style=\"display:block;border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"><td style=\"background:#d7dadc;width: 100%;max-width: 100%;display: block;word-wrap: break-word;color:#1A1A1B;\">" + StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(comment.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
         i++;
         }
         commentList += "</tbody></table>";

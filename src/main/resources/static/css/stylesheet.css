@@ -111,14 +111,27 @@ button {
 	font-face: system-ui;
 }
 
-.layout {
-	vertical-align: text-top;
-	width: 100%;
-}
-
 .results {
 	visibility: hidden;
+	text-align:center;
 }
+
+.results:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.result {
+display: inline-block;
+vertical-align: text-top;
+width:30.33%;
+max-width:30.33%;
+min-width:30.33%;
+overflow-wrap: break-word;
+padding:.5%;
+}
+
 
 .showdata {
     font-family: Noto Sans,Arial,sans-serif;
