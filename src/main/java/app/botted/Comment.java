@@ -16,18 +16,20 @@ public class Comment extends User {
      */
     private double commentTotalScore;
     private String popularCommentSubreddit = "";
-    private int commentSubredditCount = 0;
-    private ArrayList commentSubreddits = new ArrayList<>();
     private String commentSubs = "";
+    private String commentList = "";
+    private int commentSubredditCount = 0;
     private int upvotes, downvotes;
     private final SimpleDateFormat sdf = new SimpleDateFormat("M/dd/Y h:mm:ss a");
+    private ArrayList commentSubreddits = new ArrayList<>();
     Map<String, String> commentMap = new LinkedHashMap<>();
     Map<String, String> linkMap = new LinkedHashMap<>();
     Map<String, String> titleMap = new LinkedHashMap<>();
     Map<String, String> createdMap = new LinkedHashMap<>();
     Map<String, String> subredditMap = new LinkedHashMap<>();
     Map<String, String> authorMap = new LinkedHashMap<>();
-    String commentList = "";
+    Map<String, Integer> upvotesMap = new LinkedHashMap<>();
+    Map<String, Integer> downvotesMap = new LinkedHashMap<>();
 
     /**
      * Default constructor
@@ -108,13 +110,9 @@ public class Comment extends User {
         this.commentTotalScore = commentTotalScore;
     }
 
-    public void setPopularCommentSubreddit(String popularCommentSubreddit) {
-        this.popularCommentSubreddit = popularCommentSubreddit;
-    }
+    public void setPopularCommentSubreddit(String popularCommentSubreddit) { this.popularCommentSubreddit = popularCommentSubreddit; }
 
-    public void setCommentSubredditCount(int commentSubredditCount) {
-        this.commentSubredditCount = commentSubredditCount;
-    }
+    public void setCommentSubredditCount(int commentSubredditCount) { this.commentSubredditCount = commentSubredditCount; }
 
     public void setCommentSubreddits(ArrayList commentSubreddits) {
         this.commentSubreddits = commentSubreddits;
@@ -140,6 +138,8 @@ public class Comment extends User {
             String permalink = String.valueOf(dat.getAsJsonObject().get("permalink"));
             String title = StringEscapeUtils.unescapeJava(String.valueOf(dat.getAsJsonObject().get("link_title")));
             long utc = Long.parseLong(String.valueOf(dat.get("created").getAsInt()));
+            int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
+            int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
 
             created = new Date(utc * 1000);
             String date = sdf.format(created);
@@ -150,9 +150,8 @@ public class Comment extends User {
             createdMap.put(id, date);
             subredditMap.put(id, subreddit.substring(1,subreddit.length()-1));
             authorMap.put(id, author.substring(1,author.length()-1));
-            //upvotes/downvotes
-            int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
-            int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
+            upvotesMap.put(id, ups);
+            downvotesMap.put(id, downs);
             upvotes += ups;
             downvotes += downs;
         }
@@ -191,9 +190,9 @@ public class Comment extends User {
         int i = 1;
         for (Object subreddit : commentSubreddits) {
             if (i == commentSubreddits.size()) {
-                commentSubs += "<a href=\"http://www.reddit.com/" + subreddit.toString().replace("\"", "") + "\" target=\"_blank\">" + subreddit.toString().replace("\"", "") + "</a>";
+                commentSubs += "<a href=\"http://reddit.com/" + subreddit.toString().replace("\"", "") + "\" target=\"_blank\">" + subreddit.toString().replace("\"", "") + "</a>";
             } else {
-                commentSubs += "<a href=\"http://www.reddit.com/" + subreddit.toString().replace("\"", "") + "\" target=\"_blank\">" + subreddit.toString().replace("\"", "") + "</a>, ";
+                commentSubs += "<a href=\"http://reddit.com/" + subreddit.toString().replace("\"", "") + "\" target=\"_blank\">" + subreddit.toString().replace("\"", "") + "</a>, ";
             }
             i++;
         }
@@ -201,19 +200,27 @@ public class Comment extends User {
 
     public void commentsList() {
         commentList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;border: #363636 solid 4px;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
-        int i=0;
+        int i = 0;
         for (Map.Entry<String, String> comment : commentMap.entrySet()) {
-            if (i%2==0)
-                commentList += "<tr style=\"display:block; border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\"><strong>" + titleMap.get(comment.getKey()) + "</strong> by <a href=\"http://reddit.com/user/" + authorMap.get(comment.getKey()) + "\" target=\"_blank\">u/" + authorMap.get(comment.getKey()) + "</a><br><br>" + StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n","<br>").replace("\\", "") + "<br><br>" + "<a href=\"https://www.reddit.com" + subredditMap.get(comment.getKey()) + "\" target=\"_blank\">" + subredditMap.get(comment.getKey()) + "</a> | " + createdMap.get(comment.getKey()) + " | <a href=\"https://www.reddit.com" + linkMap.get(comment.getKey()).replace("\"","") + "\" target=\"_blank\">permalink</a></td></tr>";
-            else
-                commentList += "<tr style=\"display:block; border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#d7dadc;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#1A1A1B;\"><strong>" + titleMap.get(comment.getKey()) + "</strong> by <a href=\"http://reddit.com/user/" + authorMap.get(comment.getKey()) + "\" target=\"_blank\">u/" + authorMap.get(comment.getKey()) + "</a><br><br>" + StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n","<br>").replace("\\", "") + "<br><br>" + "<a href=\"https://www.reddit.com" + subredditMap.get(comment.getKey()) + "\" target=\"_blank\">" + subredditMap.get(comment.getKey()) + "</a> | " + createdMap.get(comment.getKey()) + " | <a href=\"https://www.reddit.com" + linkMap.get(comment.getKey()).replace("\"","") + "\" target=\"_blank\">permalink</a></td></tr>";
-
-        i++;
+            if (i % 2 == 0) {
+                commentList += "<tr style=\"display:block; border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"\">" +
+                        "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" +
+                        "<strong>" + titleMap.get(comment.getKey()) + "</strong> by <a href=\"http://reddit.com/user/" + authorMap.get(comment.getKey()) + "\" target=\"_blank\">u/" + authorMap.get(comment.getKey()) + "</a><br><br>" +
+                        StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
+                        "upvotes: " + upvotesMap.get(comment.getKey()) + " | downvotes: " + downvotesMap.get(comment.getKey()) + "<br>" +
+                        "<a href=\"https://reddit.com" + subredditMap.get(comment.getKey()) + "\" target=\"_blank\">" + subredditMap.get(comment.getKey()) + "</a> | " + createdMap.get(comment.getKey()) + " | <a href=\"https://reddit.com" + linkMap.get(comment.getKey()).replace("\"", "") + "\" target=\"_blank\">permalink</a></td></tr>";
+            } else {
+                commentList += "<tr style=\"display:block; border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"\">" +
+                        "<td style=\"background:#d7dadc;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#1A1A1B;\">" +
+                        "<strong>" + titleMap.get(comment.getKey()) + "</strong> by <a href=\"http://reddit.com/user/" + authorMap.get(comment.getKey()) + "\" target=\"_blank\">u/" + authorMap.get(comment.getKey()) + "</a><br><br>" +
+                        StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
+                        "upvotes: " + upvotesMap.get(comment.getKey()) + " | downvotes: " + downvotesMap.get(comment.getKey()) + "<br>" +
+                        "<a href=\"https://reddit.com" + subredditMap.get(comment.getKey()) + "\" target=\"_blank\">" + subredditMap.get(comment.getKey()) + "</a> | " + createdMap.get(comment.getKey()) + " | <a href=\"https://reddit.com" + linkMap.get(comment.getKey()).replace("\"", "") + "\" target=\"_blank\">permalink</a></td></tr>";
+            }
+            i++;
         }
         commentList += "</tbody></table>";
     }
-
-
 
     /**
      * Send results to string
@@ -223,7 +230,7 @@ public class Comment extends User {
     public String toString() {
         commentSubredditsList();
         commentsList();
-        String s = "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Comments</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
+        return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Comments</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#d7dadc;\">comment score: </span>" + commentTotalScore + "<br>" +
                 "<span style=\"color:#d7dadc;\">comments compared: </span>" + commentSubreddits.size() + "<br>" +
                 "<span style=\"color:#d7dadc;\">popular subreddit: </span><a href=\"https://reddit.com/" + popularCommentSubreddit.replace("\"", "") + "\" target=\"_blank\">" + popularCommentSubreddit.replace("\"", "") + "</a><br>" +
@@ -232,6 +239,5 @@ public class Comment extends User {
                 "<span style=\"color:#d7dadc;\">comment downvotes: </span>" + downvotes + "<br>" +
                 "<span style=\"color:#d7dadc;\">comment subreddits: </span>" + commentSubs + "<br>" +
                 "<span style=\"color:#d7dadc;\">comments: </span>" + commentList + "</span>";
-        return s;
     }
 }
