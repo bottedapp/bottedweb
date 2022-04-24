@@ -99,7 +99,29 @@ input[name=submit] {
 button {
     color: #000000;
 }
-
+.rand {
+    position: absolute;
+    right: 52px;
+    top: 12px;
+}
+.random {
+    font-family: Noto Sans,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: unset;
+    line-height: 17px;
+    text-transform: unset;
+    min-height: 25px;
+    min-width: 24px;
+    padding: 2px 9px;
+    align-items: center;
+    border-radius: 999px;
+    box-sizing: border-box;
+    position: relative;
+    background-color: #d7dadc;
+    border: none;
+    color: #000000;
+}
 .usage {
     margin: auto;
     width: fit-content;
