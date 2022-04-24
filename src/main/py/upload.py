@@ -15,6 +15,6 @@ bots = rd(conn,cur).retrive_bot_names()
 
 for bot in bots:
     score = rd(conn,cur).retrieve_bot_score(bot)
-    CommentPreprocessorUpload(bot,conn,cur,score).what()
+    CommentPreprocessorUpload(bot,conn,cur,score).upload()
 
     

@@ -6,6 +6,7 @@ from getData import RetrieveData
 import psycopg2 as psy
 import numpy as np
 from psycopg2.extensions import register_adapter, AsIs
+import pickle
 
 class CommentPreprocessor:
     def __init__(self,user,connection,cursor):
@@ -42,18 +43,17 @@ class CommentPreprocessorUpload:
         self.cur = cursor
         self.user = bot
         self.score = score
-        self.seq = CommentPreprocessor(self.user,self.conn,self.cur).tokenize()
+        self.seq = pickle.dumps(CommentPreprocessor(self.user,self.conn,self.cur).tokenize())
         register_adapter(np.ndarray, self.addapt_numpy_array)
 
     def upload(self):
         query = """INSERT INTO prepro_data VALUES (%s,%s,%s);"""
-        self.cur.execute(query,(self.user,self.score,self.seq[0]))
+        self.cur.execute(query,(self.user,self.score,self.seq))
         self.conn.commit()
 
     def addapt_numpy_array(self,array):
         return AsIs(tuple(array))
     
-    def what(self):
-        print(type(self.seq))
+
 
    
