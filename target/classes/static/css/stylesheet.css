@@ -3,6 +3,27 @@ body {
 	background-color: #363636;
 }
 
+a:link {
+  color: #eb5528;
+  text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+  color: #eb5528;
+}
+
+/* mouse over link */
+a:hover {
+  color: #eb5528;
+  text-decoration: underline;
+}
+
+/* selected link */
+a:active {
+  color: #eb5528;
+}
+
 .top {
     top: 0px;
 	height: 48px;
@@ -78,7 +99,34 @@ input[name=submit] {
 button {
     color: #000000;
 }
-
+.rand {
+    display: flex;
+    position: absolute;
+    right: 52px;
+    height: 48px;
+}
+.rand form{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.random {
+    font-family: Noto Sans,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: unset;
+    line-height: 17px;
+    text-transform: unset;
+    min-height: 25px;
+    min-width: 24px;
+    padding: 2px 9px;
+    align-items: center;
+    border-radius: 999px;
+    box-sizing: border-box;
+    position: relative;
+    background-color: #d7dadc;
+    border: none;
+    color: #000000;
+}
 .usage {
     margin: auto;
     width: fit-content;

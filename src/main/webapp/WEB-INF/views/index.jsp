@@ -19,6 +19,12 @@
 </head>
 <body>
 	<div class="top"><a href="https://botted.app"><img src="/images/bottedlogo-dark.png"></a>
+			<div class="rand">
+                <form action="/" method="post">
+                    <input type="hidden" name="random" class="random" value="random">
+                    <input type="submit" name="random" class="random" value="random">
+                </form>
+            </div>
 		<div class="hamburger" id="hamburger_menu">
 			<div class="line"></div>
 			<div class="line"></div>
@@ -45,7 +51,6 @@
 			<input type="submit" name="submit" class="submit" value="Bot or Not?">
 			<br>
 			<br> </form>
-	</div>
 	</div>
 	<div class="loading"></div>
 	<div class="usage">
