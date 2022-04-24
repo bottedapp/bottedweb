@@ -1,5 +1,7 @@
 package app.botted;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -10,7 +12,7 @@ public class User extends Reddit {
     /**
      * Protected and private variables
      */
-    protected String name, id, user, icon, url;
+    protected String name, id, user, icon, url, description;
     protected Boolean verified, has_verified_email, is_gold, is_mod, is_employee;
     protected int awardee_karma, awarder_karma, link_karma, comment_karma, total_karma;
     protected Date created;
@@ -258,6 +260,7 @@ public class User extends Reddit {
         name = String.valueOf(data.get("name")).replace("\"","");
         id = String.valueOf(data.get("id")).replace("\"","");
         icon = String.valueOf(data.get("icon_img"));
+        description = String.valueOf(data.get("public_description"));
         long utc = Long.parseLong(String.valueOf(data.get("created_utc").getAsInt()));
         created = new Date(utc * 1000);
         verified = Boolean.valueOf(String.valueOf(data.get("verified")));
@@ -296,4 +299,5 @@ public class User extends Reddit {
                 "<span style=\"color:#d7dadc;\">total karma: </span>" + total_karma + "<br>" +
                 "<span style=\"color:#d7dadc;\">created: </span>" + sdf.format(created) + "</span>";
     }
+
 }

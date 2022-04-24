@@ -10,6 +10,16 @@ jQuery(document).ready(function($) {
         $( ".result" ).html('');
     });
 
+    	$('.random').click(function() {
+    	    $( ".error" ).detach();
+            $( ".usage" ).detach();
+            $( ".results" ).detach();
+            $( ".isbot" ).detach();
+            $( ".data" ).detach();
+            $( ".loading" ).html('<br><img src="/images/loading.gif" width="80">');
+            $( ".result" ).html('');
+        });
+
     $('.showdata').click(function() {
         $( ".results" ).css("visibility","visible");
         if ($(this).val() == "show data")

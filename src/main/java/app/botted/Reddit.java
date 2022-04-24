@@ -205,6 +205,20 @@ public class Reddit {
         return 0.0;
     }
 
+    public String random() throws IOException, InterruptedException {
+        JsonObject random = useEndpoint("/r/all/comments");
+        JsonObject data = (JsonObject) random.get("data");
+        JsonArray children = data.getAsJsonArray("children");
+        String author = null;
+        for (JsonElement item : children) {
+            JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
+            author = String.valueOf(dat.getAsJsonObject().get("author"));
+
+        }
+        return author.substring(1,author.length()-1);
+    }
+
+
     /**
      * Send results to string
      * @return BASE_URL, OAUTH_URL, clientId, clientSecret, userAgent, token, expirationDate, and subreddit
