@@ -30,7 +30,8 @@ public class Comment extends User {
     Map<String, String> authorMap = new LinkedHashMap<>();
     Map<String, Integer> upvotesMap = new LinkedHashMap<>();
     Map<String, Integer> downvotesMap = new LinkedHashMap<>();
-
+    Map<String, Boolean> isOriginalMap = new LinkedHashMap<>();
+    Map<String, Boolean> nsfwMap = new LinkedHashMap<>();
     /**
      * Default constructor
      * @throws IOException
@@ -140,6 +141,8 @@ public class Comment extends User {
             long utc = Long.parseLong(String.valueOf(dat.get("created").getAsInt()));
             int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
             int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
+            boolean isOriginal = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("is_original_content")));
+            boolean nsfw = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("over_18")));
 
             created = new Date(utc * 1000);
             String date = sdf.format(created);
@@ -152,6 +155,8 @@ public class Comment extends User {
             authorMap.put(id, author.substring(1,author.length()-1));
             upvotesMap.put(id, ups);
             downvotesMap.put(id, downs);
+            isOriginalMap.put(id, isOriginal);
+            nsfwMap.put(id, nsfw);
             upvotes += ups;
             downvotes += downs;
         }
@@ -199,25 +204,14 @@ public class Comment extends User {
     }
 
     public void commentsList() {
-        commentList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;border: #363636 solid 4px;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
-        int i = 0;
+        commentList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
         for (Map.Entry<String, String> comment : commentMap.entrySet()) {
-            if (i % 2 == 0) {
-                commentList += "<tr style=\"display:block; border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"\">" +
-                        "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" +
-                        "<strong>" + titleMap.get(comment.getKey()) + "</strong> by <a href=\"http://reddit.com/user/" + authorMap.get(comment.getKey()) + "\" target=\"_blank\">u/" + authorMap.get(comment.getKey()) + "</a><br><br>" +
-                        StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
-                        "upvotes: " + upvotesMap.get(comment.getKey()) + " | downvotes: " + downvotesMap.get(comment.getKey()) + "<br>" +
-                        "<a href=\"https://reddit.com" + subredditMap.get(comment.getKey()) + "\" target=\"_blank\">" + subredditMap.get(comment.getKey()) + "</a> | " + createdMap.get(comment.getKey()) + " | <a href=\"https://reddit.com" + linkMap.get(comment.getKey()).replace("\"", "") + "\" target=\"_blank\">permalink</a></td></tr>";
-            } else {
-                commentList += "<tr style=\"display:block; border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"\">" +
-                        "<td style=\"background:#d7dadc;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#1A1A1B;\">" +
-                        "<strong>" + titleMap.get(comment.getKey()) + "</strong> by <a href=\"http://reddit.com/user/" + authorMap.get(comment.getKey()) + "\" target=\"_blank\">u/" + authorMap.get(comment.getKey()) + "</a><br><br>" +
-                        StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
-                        "upvotes: " + upvotesMap.get(comment.getKey()) + " | downvotes: " + downvotesMap.get(comment.getKey()) + "<br>" +
-                        "<a href=\"https://reddit.com" + subredditMap.get(comment.getKey()) + "\" target=\"_blank\">" + subredditMap.get(comment.getKey()) + "</a> | " + createdMap.get(comment.getKey()) + " | <a href=\"https://reddit.com" + linkMap.get(comment.getKey()).replace("\"", "") + "\" target=\"_blank\">permalink</a></td></tr>";
-            }
-            i++;
+            commentList += "<tr style=\"display:block; border-bottom: #363636 solid 15px;\"\">" +
+                    "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;border: #d7dadc solid 1px;\">" +
+                    "<strong>" + titleMap.get(comment.getKey()) + "</strong> by <a href=\"http://reddit.com/user/" + authorMap.get(comment.getKey()) + "\" target=\"_blank\">u/" + authorMap.get(comment.getKey()) + "</a><br><br>" +
+                    StringEscapeUtils.unescapeJava(comment.getValue()).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
+                    "upvotes: " + upvotesMap.get(comment.getKey()) + " | downvotes: " + downvotesMap.get(comment.getKey()) + " | nsfw: " + nsfwMap.get(comment.getKey()) + "<br>" +
+                    "<a href=\"https://reddit.com" + subredditMap.get(comment.getKey()) + "\" target=\"_blank\">" + subredditMap.get(comment.getKey()) + "</a> | " + createdMap.get(comment.getKey()) + " | <a href=\"https://reddit.com" + linkMap.get(comment.getKey()).replace("\"", "") + "\" target=\"_blank\">permalink</a></td></tr>";
         }
         commentList += "</tbody></table>";
     }

@@ -31,6 +31,10 @@ public class Submission extends User {
     Map<String, Integer> commentsMap = new LinkedHashMap<>();
     Map<String, Integer> upvotesMap = new LinkedHashMap<>();
     Map<String, Integer> downvotesMap = new LinkedHashMap<>();
+    Map<String, Double> upvoteRatioMap = new LinkedHashMap<>();
+    Map<String, Boolean> isOriginalMap = new LinkedHashMap<>();
+    Map<String, Integer> crosspostsMap = new LinkedHashMap<>();
+    Map<String, Boolean> nsfwMap = new LinkedHashMap<>();
 
     /**
      * Constructor with parameters
@@ -159,9 +163,15 @@ public class Submission extends User {
             String url = String.valueOf(dat.getAsJsonObject().get("url_overridden_by_dest"));
             int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
             int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
+            double upvoteRatio = Double.valueOf(String.valueOf(dat.getAsJsonObject().get("upvote_ratio")));
             long utc = Long.parseLong(String.valueOf(dat.get("created").getAsInt()));
             int numComments = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("num_comments")));
-            if (body.length() > 3)
+            boolean isOriginal = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("is_original_content")));
+            int crossposts = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("num_crossposts")));
+            boolean nsfw = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("over_18")));
+
+
+            if (body.length() > 3 || body != "\"ul\"")
                 submissionMap.put(id, body.substring(1,body.length()-1));
             else
                 submissionMap.put(id, url.substring(1,url.length()-1));
@@ -173,7 +183,11 @@ public class Submission extends User {
             subredditMap.put(id, subreddit.substring(1,subreddit.length()-1));
             upvotesMap.put(id, ups);
             downvotesMap.put(id, downs);
+            upvoteRatioMap.put(id, upvoteRatio);
             commentsMap.put(id, numComments);
+            isOriginalMap.put(id, isOriginal);
+            crosspostsMap.put(id, crossposts);
+            nsfwMap.put(id, nsfw);
             upvotes += ups;
             downvotes += downs;
         }
@@ -227,24 +241,15 @@ public class Submission extends User {
     }
 
     public void submissionsList() {
-        submissionList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;border: #363636 solid 4px;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
-        int i=0;
+        submissionList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
         for (Map.Entry<String, String> post : submissionMap.entrySet()) {
-            if (i % 2 == 0)
-                submissionList += "<tr style=\"display:block;border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"\">" +
-                        "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" +
-                        "<strong>" + titleMap.get(post.getKey()) + "</strong><br><br>" +
-                        StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><br>" +
-                        "upvotes: " + upvotesMap.get(post.getKey()) + " | downvotes: " + downvotesMap.get(post.getKey()) + " | comments: " + commentsMap.get(post.getKey()) + "<br>" +
-                        "<a href=\"https://reddit.com/" + subredditMap.get(post.getKey()) + "\" target=\"_blank\">" + subredditMap.get(post.getKey()) + "</a> | " + createdMap.get(post.getKey()) + " | <a style=\"color:#eb5528\" href=\"https://reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\" target=\"_blank\">permalink</a></td></tr>";
-            else
-                submissionList += "<tr style=\"display:block;border: #363636 solid 4px;border-bottom: #363636 solid 4px;\"\">" +
-                        "<td style=\"background:#d7dadc;width: 100%;max-width: 100%;display: block;word-wrap: break-word;color:#1A1A1B;\">" +
-                        "<strong>" + titleMap.get(post.getKey()) + "</strong><br><br>" +
-                        StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><br>" +
-                        "upvotes: " + upvotesMap.get(post.getKey()) + " | downvotes: " + downvotesMap.get(post.getKey()) + " | comments: " + commentsMap.get(post.getKey()) + "<br>" +
-                        "<a href=\"https://reddit.com/" + subredditMap.get(post.getKey()) + "\" target=\"_blank\">" + subredditMap.get(post.getKey()) + "</a> | " + createdMap.get(post.getKey()) + " | <a style=\"color:#eb5528\" href=\"https://reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\" target=\"_blank\">permalink</a></td></tr>";
-            i++;
+            submissionList += "<tr style=\"display:block;border-bottom: #363636 solid 15px;\"\">" +
+                    "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;border: #d7dadc solid 1px;\">" +
+                    "<strong>" + titleMap.get(post.getKey()) + "</strong><br><br>" +
+                    StringEscapeUtils.unescapeJava(post.getValue()).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
+                    "original: " + isOriginalMap.get(post.getKey()) + " | " + "crossposts: " + crosspostsMap.get(post.getKey()) + " | comments: " + commentsMap.get(post.getKey()) + "<br>" +
+                    "upvotes: " + upvotesMap.get(post.getKey()) + " | downvotes: " + downvotesMap.get(post.getKey()) + " | ratio: " + upvoteRatioMap.get(post.getKey()) + " | nsfw: " + nsfwMap.get(post.getKey()) + "<br>" +
+                    "<a href=\"https://reddit.com/" + subredditMap.get(post.getKey()) + "\" target=\"_blank\">" + subredditMap.get(post.getKey()) + "</a> | " + createdMap.get(post.getKey()) + " | <a style=\"color:#eb5528\" href=\"https://reddit.com" + linkMap.get(post.getKey()).replace("\"", "") + "\" target=\"_blank\">permalink</a></td></tr>";
         }
         submissionList += "</tbody></table>";
     }
