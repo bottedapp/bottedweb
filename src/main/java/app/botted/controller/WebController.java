@@ -19,9 +19,25 @@ public class WebController {
     private DataSource dataSource;
 
     @RequestMapping("/")
-    public String index(Model m, @RequestParam(value = "u", required = false) String name) throws IOException, InterruptedException, SQLException {
-        if (name == null)
+    public String index(Model m, @RequestParam(value = "u", required = false) String name, String random) throws IOException, InterruptedException, SQLException {
+        if (name == null && random == null)
             return "index";
+        else if (random !=  null) {
+            Reddit reddit = new Reddit();
+            String redditor = reddit.random();
+            Reddit user = new User(redditor);
+            User comments = new Comment(redditor);
+            User submissions = new Submission(redditor);
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((User) user).getName() + Bot.isBot(((Comment) comments).getCommentTotalScore()) + "</h1>";
+
+            m.addAttribute("uname", name);
+            m.addAttribute("user", user);
+            m.addAttribute("comments", comments);
+            m.addAttribute("submissions", submissions);
+            m.addAttribute("isBot", isaBot);
+
+            return "result";
+        }
         else {
             Reddit reddit = new Reddit();
             String redditor = reddit.readInput(name);

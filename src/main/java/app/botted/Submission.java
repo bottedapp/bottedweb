@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Submission extends User {
@@ -13,16 +14,27 @@ public class Submission extends User {
     /**
      * Protected and private variables
      */
-    protected String input, result;
     private double submissionTotalScore;
     private String popularSubmissionSubreddit = "";
-    private int submissionSubredditCount, freeKarma = 0;
-    private ArrayList subSubreddits = new ArrayList();
+    private String input, result;
     private String subSubs = "";
+    private String submissionList;
+    private int submissionSubredditCount, freeKarma = 0;
     private int upvotes, downvotes;
+    private final SimpleDateFormat sdf = new SimpleDateFormat("M/dd/Y h:mm:ss a");
+    private ArrayList subSubreddits = new ArrayList();
     Map<String, String> submissionMap = new LinkedHashMap<>();
     Map<String, String> linkMap = new LinkedHashMap<>();
-    String submissionList;
+    Map<String, String> titleMap = new LinkedHashMap<>();
+    Map<String, String> createdMap = new LinkedHashMap<>();
+    Map<String, String> subredditMap = new LinkedHashMap<>();
+    Map<String, Integer> commentsMap = new LinkedHashMap<>();
+    Map<String, Integer> upvotesMap = new LinkedHashMap<>();
+    Map<String, Integer> downvotesMap = new LinkedHashMap<>();
+    Map<String, Double> upvoteRatioMap = new LinkedHashMap<>();
+    Map<String, Boolean> isOriginalMap = new LinkedHashMap<>();
+    Map<String, Integer> crosspostsMap = new LinkedHashMap<>();
+    Map<String, Boolean> nsfwMap = new LinkedHashMap<>();
 
     /**
      * Constructor with parameters
@@ -106,17 +118,11 @@ public class Submission extends User {
 
     //setters
 
-    public void setSubmissionTotalScore(double submissionTotalScore) {
-        this.submissionTotalScore = submissionTotalScore;
-    }
+    public void setSubmissionTotalScore(double submissionTotalScore) { this.submissionTotalScore = submissionTotalScore; }
 
-    public void setPopularSubmissionSubreddit(String popularSubmissionSubreddit) {
-        this.popularSubmissionSubreddit = popularSubmissionSubreddit;
-    }
+    public void setPopularSubmissionSubreddit(String popularSubmissionSubreddit) { this.popularSubmissionSubreddit = popularSubmissionSubreddit; }
 
-    public void setSubmissionSubredditCount(int submissionSubredditCount) {
-        this.submissionSubredditCount = submissionSubredditCount;
-    }
+    public void setSubmissionSubredditCount(int submissionSubredditCount) { this.submissionSubredditCount = submissionSubredditCount; }
 
     public void setFreeKarma(int freeKarma) {
         this.freeKarma = freeKarma;
@@ -150,13 +156,38 @@ public class Submission extends User {
             //posts
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
             String id = String.valueOf(dat.getAsJsonObject().get("id"));
+            String subreddit = String.valueOf(dat.getAsJsonObject().get("subreddit_name_prefixed"));
             String body = String.valueOf(dat.getAsJsonObject().get("selftext"));
             String permalink = String.valueOf(dat.getAsJsonObject().get("permalink"));
-            submissionMap.put(id, body);
-            linkMap.put(id, permalink);
-            //upvotes/downvotes
+            String title = String.valueOf(dat.getAsJsonObject().get("title"));
+            String url = String.valueOf(dat.getAsJsonObject().get("url_overridden_by_dest"));
             int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
             int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
+            double upvoteRatio = Double.valueOf(String.valueOf(dat.getAsJsonObject().get("upvote_ratio")));
+            long utc = Long.parseLong(String.valueOf(dat.get("created").getAsInt()));
+            int numComments = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("num_comments")));
+            boolean isOriginal = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("is_original_content")));
+            int crossposts = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("num_crossposts")));
+            boolean nsfw = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("over_18")));
+
+
+            if (body.length() > 3 || body != "\"ul\"")
+                submissionMap.put(id, body.substring(1,body.length()-1));
+            else
+                submissionMap.put(id, url.substring(1,url.length()-1));
+            created = new Date(utc * 1000);
+            String date = sdf.format(created);
+            linkMap.put(id, permalink);
+            titleMap.put(id, title.substring(1,title.length()-1));
+            createdMap.put(id, date);
+            subredditMap.put(id, subreddit.substring(1,subreddit.length()-1));
+            upvotesMap.put(id, ups);
+            downvotesMap.put(id, downs);
+            upvoteRatioMap.put(id, upvoteRatio);
+            commentsMap.put(id, numComments);
+            isOriginalMap.put(id, isOriginal);
+            crosspostsMap.put(id, crossposts);
+            nsfwMap.put(id, nsfw);
             upvotes += ups;
             downvotes += downs;
         }
@@ -196,20 +227,29 @@ public class Submission extends User {
             submissionTotalScore = postScore / postScoreCount;
         }
     }
+
     public void subSubredditslist() {
-        for (Object subs : subSubreddits)
-            subSubs += subs.toString().replace("\"","") + ", ";
+        int i = 1;
+        for (Object subreddit : subSubreddits) {
+            if (i == subSubreddits.size()) {
+                subSubs += "<a href=\"http://reddit.com/" + subreddit.toString().replace("\"", "") + "\" target=\"_blank\">" + subreddit.toString().replace("\"", "") + "</a>";
+            } else {
+                subSubs += "<a href=\"http://reddit.com/" + subreddit.toString().replace("\"", "") + "\" target=\"_blank\">" + subreddit.toString().replace("\"", "") + "</a>, ";
+            }
+            i++;
+        }
     }
 
     public void submissionsList() {
-        submissionList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;border: #363636 solid 4px;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
-        int i=0;
+        submissionList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
         for (Map.Entry<String, String> post : submissionMap.entrySet()) {
-            if (i%2==0)
-                submissionList += "<tr style=\"display:block; #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;\">" + StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
-            else
-                submissionList += "<tr style=\"display:block; #363636 solid 4px;border-bottom: #363636 solid 4px;\"\"><td style=\"background:#d7dadc;width: 100%;max-width: 100%;display: block;word-wrap: break-word;color:#1A1A1B;\">" + StringEscapeUtils.unescapeJava(post.getValue()).replace("\n","<br>").replace("\\", "") + "<br><a style=\"color:#eb5528\" href=\"https://www.reddit.com" + linkMap.get(post.getKey()).replace("\"","") + "\">permalink</a></td></tr>";
-            i++;
+            submissionList += "<tr style=\"display:block;border-bottom: #363636 solid 15px;\"\">" +
+                    "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;border: #d7dadc solid 1px;\">" +
+                    "<strong>" + titleMap.get(post.getKey()) + "</strong><br><br>" +
+                    StringEscapeUtils.unescapeJava(post.getValue()).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
+                    "original: " + isOriginalMap.get(post.getKey()) + " | " + "crossposts: " + crosspostsMap.get(post.getKey()) + " | comments: " + commentsMap.get(post.getKey()) + "<br>" +
+                    "upvotes: " + upvotesMap.get(post.getKey()) + " | downvotes: " + downvotesMap.get(post.getKey()) + " | ratio: " + upvoteRatioMap.get(post.getKey()) + " | nsfw: " + nsfwMap.get(post.getKey()) + "<br>" +
+                    "<a href=\"https://reddit.com/" + subredditMap.get(post.getKey()) + "\" target=\"_blank\">" + subredditMap.get(post.getKey()) + "</a> | " + createdMap.get(post.getKey()) + " | <a style=\"color:#eb5528\" href=\"https://reddit.com" + linkMap.get(post.getKey()).replace("\"", "") + "\" target=\"_blank\">permalink</a></td></tr>";
         }
         submissionList += "</tbody></table>";
     }
@@ -221,7 +261,7 @@ public class Submission extends User {
         return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Submissions</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<span style=\"color:#d7dadc;\">submission score: </span>" + submissionTotalScore + "<br>" +
                 "<span style=\"color:#d7dadc;\">submissions compared: </span>" + subSubreddits.size() + "<br>" +
-                "<span style=\"color:#d7dadc;\">popular subreddit: </span>" + popularSubmissionSubreddit.replace("\"","") + "<br>" +
+                "<span style=\"color:#d7dadc;\">popular subreddit: </span><a href=\"https://reddit.com/" + popularSubmissionSubreddit.replace("\"", "") + "\" target=\"_blank\">" + popularSubmissionSubreddit.replace("\"", "") + "</a><br>" +
                 "<span style=\"color:#d7dadc;\">popular subreddit count: </span>" + submissionSubredditCount + "<br>" +
                 "<span style=\"color:#d7dadc;\">submissions in r/FreeKarma4You: </span>" + freeKarma + "<br>" +
                 "<span style=\"color:#d7dadc;\">submission upvotes: </span>" + upvotes + "<br>" +
