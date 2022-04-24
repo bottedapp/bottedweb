@@ -100,9 +100,14 @@ button {
     color: #000000;
 }
 .rand {
+    display: flex;
     position: absolute;
     right: 52px;
-    top: 12px;
+    height: 48px;
+}
+.rand form{
+    margin-top: auto;
+    margin-bottom: auto;
 }
 .random {
     font-family: Noto Sans,Arial,sans-serif;
