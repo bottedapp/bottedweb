@@ -20,8 +20,9 @@ public class WebController {
 
     @RequestMapping("/")
     public String index(Model m, @RequestParam(value = "u", required = false) String name, String random) throws IOException, InterruptedException, SQLException {
-        if (name == null && random == null)
+        if (name == null && random == null) {
             return "index";
+        }
         else if (random !=  null) {
             Reddit reddit = new Reddit();
             String redditor = reddit.random();
@@ -54,7 +55,6 @@ public class WebController {
             m.addAttribute("submissions", submissions);
             m.addAttribute("isBot", isaBot);
             m.addAttribute("db", "");
-            //db();
             return "result";
         }
     }
@@ -63,7 +63,7 @@ public class WebController {
             Statement stmt = dataSource.getConnection().createStatement();
             //stmt.executeUpdate("CREATE TABLE ticks (tick timestamp)");
             //stmt.executeUpdate("INSERT INTO ticks VALUES (now())");
-            ResultSet rs = stmt.executeQuery("SELECT * FROM comments");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM prepro_data");
             while (rs.next()) {
                 System.out.println(rs.getString(1));
             }

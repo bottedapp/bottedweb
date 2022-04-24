@@ -171,10 +171,12 @@ public class Submission extends User {
             boolean nsfw = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("over_18")));
 
 
-            if (body.length() > 3 || body != "\"ul\"")
+            if (body.length() > 2 && body != null)
                 submissionMap.put(id, body.substring(1,body.length()-1));
-            else
+            else if (url != "null")
                 submissionMap.put(id, url.substring(1,url.length()-1));
+            else
+                submissionMap.put(id, "");
             created = new Date(utc * 1000);
             String date = sdf.format(created);
             linkMap.put(id, permalink);
