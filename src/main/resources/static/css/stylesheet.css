@@ -3,6 +3,27 @@ body {
 	background-color: #363636;
 }
 
+a:link {
+  color: #eb5528;
+  text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+  color: #eb5528;
+}
+
+/* mouse over link */
+a:hover {
+  color: #eb5528;
+  text-decoration: underline;
+}
+
+/* selected link */
+a:active {
+  color: #eb5528;
+}
+
 .top {
     top: 0px;
 	height: 48px;

@@ -10,12 +10,12 @@ public class User extends Reddit {
     /**
      * Protected and private variables
      */
-    protected String name, id, user, icon;
+    protected String name, id, user, icon, url;
     protected Boolean verified, has_verified_email, is_gold, is_mod, is_employee;
     protected int awardee_karma, awarder_karma, link_karma, comment_karma, total_karma;
     protected Date created;
     private final SimpleDateFormat sdf = new SimpleDateFormat("MMMMM dd, yyyy");
-    private String comment;
+    private String post;
     private boolean upvote;
     private boolean downvote;
 
@@ -52,7 +52,7 @@ public class User extends Reddit {
     public User(String subreddit, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException { // human
         super();
         this.subreddit = subreddit;
-        this.comment = comment;
+        this.post = comment;
         this.upvote = upvote;
         this.downvote = downvote;
     }
@@ -96,7 +96,7 @@ public class User extends Reddit {
         this.comment_karma = comment_karma;
         this.total_karma = total_karma;
         this.created = created;
-        this.comment = comment;
+        this.post = comment;
         this.upvote = upvote;
         this.downvote = downvote;
     }
@@ -164,7 +164,7 @@ public class User extends Reddit {
     }
 
     public String getComment() {
-        return comment;
+        return post;
     }
 
     public boolean isUpvote() {
@@ -234,7 +234,7 @@ public class User extends Reddit {
     }
 
     public void setComment(String comment) {
-        this.comment = comment;
+        this.post = comment;
     }
 
     public void setUpvote(boolean upvote) {
@@ -271,6 +271,7 @@ public class User extends Reddit {
         link_karma = Integer.parseInt(String.valueOf(data.get("link_karma")));
         comment_karma = Integer.parseInt(String.valueOf(data.get("comment_karma")));
         total_karma = Integer.parseInt(String.valueOf(data.get("total_karma")));
+        url = "http://reddit.com/user/" + name;
     }
 
     /**
@@ -281,7 +282,7 @@ public class User extends Reddit {
     public String toString() {
         return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">User</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
                 "<img src=" + icon + " width=\"50px\"><br>" +
-                "<span style=\"color:#d7dadc;\">user: </span>" + name + "<br>" +
+                "<span style=\"color:#d7dadc;\">user: </span><a href=\"" + url + "\" target=\"_blank\">" + name + "</a><br>" +
                 "<span style=\"color:#d7dadc;\">id: </span>" + id + "<br>" +
                 "<span style=\"color:#d7dadc;\">verified: </span>" + verified + "<br>" +
                 "<span style=\"color:#d7dadc;\">has verified email: </span>" + has_verified_email + "<br>" +
