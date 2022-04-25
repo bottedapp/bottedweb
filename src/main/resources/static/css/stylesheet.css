@@ -264,7 +264,7 @@ padding:.5%;
 	display: flex;
 	background: rgb(26 26 27 / 60%);
 	transform: translateX(200px);
-	transition: 0.4s all ease;
+	transition: 0.1s all ease;
 	z-index: 5;
 
 }
