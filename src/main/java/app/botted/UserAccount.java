@@ -325,6 +325,7 @@ public class UserAccount extends Reddit {
             for (Object postSubreddit : subreddits) {
                 if (Collections.frequency(subreddits, postSubreddit) > subredditCount) {
                     popularSubreddit = (String) postSubreddit;
+                    subredditCount = Collections.frequency(subreddits, postSubreddit);
                 }
             }
         }
