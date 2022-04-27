@@ -161,6 +161,7 @@ public class Submission extends User {
             String permalink = String.valueOf(dat.getAsJsonObject().get("permalink"));
             String title = String.valueOf(dat.getAsJsonObject().get("title"));
             String url = String.valueOf(dat.getAsJsonObject().get("url_overridden_by_dest"));
+            String thumbnail = String.valueOf(dat.getAsJsonObject().get("thumbnail"));
             int ups = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("ups")));
             int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
             double upvoteRatio = Double.valueOf(String.valueOf(dat.getAsJsonObject().get("upvote_ratio")));
@@ -171,10 +172,15 @@ public class Submission extends User {
             boolean nsfw = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("over_18")));
 
 
-            if (body.length() > 3 || body != "\"ul\"")
+            if (body.length() > 2 && body != null)
                 submissionMap.put(id, body.substring(1,body.length()-1));
-            else
+            else if (url != "null" && url.endsWith(".jpg\"") == false && url.endsWith(".png\"") == false && url.endsWith(".gif\"") == false)
                 submissionMap.put(id, url.substring(1,url.length()-1));
+            else if (url.endsWith(".jpg\"") == true || url.endsWith(".png\"") == true || url.endsWith(".gif\"") == true)
+                submissionMap.put(id, "<img src=" + url + " width=\"100%\"></img>");
+            else
+                submissionMap.put(id, "");
+
             created = new Date(utc * 1000);
             String date = sdf.format(created);
             linkMap.put(id, permalink);
