@@ -3,14 +3,14 @@ package app.botted;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Human extends UserAccount {
+public class HumanAccount extends UserAccount {
 
     private boolean human;
-    public Human() throws IOException, InterruptedException {
+    public HumanAccount() throws IOException, InterruptedException {
         super();
 
     }
-    public Human(String subreddit, String comment, boolean upvote, boolean downvote, boolean human) throws IOException, InterruptedException {
+    public HumanAccount(String subreddit, String comment, boolean upvote, boolean downvote, boolean human) throws IOException, InterruptedException {
         super(subreddit, comment, upvote, downvote);
         this.human = human;
     }

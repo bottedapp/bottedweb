@@ -29,7 +29,7 @@ public class WebController {
             Reddit user = new UserAccount(redditor);
             UserAccount comments = new UserComment(redditor);
             UserAccount submissions = new UserSubmission(redditor);
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + Bot.isBot(((UserComment) comments).getScore()) + "</h1>";
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + BotAccount.isBot(((UserComment) comments).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
@@ -45,9 +45,9 @@ public class WebController {
             Reddit user = new UserAccount(redditor);
             UserAccount comments = new UserComment(redditor);
             UserAccount submissions = new UserSubmission(redditor);
-            Reddit bot = new Bot();
-            Reddit human = new Human();
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + Bot.isBot(((UserComment) comments).getScore()) + "</h1>";
+            Reddit bot = new BotAccount();
+            Reddit human = new HumanAccount();
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + BotAccount.isBot(((UserComment) comments).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
