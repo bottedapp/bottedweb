@@ -1,13 +1,13 @@
 package app.botted;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
-public class User extends Reddit {
+public class UserAccount extends Reddit {
 
     /**
      * Protected and private variables
@@ -26,7 +26,7 @@ public class User extends Reddit {
      * @throws IOException
      * @throws InterruptedException
      */
-    public User() throws IOException, InterruptedException {
+    public UserAccount() throws IOException, InterruptedException {
         super();
         this.user = "spez";
     }
@@ -37,9 +37,9 @@ public class User extends Reddit {
      * @throws IOException
      * @throws InterruptedException
      */
-    public User(String user) throws IOException, InterruptedException {
+    public UserAccount(String user) throws IOException, InterruptedException {
         this.user = user;
-        value(user);
+        analyze(user);
     }
 
     /**
@@ -51,7 +51,7 @@ public class User extends Reddit {
      * @throws IOException
      * @throws InterruptedException
      */
-    public User(String subreddit, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException { // human
+    public UserAccount(String subreddit, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException { // human
         super();
         this.subreddit = subreddit;
         this.post = comment;
@@ -82,7 +82,7 @@ public class User extends Reddit {
      * @throws IOException
      * @throws InterruptedException
      */
-    public User(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, Date created, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException {
+    public UserAccount(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, Date created, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException {
         super(subreddit);
         this.name = name;
         this.id = id;
@@ -253,7 +253,7 @@ public class User extends Reddit {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void value(String user) throws IOException, InterruptedException {
+    public void analyze(String user) throws IOException, InterruptedException {
         JsonObject about = useEndpoint("/user/" + user +"/about");
         JsonObject data = (JsonObject) about.get("data");
         //User Info
@@ -299,5 +299,100 @@ public class User extends Reddit {
                 "<span style=\"color:#d7dadc;\">total karma: </span>" + total_karma + "<br>" +
                 "<span style=\"color:#d7dadc;\">created: </span>" + sdf.format(created) + "</span>";
     }
+
+    public String popularSubreddit(List subreddits) {
+        String popularSubreddit = "";
+        int subredditCount = 0;
+        if (subreddits.size() < 1) {
+            //do nothing
+        } else {
+            for (Object postSubreddit : subreddits) {
+                if (Collections.frequency(subreddits, postSubreddit) > subredditCount) {
+                    popularSubreddit = (String) postSubreddit;
+                }
+            }
+        }
+        return popularSubreddit;
+    }
+
+    public int popularSubredditCount(List subreddits) {
+        int subredditCount = 0;
+        if (subreddits.size() < 1) {
+            //do nothing
+        } else {
+            for (Object postSubreddit : subreddits) {
+                if (Collections.frequency(subreddits, postSubreddit) > subredditCount) {
+                    subredditCount = Collections.frequency(subreddits, postSubreddit);
+                }
+            }
+        }
+        return subredditCount;
+    }
+
+    public double compareScore(Map<String, String> scoreMap) {
+        double score = 0;
+        int scoreCount = 0;
+        if (scoreMap.size() <= 1) {
+            return 0.0;
+        } else {
+            for (Map.Entry<String, String> posts : scoreMap.entrySet()) {
+                for (Map.Entry<String, String> post : scoreMap.entrySet()) {
+                    if (Objects.equals(post.getKey(), posts.getKey())) {
+                        // do nothing
+                    } else {
+                        score += (findSimilarity(post.getValue(), posts.getValue()));
+                        scoreCount++;
+                    }
+                }
+            }
+        }
+        return score / scoreCount;
+    }
+
+    public String subredditsList(Map<String, List<Object>> userSubreddits) {
+        int i = 1;
+        String userSubs = "";
+        for (Map.Entry<String, List<Object>> subreddit : userSubreddits.entrySet()) {
+            if (i == userSubreddits.size()) {
+                userSubs += "<a href=\"http://reddit.com/" + userSubreddits.get(subreddit.getKey()).get(2) + "\" target=\"_blank\">" + userSubreddits.get(subreddit.getKey()).get(2) + "</a>";
+            } else {
+                userSubs += "<a href=\"http://reddit.com/" + userSubreddits.get(subreddit.getKey()).get(2) + "\" target=\"_blank\">" + userSubreddits.get(subreddit.getKey()).get(2) + "</a>, ";
+            }
+            i++;
+        }
+        return userSubs;
+    }
+
+    public int upvotes(Map<String, List<Object>> postMap) {
+        int ups = 0;
+        for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
+            ups += Integer.valueOf(String.valueOf(postMap.get(comment.getKey()).get(3)));
+        return ups;
+    }
+
+    public int downvotes(Map<String, List<Object>> postMap) {
+        int downs = 0;
+        for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
+            downs += Integer.valueOf(String.valueOf(postMap.get(comment.getKey()).get(4)));
+        return downs;
+    }
+
+
+    public String submissionsList(Map<String, List<Object>> userSubmissions) {
+        String submissionList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
+        for (Map.Entry<String, List<Object>> post : userSubmissions.entrySet()) {
+            submissionList += "<tr style=\"display:block;border-bottom: #363636 solid 15px;\"\">" +
+                    "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;border: #d7dadc solid 1px;\">" +
+                    "<strong>" + userSubmissions.get(post.getKey()).get(1) + "</strong><br><br>" +
+                    StringEscapeUtils.unescapeJava((String) userSubmissions.get(post.getKey()).get(0)).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
+                    "original: " + userSubmissions.get(post.getKey()).get(9) + " | " + "crossposts: " + userSubmissions.get(post.getKey()).get(10) + " | comments: " + userSubmissions.get(post.getKey()).get(11) + "<br>" +
+                    "upvotes: " + userSubmissions.get(post.getKey()).get(3) + " | downvotes: " + userSubmissions.get(post.getKey()).get(4) + " | ratio: " + userSubmissions.get(post.getKey()).get(8) + " | nsfw: " + userSubmissions.get(post.getKey()).get(5) + "<br>" +
+                    "<a href=\"https://reddit.com/" + userSubmissions.get(post.getKey()).get(2) + "\" target=\"_blank\">" + userSubmissions.get(post.getKey()).get(2) + "</a> | " + userSubmissions.get(post.getKey()).get(6) + " | <a style=\"color:#eb5528\" href=\"https://reddit.com" + userSubmissions.get(post.getKey()).get(7) + "\" target=\"_blank\">permalink</a></td></tr>";
+        }
+        submissionList += "</tbody></table>";
+        return submissionList;
+    }
+
+
 
 }

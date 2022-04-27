@@ -3,7 +3,7 @@ package app.botted;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Human extends User {
+public class Human extends UserAccount {
 
     private boolean human;
     public Human() throws IOException, InterruptedException {

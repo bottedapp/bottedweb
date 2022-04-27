@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Bot extends User {
+public class Bot extends UserAccount {
 
     /**
      * Private variables

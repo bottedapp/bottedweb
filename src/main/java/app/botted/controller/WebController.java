@@ -26,10 +26,10 @@ public class WebController {
         else if (random !=  null) {
             Reddit reddit = new Reddit();
             String redditor = reddit.random();
-            Reddit user = new User(redditor);
-            User comments = new Comment(redditor);
-            User submissions = new Submission(redditor);
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((User) user).getName() + Bot.isBot(((Comment) comments).getCommentTotalScore()) + "</h1>";
+            Reddit user = new UserAccount(redditor);
+            UserAccount comments = new UserComment(redditor);
+            UserAccount submissions = new UserSubmission(redditor);
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + Bot.isBot(((UserComment) comments).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
@@ -42,12 +42,12 @@ public class WebController {
         else {
             Reddit reddit = new Reddit();
             String redditor = reddit.readInput(name);
-            Reddit user = new User(redditor);
-            User comments = new Comment(redditor);
-            User submissions = new Submission(redditor);
+            Reddit user = new UserAccount(redditor);
+            UserAccount comments = new UserComment(redditor);
+            UserAccount submissions = new UserSubmission(redditor);
             Reddit bot = new Bot();
             Reddit human = new Human();
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((User) user).getName() + Bot.isBot(((Comment) comments).getCommentTotalScore()) + "</h1>";
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + Bot.isBot(((UserComment) comments).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
