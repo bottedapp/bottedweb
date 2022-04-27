@@ -15,8 +15,8 @@ public class UserSubmission extends UserAccount {
      * Protected and private variables
      */
     private ArrayList subSubreddits = new ArrayList();
-    Map<String, String> submissionMap = new LinkedHashMap<>();
-    Map<String, List<Object>> userSubmissions = new HashMap<>();
+    private Map<String, String> submissionMap = new LinkedHashMap<>();
+    private Map<String, List<Object>> userSubmissions = new HashMap<>();
 
     /**
      * Constructor with parameters

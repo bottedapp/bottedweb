@@ -15,8 +15,8 @@ public class UserComment extends UserAccount {
      * Private variables
      */
     private ArrayList commentSubreddits = new ArrayList<>();
-    Map<String, String> commentMap = new LinkedHashMap<>();
-    Map<String, List<Object>> userComments = new HashMap<>();
+    private Map<String, String> commentMap = new LinkedHashMap<>();
+    private Map<String, List<Object>> userComments = new HashMap<>();
 
     /**
      * Default constructor
