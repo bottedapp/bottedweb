@@ -14,9 +14,9 @@ public class UserSubmission extends UserAccount {
     /**
      * Protected and private variables
      */
-    private ArrayList subSubreddits = new ArrayList();
-    private Map<String, String> submissionMap = new LinkedHashMap<>();
-    private Map<String, List<Object>> userSubmissions = new HashMap<>();
+    protected List subSubreddits;
+    protected Map<String, String> submissionMap;
+    protected Map<String, List<Object>> userSubmissions;
 
     /**
      * Constructor with parameters
@@ -26,7 +26,7 @@ public class UserSubmission extends UserAccount {
      */
     public UserSubmission(String user) throws IOException, InterruptedException {
         super(user);
-        analyzeSubmissions();
+        analyze();
     }
 
     /**
@@ -57,20 +57,20 @@ public class UserSubmission extends UserAccount {
      * @throws IOException
      * @throws InterruptedException
      */
-    public UserSubmission(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, Date created, String comment, boolean upvote, boolean downvote, double submissionTotalScore, String popularSubmissionSubreddit, int submissionSubredditCount, int freeKarma, ArrayList commentSubreddits) throws IOException, InterruptedException {
+    public UserSubmission(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote, double submissionTotalScore, String popularSubmissionSubreddit, int submissionSubredditCount, int freeKarma, ArrayList commentSubreddits) throws IOException, InterruptedException {
         super(subreddit, name, id, user, verified, has_verified_email, is_gold, is_mod, is_employee, awardee_karma, awarder_karma, link_karma, comment_karma, total_karma, created, comment, upvote, downvote);
         this.subSubreddits = commentSubreddits;
     }
 
     //getters
 
-    public ArrayList getSubSubreddits() {
+    public List getSubSubreddits() {
         return subSubreddits;
     }
 
     //setters
 
-    public void setSubSubreddits(ArrayList commentSubreddits) {
+    public void setSubSubreddits(List commentSubreddits) {
         this.subSubreddits = commentSubreddits;
     }
 
@@ -81,7 +81,12 @@ public class UserSubmission extends UserAccount {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void analyzeSubmissions() throws IOException, InterruptedException {
+    @Override
+    public void analyze() throws IOException, InterruptedException {
+        subSubreddits = new ArrayList();
+        submissionMap = new HashMap<>();
+        userSubmissions = new HashMap<>();
+
         JsonObject submitted = useEndpoint("/user/" + user + "/submitted");
         JsonObject data = (JsonObject) submitted.get("data");
         JsonArray children = (JsonArray) data.get("children");
@@ -102,9 +107,9 @@ public class UserSubmission extends UserAccount {
             int crossposts = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("num_crossposts")));
             boolean nsfw = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("over_18")));
             long utc = Long.parseLong(String.valueOf(dat.get("created").getAsInt()));
+            Date date = new Date(utc * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("M/dd/Y h:mm:ss a");
-            Date created = new Date(utc * 1000);
-            String date = sdf.format(created);
+            String created = sdf.format(date);
 
             subSubreddits.add(subreddit.substring(1,subreddit.length()-1));
 
@@ -128,7 +133,7 @@ public class UserSubmission extends UserAccount {
             submissionArray.add(ups); // [3]
             submissionArray.add(downs); // [4]
             submissionArray.add(nsfw); // [5]
-            submissionArray.add(date); // [6]
+            submissionArray.add(created); // [6]
             submissionArray.add(permalink.substring(1, permalink.length() - 1)); // [7]
             submissionArray.add(upvoteRatio); // [8]
             submissionArray.add(isOriginal); // [9]

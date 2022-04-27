@@ -14,9 +14,9 @@ public class UserComment extends UserAccount {
     /**
      * Private variables
      */
-    private ArrayList commentSubreddits = new ArrayList<>();
-    private Map<String, String> commentMap = new LinkedHashMap<>();
-    private Map<String, List<Object>> userComments = new HashMap<>();
+    private ArrayList commentSubreddits;
+    private Map<String, String> commentMap;
+    private Map<String, List<Object>> userComments;
 
     /**
      * Default constructor
@@ -35,7 +35,7 @@ public class UserComment extends UserAccount {
      */
     public UserComment(String user) throws IOException, InterruptedException {
         super(user);
-        analyzeComments();
+        analyze();
     }
 
     /**
@@ -65,7 +65,7 @@ public class UserComment extends UserAccount {
      * @throws IOException
      * @throws InterruptedException
      */
-    public UserComment(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, Date created, String comment, boolean upvote, boolean downvote, double commentTotalScore, String popularCommentSubreddit, int commentSubredditCount, ArrayList commentSubreddits) throws IOException, InterruptedException {
+    public UserComment(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote, double commentTotalScore, String popularCommentSubreddit, int commentSubredditCount, ArrayList commentSubreddits) throws IOException, InterruptedException {
         super(subreddit, name, id, user, verified, has_verified_email, is_gold, is_mod, is_employee, awardee_karma, awarder_karma, link_karma, comment_karma, total_karma, created, comment, upvote, downvote);
         this.commentSubreddits = commentSubreddits;
     }
@@ -88,7 +88,12 @@ public class UserComment extends UserAccount {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void analyzeComments() throws IOException, InterruptedException {
+    @Override
+    public void analyze() throws IOException, InterruptedException {
+        commentSubreddits = new ArrayList<>();
+        commentMap = new HashMap<>();
+        userComments = new HashMap<>();
+
         JsonObject comments = useEndpoint("/user/" + user + "/comments");
         JsonObject data = comments.getAsJsonObject("data");
         JsonArray children = data.getAsJsonArray("children");
@@ -105,9 +110,9 @@ public class UserComment extends UserAccount {
             int downs = Integer.valueOf(String.valueOf(dat.getAsJsonObject().get("downs")));
             boolean nsfw = Boolean.valueOf(String.valueOf(dat.getAsJsonObject().get("over_18")));
             long utc = Long.parseLong(String.valueOf(dat.get("created").getAsInt()));
+            Date date = new Date(utc * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("M/dd/Y h:mm:ss a");
-            Date created = new Date(utc * 1000);
-            String date = sdf.format(created);
+            String created = sdf.format(date);
 
             commentSubreddits.add(subreddit.substring(1,subreddit.length()-1));
             commentMap.put(id, body.substring(1,body.length()-1));
@@ -119,7 +124,7 @@ public class UserComment extends UserAccount {
             commentsArray.add(ups); // [3]
             commentsArray.add(downs); // [4]
             commentsArray.add(nsfw); // [5]
-            commentsArray.add(date); // [6]
+            commentsArray.add(created); // [6]
             commentsArray.add(permalink.substring(1, permalink.length()-1)); // [7]
             commentsArray.add(author.substring(1,author.length()-1)); // [8]
             userComments.put(id, commentsArray);
