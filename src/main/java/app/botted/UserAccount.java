@@ -300,6 +300,40 @@ public class UserAccount extends Reddit {
                 "<span style=\"color:#d7dadc;\">created: </span>" + sdf.format(created) + "</span>";
     }
 
+    public double compareScore(Map<String, String> scoreMap) {
+        double score = 0;
+        int scoreCount = 0;
+        if (scoreMap.size() <= 1) {
+            return 0.0;
+        } else {
+            for (Map.Entry<String, String> posts : scoreMap.entrySet()) {
+                for (Map.Entry<String, String> post : scoreMap.entrySet()) {
+                    if (Objects.equals(post.getKey(), posts.getKey())) {
+                        // do nothing
+                    } else {
+                        score += (findSimilarity(post.getValue(), posts.getValue()));
+                        scoreCount++;
+                    }
+                }
+            }
+        }
+        return score / scoreCount;
+    }
+
+    public int upvotes(Map<String, List<Object>> postMap) {
+        int ups = 0;
+        for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
+            ups += Integer.valueOf(String.valueOf(postMap.get(comment.getKey()).get(3)));
+        return ups;
+    }
+
+    public int downvotes(Map<String, List<Object>> postMap) {
+        int downs = 0;
+        for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
+            downs += Integer.valueOf(String.valueOf(postMap.get(comment.getKey()).get(4)));
+        return downs;
+    }
+
     public String subredditsList(Map<String, List<Object>> userSubreddits) {
         int i = 1;
         String userSubs = "";
@@ -341,39 +375,5 @@ public class UserAccount extends Reddit {
             }
         }
         return subredditCount;
-    }
-
-    public double compareScore(Map<String, String> scoreMap) {
-        double score = 0;
-        int scoreCount = 0;
-        if (scoreMap.size() <= 1) {
-            return 0.0;
-        } else {
-            for (Map.Entry<String, String> posts : scoreMap.entrySet()) {
-                for (Map.Entry<String, String> post : scoreMap.entrySet()) {
-                    if (Objects.equals(post.getKey(), posts.getKey())) {
-                        // do nothing
-                    } else {
-                        score += (findSimilarity(post.getValue(), posts.getValue()));
-                        scoreCount++;
-                    }
-                }
-            }
-        }
-        return score / scoreCount;
-    }
-
-    public int upvotes(Map<String, List<Object>> postMap) {
-        int ups = 0;
-        for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
-            ups += Integer.valueOf(String.valueOf(postMap.get(comment.getKey()).get(3)));
-        return ups;
-    }
-
-    public int downvotes(Map<String, List<Object>> postMap) {
-        int downs = 0;
-        for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
-            downs += Integer.valueOf(String.valueOf(postMap.get(comment.getKey()).get(4)));
-        return downs;
     }
 }

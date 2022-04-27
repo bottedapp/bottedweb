@@ -106,24 +106,30 @@ public class UserSubmission extends UserAccount {
             Date created = new Date(utc * 1000);
             String date = sdf.format(created);
 
-            if (body.length() > 2 && body != null)
-                submissionMap.put(id, body.substring(1, body.length() - 1));
-            else if (url != "null" && url.endsWith(".jpg\"") == false && url.endsWith(".png\"") == false && url.endsWith(".gif\"") == false)
-                submissionMap.put(id, url.substring(1, url.length() - 1));
-            else if (url.endsWith(".jpg\"") == true || url.endsWith(".png\"") == true || url.endsWith(".gif\"") == true)
-                submissionMap.put(id, "<img src=" + url + " width=\"100%\"></img>");
-            else
-                submissionMap.put(id, "");
+            subSubreddits.add(subreddit.substring(1,subreddit.length()-1));
 
             List submissionArray = new ArrayList<>();
-            submissionArray.add(body.substring(1, body.length() - 1)); // [0]
+            if (body.length() > 2 && body != null) {
+                submissionMap.put(id, body.substring(1, body.length() - 1));
+                submissionArray.add(body.substring(1, body.length() - 1));
+            } else if (url != "null" && url.endsWith(".jpg\"") == false && url.endsWith(".png\"") == false && url.endsWith(".gif\"") == false) {
+                submissionMap.put(id, url.substring(1, url.length() - 1));
+                submissionArray.add(url.substring(1, url.length() - 1));
+            } else if (url.endsWith(".jpg\"") == true || url.endsWith(".png\"") == true || url.endsWith(".gif\"") == true) {
+                submissionMap.put(id, url.substring(1, url.length() - 1));
+                submissionArray.add("<img src=" + url + " width=\"100%\"></img>");
+            }
+            else {
+                submissionMap.put(id, "");
+                submissionArray.add(body.substring(1, body.length() - 1)); // [0]
+            }
             submissionArray.add(title.substring(1, title.length() - 1)); // [1]
             submissionArray.add(subreddit.substring(1, subreddit.length() - 1)); // [2]
             submissionArray.add(ups); // [3]
             submissionArray.add(downs); // [4]
             submissionArray.add(nsfw); // [5]
             submissionArray.add(date); // [6]
-            submissionArray.add(permalink); // [7]
+            submissionArray.add(permalink.substring(1, permalink.length() - 1)); // [7]
             submissionArray.add(upvoteRatio); // [8]
             submissionArray.add(isOriginal); // [9]
             submissionArray.add(crossposts); // [10]
