@@ -120,7 +120,7 @@ public class UserComment extends UserAccount {
             commentsArray.add(downs); // [4]
             commentsArray.add(nsfw); // [5]
             commentsArray.add(date); // [6]
-            commentsArray.add(permalink.substring(1,subreddit.length()-1)); // [7]
+            commentsArray.add(permalink); // [7]
             commentsArray.add(author.substring(1,author.length()-1)); // [8]
             userComments.put(id, commentsArray);
         }

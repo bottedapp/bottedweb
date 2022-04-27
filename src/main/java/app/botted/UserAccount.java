@@ -300,6 +300,20 @@ public class UserAccount extends Reddit {
                 "<span style=\"color:#d7dadc;\">created: </span>" + sdf.format(created) + "</span>";
     }
 
+    public String subredditsList(Map<String, List<Object>> userSubreddits) {
+        int i = 1;
+        String userSubs = "";
+        for (Map.Entry<String, List<Object>> subreddit : userSubreddits.entrySet()) {
+            if (i == userSubreddits.size()) {
+                userSubs += "<a href=\"http://reddit.com/" + userSubreddits.get(subreddit.getKey()).get(2) + "\" target=\"_blank\">" + userSubreddits.get(subreddit.getKey()).get(2) + "</a>";
+            } else {
+                userSubs += "<a href=\"http://reddit.com/" + userSubreddits.get(subreddit.getKey()).get(2) + "\" target=\"_blank\">" + userSubreddits.get(subreddit.getKey()).get(2) + "</a>, ";
+            }
+            i++;
+        }
+        return userSubs;
+    }
+
     public String popularSubreddit(List subreddits) {
         String popularSubreddit = "";
         int subredditCount = 0;
@@ -349,20 +363,6 @@ public class UserAccount extends Reddit {
         return score / scoreCount;
     }
 
-    public String subredditsList(Map<String, List<Object>> userSubreddits) {
-        int i = 1;
-        String userSubs = "";
-        for (Map.Entry<String, List<Object>> subreddit : userSubreddits.entrySet()) {
-            if (i == userSubreddits.size()) {
-                userSubs += "<a href=\"http://reddit.com/" + userSubreddits.get(subreddit.getKey()).get(2) + "\" target=\"_blank\">" + userSubreddits.get(subreddit.getKey()).get(2) + "</a>";
-            } else {
-                userSubs += "<a href=\"http://reddit.com/" + userSubreddits.get(subreddit.getKey()).get(2) + "\" target=\"_blank\">" + userSubreddits.get(subreddit.getKey()).get(2) + "</a>, ";
-            }
-            i++;
-        }
-        return userSubs;
-    }
-
     public int upvotes(Map<String, List<Object>> postMap) {
         int ups = 0;
         for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
@@ -376,23 +376,4 @@ public class UserAccount extends Reddit {
             downs += Integer.valueOf(String.valueOf(postMap.get(comment.getKey()).get(4)));
         return downs;
     }
-
-
-    public String submissionsList(Map<String, List<Object>> userSubmissions) {
-        String submissionList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
-        for (Map.Entry<String, List<Object>> post : userSubmissions.entrySet()) {
-            submissionList += "<tr style=\"display:block;border-bottom: #363636 solid 15px;\"\">" +
-                    "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;border: #d7dadc solid 1px;\">" +
-                    "<strong>" + userSubmissions.get(post.getKey()).get(1) + "</strong><br><br>" +
-                    StringEscapeUtils.unescapeJava((String) userSubmissions.get(post.getKey()).get(0)).replace("\n", "<br>").replace("\\", "") + "<br><br>" +
-                    "original: " + userSubmissions.get(post.getKey()).get(9) + " | " + "crossposts: " + userSubmissions.get(post.getKey()).get(10) + " | comments: " + userSubmissions.get(post.getKey()).get(11) + "<br>" +
-                    "upvotes: " + userSubmissions.get(post.getKey()).get(3) + " | downvotes: " + userSubmissions.get(post.getKey()).get(4) + " | ratio: " + userSubmissions.get(post.getKey()).get(8) + " | nsfw: " + userSubmissions.get(post.getKey()).get(5) + "<br>" +
-                    "<a href=\"https://reddit.com/" + userSubmissions.get(post.getKey()).get(2) + "\" target=\"_blank\">" + userSubmissions.get(post.getKey()).get(2) + "</a> | " + userSubmissions.get(post.getKey()).get(6) + " | <a style=\"color:#eb5528\" href=\"https://reddit.com" + userSubmissions.get(post.getKey()).get(7) + "\" target=\"_blank\">permalink</a></td></tr>";
-        }
-        submissionList += "</tbody></table>";
-        return submissionList;
-    }
-
-
-
 }

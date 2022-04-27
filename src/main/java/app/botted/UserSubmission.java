@@ -123,7 +123,7 @@ public class UserSubmission extends UserAccount {
             submissionArray.add(downs); // [4]
             submissionArray.add(nsfw); // [5]
             submissionArray.add(date); // [6]
-            submissionArray.add(permalink.substring(1, subreddit.length() - 1)); // [7]
+            submissionArray.add(permalink); // [7]
             submissionArray.add(upvoteRatio); // [8]
             submissionArray.add(isOriginal); // [9]
             submissionArray.add(crossposts); // [10]
