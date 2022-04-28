@@ -11,7 +11,7 @@ import java.util.Base64;
 import java.io.IOException;
 import com.google.gson.*;
 
-public class Reddit {
+public class RedditComponent {
 
     /**
      * Protected and private variables
@@ -30,7 +30,7 @@ public class Reddit {
      * @throws IOException
      * @throws InterruptedException
      */
-    public Reddit() throws IOException, InterruptedException {
+    public RedditComponent() throws IOException, InterruptedException {
         ensureConnection();
     }
 
@@ -40,7 +40,7 @@ public class Reddit {
      * @throws IOException
      * @throws InterruptedException
      */
-    public Reddit(String subreddit) throws IOException, InterruptedException {
+    public RedditComponent(String subreddit) throws IOException, InterruptedException {
         this.subreddit = subreddit;
         ensureConnection();
     }
@@ -134,16 +134,13 @@ public class Reddit {
         if (!input.contains("/")) {
             user = input;
         }
-        if (input.startsWith("u/") || input.contains("/u/")) {
+        if (input.startsWith("t2_")) {
+            //fullname
+        }
+        if (input.startsWith("u/") || input.contains("/u/") || input.contains("/user/")) {
             String[] e = input.split("u/");
             String[] f = e[1].split("/");
             user = f[0];
-        }
-
-        if (input.contains("/user/")) {
-            String[] g = input.split("user/");
-            String[] h = g[1].split("/");
-            user = h[0];
         }
 
         if (input.contains("/comments/") && !input.contains("/comment/")) {
@@ -234,5 +231,4 @@ public class Reddit {
                 ", subreddit='" + subreddit + '\'' +
                 '}';
     }
-
 }

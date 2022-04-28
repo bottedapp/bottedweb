@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
 
-public class UserAccount extends Reddit {
+public class UserAccount extends RedditComponent {
 
     /**
      * Protected and private variables
@@ -13,6 +13,7 @@ public class UserAccount extends Reddit {
     protected String name, id, user, icon, url, description, created;
     protected Boolean verified, has_verified_email, is_gold, is_mod, is_employee;
     protected int awardee_karma, awarder_karma, link_karma, comment_karma, total_karma;
+    ArrayList keyPhrase;
 
     Boolean upvote, downvote;
     String post;
@@ -345,6 +346,23 @@ public class UserAccount extends Reddit {
         }
         return subredditCount;
     }
+
+    /**
+     * Return correct response according to results
+     * @param keyPhrase Phrase to signal to our bot for an action
+     * @return
+     */
+    public String responses(ArrayList<String> keyPhrase) {
+
+        String response = keyPhrase.get(2);
+
+        return response;
+    }
+
+    public static Object responses() {
+        return responses();
+    }
+
 
     /**
      * Send results to string

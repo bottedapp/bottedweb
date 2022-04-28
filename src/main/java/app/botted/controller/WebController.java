@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 @Controller
 public class WebController {
@@ -20,16 +21,28 @@ public class WebController {
 
     @RequestMapping("/")
     public String index(Model m, @RequestParam(value = "u", required = false) String name, String random) throws IOException, InterruptedException, SQLException {
+
+        ArrayList keyPhrase = new ArrayList();
+        keyPhrase.add("Hi! Thank you for summoning me! It would appear that this account is run by a bot!" +
+                "Here is a link to my webpage if you would like a more detailed analysis!" +
+                "\nhttps://botted.app/");
+        keyPhrase.add("Hi! Thank you for summoning me! It would appear that this account is run by a human!" +
+                "Here is a link to my webpage if you would like a more detailed analysis!" +
+                "\nhttps://botted.app/");
+        keyPhrase.add("Hi! Thank you for summoning me! Hm... my apologies, for some reason I am unsure whether or not this account is run by a bot." +
+                "Here is a link to my webpage if you would like a more detailed analysis!" +
+                "\nhttps://botted.app/");
+
         if (name == null && random == null) {
             return "index";
         }
         else if (random !=  null) {
-            Reddit reddit = new Reddit();
+            RedditComponent reddit = new RedditComponent();
             String redditor = reddit.random();
-            Reddit user = new UserAccount(redditor);
-            UserAccount comments = new UserComment(redditor);
-            UserAccount submissions = new UserSubmission(redditor);
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + BotAccount.isBot(((UserComment) comments).getScore()) + "</h1>";
+            RedditComponent user = new UserAccount(redditor);
+            UserAccount comments = new UserComments(redditor);
+            UserAccount submissions = new UserSubmissions(redditor);
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + BotAccount.isBot(((UserComments) comments).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
@@ -40,14 +53,14 @@ public class WebController {
             return "result";
         }
         else {
-            Reddit reddit = new Reddit();
+            RedditComponent reddit = new RedditComponent();
             String redditor = reddit.readInput(name);
-            Reddit user = new UserAccount(redditor);
-            UserAccount comments = new UserComment(redditor);
-            UserAccount submissions = new UserSubmission(redditor);
-            Reddit bot = new BotAccount();
-            Reddit human = new HumanAccount();
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + BotAccount.isBot(((UserComment) comments).getScore()) + "</h1>";
+            RedditComponent user = new UserAccount(redditor);
+            UserAccount comments = new UserComments(redditor);
+            UserAccount submissions = new UserSubmissions(redditor);
+            RedditComponent bot = new BotAccount();
+            RedditComponent human = new HumanAccount();
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + BotAccount.isBot(((UserComments) comments).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);

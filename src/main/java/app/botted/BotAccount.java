@@ -9,17 +9,45 @@ public class BotAccount extends UserAccount {
      * Private variables
      */
     private boolean bot;
-    private boolean goodBot;
-    private boolean badBot;
-    private static ArrayList keyPhrase = new ArrayList();
 
+    /**
+     * Default constructor
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public BotAccount() throws IOException, InterruptedException {
         super();
-        keyPhrase.add("This is a good bot!");
-        keyPhrase.add("This is a bad bot!");
-        keyPhrase.add("This is a human!");
-        keyPhrase.add("Undetermined.");
     }
+
+    /**
+     * Constructor
+     * @param subreddit The specific subreddit
+     * @param name The name associated with the account
+     * @param id The account ID
+     * @param user The username
+     * @param verified If account is verified
+     * @param has_verified_email If E-mail has been verified on account
+     * @param is_gold If account has gold status
+     * @param is_mod Is a moderator
+     * @param is_employee Is an employee
+     * @param awardee_karma Karma gained from awardee
+     * @param awarder_karma Karma gained from awarder
+     * @param link_karma Karma gained from link
+     * @param comment_karma Karma gained from comment
+     * @param total_karma Total karma on account
+     * @param created When the account was created
+     * @param comment A comment on a post
+     * @param upvote An upvote on a post or comment
+     * @param downvote A downvote on a post or comment
+     * @param bot Whether this is a bot
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public BotAccount(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote, boolean bot, boolean goodBot, boolean badBot) throws IOException, InterruptedException {
+        super(subreddit, name, id, user, verified, has_verified_email, is_gold, is_mod, is_employee, awardee_karma, awarder_karma, link_karma, comment_karma, total_karma, created, comment, upvote, downvote);
+        this.bot = bot;
+    }
+
     public static String isBot(double score) {
         if (score >= 0.4)
             return " is a bot";
@@ -29,36 +57,11 @@ public class BotAccount extends UserAccount {
             return " is not a bot";
         return "";
     }
-    /**
-     * Constructor
-     * @param subreddit The specific subreddit
-     * @param comment A comment on a post
-     * @param upvote An upvote on a post or comment
-     * @param downvote A downvote on a post or comment
-     * @param bot Whether this is a bot
-     * @param goodBot Whether the bot is good
-     * @param badBot Whether the bot is bad
-     */
-    public BotAccount(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote, boolean bot, boolean goodBot, boolean badBot) throws IOException, InterruptedException {
-        super(subreddit, name, id, user, verified, has_verified_email, is_gold, is_mod, is_employee, awardee_karma, awarder_karma, link_karma, comment_karma, total_karma, created, comment, upvote, downvote);
-        this.bot = bot;
-        this.goodBot = goodBot;
-        this.badBot = badBot;
-    }
 
     //getters
 
-
     public boolean isBot() {
         return bot;
-    }
-
-    public boolean isGoodBot() {
-        return goodBot;
-    }
-
-    public boolean isBadBot() {
-        return badBot;
     }
 
     //setters
@@ -67,33 +70,32 @@ public class BotAccount extends UserAccount {
         this.bot = bot;
     }
 
-    public void setGoodBot(boolean goodBot) {
-        this.goodBot = goodBot;
+    /**
+     * Return correct response according to results
+     * @param keyPhrase Phrase to signal to our bot for an action
+     * @return
+     */
+    @Override
+    public String responses(ArrayList<String> keyPhrase) {
+
+        String response = keyPhrase.get(0);
+
+        return response;
     }
 
-    public void setBadBot(boolean badBot) {
-        this.badBot = badBot;
+    public static Object responses() {
+        return responses();
     }
 
+    /**
+     * Send results to string
+     * @return bot, goodBot, and badBot
+     */
     @Override
     public String toString() {
         return "Bot{" +
                 "bot=" + bot +
-                ", goodBot=" + goodBot +
-                ", badBot=" + badBot +
                 '}';
-    }
-
-    public String[] responses(boolean goodBot, boolean badBot, ArrayList<String> keyPhrase) {
-        if (goodBot = true) {
-            return new String[]{keyPhrase.get(0)};
-        }
-        else if (badBot = true) {
-            return new String[]{keyPhrase.get(1)};
-        }
-        else {
-            return new String[]{keyPhrase.get(3)};
-        }
     }
 
 }
