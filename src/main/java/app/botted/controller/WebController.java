@@ -37,12 +37,13 @@ public class WebController {
             return "index";
         }
         else if (random !=  null) {
+
             RedditComponent reddit = new RedditComponent();
             String redditor = reddit.random();
             RedditComponent user = new UserAccount(redditor);
             UserAccount comments = new UserComments(redditor);
             UserAccount submissions = new UserSubmissions(redditor);
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + BotAccount.isBot(((UserComments) comments).getScore()) + "</h1>";
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.isBot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
@@ -60,7 +61,7 @@ public class WebController {
             UserAccount submissions = new UserSubmissions(redditor);
             RedditComponent bot = new BotAccount();
             RedditComponent human = new HumanAccount();
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + ((UserAccount) user).getName() + BotAccount.isBot(((UserComments) comments).getScore()) + "</h1>";
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.isBot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);

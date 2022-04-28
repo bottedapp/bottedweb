@@ -2,6 +2,9 @@ package app.botted;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class BotAccount extends UserAccount {
 
@@ -48,13 +51,16 @@ public class BotAccount extends UserAccount {
         this.bot = bot;
     }
 
-    public static String isBot(double score) {
-        if (score >= 0.4)
-            return " is a bot";
-        if (score > 0.2 && score < 0.4)
-            return " might be a bot";
-        if (score <= 0.2)
-            return " is not a bot";
+    public static String isBot(String name, double commentScore, double submissionScore) {
+        String user = name.toLowerCase(Locale.ROOT);
+        if (user.contains("_bot") || user.contains("bot_"))
+            return user + " is a bot";
+        if (commentScore >= 0.35 || submissionScore >= 0.6)
+            return user + " is a bot";
+        if (commentScore > 0.25 && commentScore < 0.4 || submissionScore >= 0.35 && submissionScore >= 0.6)
+            return user + " might be a bot";
+        if (commentScore <= 0.25 && submissionScore <= 0.4)
+            return user + " is not a bot";
         return "";
     }
 

@@ -42,10 +42,10 @@ public class UserSubmissions extends UserAccount {
     /**
      * Constructor
      *
-     * @param user                 The username
+     * @param user The username
      * @param submissionSubreddits Subreddits commented in
-     * @param submissionMap        25 latest submissions by user
-     * @param userSubmissions      Map of all user submission data
+     * @param submissionMap 25 latest submissions by user
+     * @param userSubmissions Map of all user submission data
      * @throws IOException
      * @throws InterruptedException
      */
@@ -169,6 +169,11 @@ public class UserSubmissions extends UserAccount {
         submissionList += "</tbody></table>";
         return submissionList;
     }
+
+    public double getScore() {
+        return compareScore(submissionMap);
+    }
+
     /**
      * Send results to string
      * @return All data of analyzed submissions
