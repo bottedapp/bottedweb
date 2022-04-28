@@ -73,9 +73,10 @@ public class UserComments extends UserAccount {
 
     public void setUserComments(Map<String, List<Object>> userComments) { this.userComments = userComments; }
 
+
     /**
-     * Finds most active subreddit user comments in
-     * Calculates similarities between comments
+     * Retrieves and assigns all comments data from Reddit API
+     *
      * @throws IOException
      * @throws InterruptedException
      */
@@ -122,6 +123,10 @@ public class UserComments extends UserAccount {
         }
     }
 
+    /**
+     * @param userComments Map of all user comments data
+     * @return List of all user comments
+     */
     public String commentsList(Map<String, List<Object>> userComments) {
         String commentList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
         for (Map.Entry<String, List<Object>> comment : userComments.entrySet()) {
@@ -136,13 +141,16 @@ public class UserComments extends UserAccount {
         return commentList;
     }
 
+    /**
+     * @return Comment Score
+     */
     public double getScore() {
         return compareScore(commentMap);
     }
 
     /**
      * Send results to string
-     * @return commentTotalScore, popularCommentSubreddit, commentSubredditCount, and commentSubreddits
+     * @return All data of analyzed comments
      */
     @Override
     public String toString() {

@@ -169,7 +169,10 @@ public class UserSubmissions extends UserAccount {
         submissionList += "</tbody></table>";
         return submissionList;
     }
-
+    /**
+     * Send results to string
+     * @return All data of analyzed submissions
+     */
     @Override
     public String toString() {
         return "<h4 style=\"font-family:system-ui;color:#d7dadc;\">Submissions</h4><span style=\"font-family:system-ui;color:#eb5528;\">" +
