@@ -31,7 +31,6 @@ public class RedditComponent {
      * @throws InterruptedException
      */
     public RedditComponent() throws IOException, InterruptedException {
-        ensureConnection();
     }
 
     /**
@@ -42,7 +41,6 @@ public class RedditComponent {
      */
     public RedditComponent(String subreddit) throws IOException, InterruptedException {
         this.subreddit = subreddit;
-        ensureConnection();
     }
 
     //getter
