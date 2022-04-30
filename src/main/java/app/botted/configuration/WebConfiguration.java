@@ -52,4 +52,8 @@ public class WebConfiguration {
         basicDataSource.setUrl(dbUrl);
         return basicDataSource;
     }
+    public String getDbUrl () {
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        return dbUrl;
+    }
 }

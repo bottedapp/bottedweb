@@ -1,10 +1,11 @@
 /Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/BotAccount.java
+/Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/UserSubmissions.java
 /Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/web.java
 /Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/UserAccount.java
 /Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/HumanAccount.java
 /Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/Model.java
 /Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/controller/WebController.java
 /Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/configuration/WebConfiguration.java
-/Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/UserComment.java
-/Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/Reddit.java
-/Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/UserSubmission.java
+/Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/UserComments.java
+/Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/RedditComponent.java
+/Users/lee/Library/Mobile Documents/com~apple~CloudDocs/2022 Spring Semester/CIS 111-B/Botted/Week2/bottedweb/src/main/java/app/botted/BottedRequest.java

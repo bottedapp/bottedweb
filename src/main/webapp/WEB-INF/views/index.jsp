@@ -33,11 +33,10 @@
 		<section class="menu_body" id="menubody">
 			<div class="menu_body_item_wrapper">
 				<ul class="menu_list">
-					<li><a href="#">Home</a></li>
-					<li><a href="#">About</a></li>
+					<li><a href="https://botted.app">Home</a></li>
+					<li><a href="https://botted.app/about">About</a></li>
 					<li><a href="http://github.com/bottedapp/botted">Github</a></li>
-					<li><a href="#">FAQ</a></li>
-					<li><a href="#">Contact Us</a></li>
+					<li><a href="mailto:bottedapp@gmail.com">Contact Us</a></li>
 				</ul>
 			</div>
 		</section>

@@ -3,6 +3,7 @@ package app.botted.controller;
 import app.botted.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
@@ -38,9 +39,9 @@ public class WebController {
         }
         else if (random !=  null) {
 
-            RedditComponent reddit = new RedditComponent();
-            String redditor = reddit.random();
-            RedditComponent user = new UserAccount(redditor);
+            RedditAPI reddit = new RedditAPI();
+            String redditor = new UserAccount().random();
+            RedditAPI user = new UserAccount(redditor);
             UserAccount comments = new UserComments(redditor);
             UserAccount submissions = new UserSubmissions(redditor);
             String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.isBot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
@@ -54,13 +55,13 @@ public class WebController {
             return "result";
         }
         else {
-            RedditComponent reddit = new RedditComponent();
+            RedditAPI reddit = new RedditAPI();
             String redditor = reddit.readInput(name);
-            RedditComponent user = new UserAccount(redditor);
+            RedditAPI user = new UserAccount(redditor);
             UserAccount comments = new UserComments(redditor);
             UserAccount submissions = new UserSubmissions(redditor);
-            RedditComponent bot = new BotAccount();
-            RedditComponent human = new HumanAccount();
+            UserAccount bot = new BotAccount();
+            UserAccount human = new HumanAccount();
             String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.isBot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
@@ -72,7 +73,10 @@ public class WebController {
             return "result";
         }
     }
-
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
     private void db() throws SQLException {
             Statement stmt = dataSource.getConnection().createStatement();
             //stmt.executeUpdate("CREATE TABLE ticks (tick timestamp)");

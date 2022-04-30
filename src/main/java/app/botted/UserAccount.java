@@ -1,11 +1,16 @@
 package app.botted;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.commons.lang3.StringUtils;
+
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
 
-public class UserAccount extends RedditComponent {
+public class UserAccount extends RedditAPI {
 
     /**
      * Protected and private variables
@@ -25,7 +30,6 @@ public class UserAccount extends RedditComponent {
      */
     public UserAccount() throws IOException, InterruptedException {
         super();
-        this.user = "spez";
     }
 
     /**
@@ -34,7 +38,7 @@ public class UserAccount extends RedditComponent {
      * @throws IOException
      * @throws InterruptedException
      */
-    public UserAccount(String user) throws IOException, InterruptedException {
+    public UserAccount(String user) throws IOException, InterruptedException, SQLException {
         this.user = user;
         analyze();
     }
@@ -50,7 +54,6 @@ public class UserAccount extends RedditComponent {
      */
     public UserAccount(String subreddit, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException { // human
         super();
-        this.subreddit = subreddit;
         this.post = comment;
         this.upvote = upvote;
         this.downvote = downvote;
@@ -244,7 +247,7 @@ public class UserAccount extends RedditComponent {
      * Collects information about user and user account
      * @throws InterruptedException
      */
-    public void analyze() throws InterruptedException, IOException {
+    public void analyze() throws InterruptedException, IOException, SQLException {
         JsonObject about = useEndpoint("/user/" + user +"/about");
         JsonObject data = (JsonObject) about.get("data");
 
@@ -345,6 +348,30 @@ public class UserAccount extends RedditComponent {
             }
         }
         return subredditCount;
+    }
+
+    /**
+     * Finding similarities between comments (referenced as Strings)
+     * @param x String 1 to compare to
+     * @param y String 2 to compare to
+     * @return
+     */
+    public static double findSimilarity(String x, String y) {
+        double maxLength = Double.max(x.length(), y.length());
+        if (maxLength > 0)
+            return (maxLength - StringUtils.getLevenshteinDistance(x, y)) / maxLength;
+        return 0.0;
+    }
+    public String random() throws IOException, InterruptedException, SQLException {
+        JsonObject random = useEndpoint("/r/all/comments?sort=random");
+        JsonObject data = (JsonObject) random.get("data");
+        JsonArray children = data.getAsJsonArray("children");
+        String author = null;
+        for (JsonElement item : children) {
+            JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
+            author = String.valueOf(dat.getAsJsonObject().get("author"));
+        }
+        return author.substring(1,author.length()-1);
     }
 
     /**

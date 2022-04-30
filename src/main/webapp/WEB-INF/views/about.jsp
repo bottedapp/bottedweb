@@ -19,12 +19,12 @@
 </head>
 <body>
 	<div class="top"><a href="https://botted.app"><img src="/images/bottedlogo-dark.png"></a>
-		<div class="rand">
-            <form action="/" method="post">
-                <input type="hidden" name="random" class="random" value="random">
-                <input type="submit" name="random" class="random" value="random">
-            </form>
-         </div>
+			<div class="rand">
+                <form action="/" method="post">
+                    <input type="hidden" name="random" class="random" value="random">
+                    <input type="submit" name="random" class="random" value="random">
+                </form>
+            </div>
 		<div class="hamburger" id="hamburger_menu">
 			<div class="line"></div>
 			<div class="line"></div>
@@ -34,36 +34,23 @@
 			<div class="menu_body_item_wrapper">
 				<ul class="menu_list">
 					<li><a href="https://botted.app">Home</a></li>
-					<li><a href="/about">About</a></li>
+					<li><a href="https://botted.app/about">About</a></li>
 					<li><a href="http://github.com/bottedapp/botted">Github</a></li>
 					<li><a href="mailto:bottedapp@gmail.com">Contact Us</a></li>
 				</ul>
 			</div>
 		</section>
 	</div>
-	<div class="content"><img src="/images/botted.png">
+	<div class="content"><img src="/images/botted.png"><br>
+	<div class="about">
 		<br>
-		<form action="/" method="post">
-			<input type="text" name="u" class="u" placeholder="user/submission/comment">
-			<br>
-			<br>
-			<input type="submit" name="submit" class="submit" value="Bot or Not?">
-			<br> </form>
-	</div>
-	<div class="loading"></div>
-	<div class="isbot"><p th:utext="${isBot}"></div>
-	<div class="data">
-		<input type="button" name="showdata" class="showdata" value="show data">
-	</div>
-	<div class="results">
-		<div class="result">
-			<p th:utext="${user}">
-		</div>
-		<div class="result">
-			<p th:utext="${comments}">
-		</div>
-		<div class="result">
-			<p th:utext="${submissions}">
+		<h1>About</h1>
+	    Botted is a Reddit API application that is written in Java and deployed using Spring Boot and Heroku. It was developed as a final project for Computer Science II: Object-Oriented Programming.
+		<p>
+		<h2>Developed by</h2>
+		<a href="https://github.com/leemoriarity">github.com/leemoriarity</a><br>
+		<a href="https://github.com/chrismben">github.com/chrismben</a><br>
+		<a href="https://github.com/kalisparrow">github.com/kalisparrow</a>
 		</div>
 	</div>
 </body>

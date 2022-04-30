@@ -1,17 +1,20 @@
 package app.botted;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 import javax.security.sasl.AuthenticationException;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Instant;
 import java.util.Base64;
 import java.io.IOException;
 import com.google.gson.*;
 
-public class RedditComponent {
+public class RedditAPI {
 
     /**
      * Protected and private variables
@@ -21,38 +24,44 @@ public class RedditComponent {
     private final String clientId = "GgPNctP2KQdth-iX6aMGUQ";
     private final String clientSecret = "6zov1gDWJ8Ij60yH3L7q6N_LnPUZHA";
     private final String userAgent = "botted 0.0.1";
-    private String token;
-    private long expirationDate;
-    protected String subreddit;
+    private String token, tokenDb;
+    private long expirationDate, expirationDateDb;
+    private String user;
 
     /**
      * Default constructor
      * @throws IOException
      * @throws InterruptedException
      */
-    public RedditComponent() throws IOException, InterruptedException {
+    public RedditAPI() throws IOException, InterruptedException {
     }
 
     /**
      * Constructor with parameters
-     * @param subreddit The specific subreddit
+     * @param user The reddit user
      * @throws IOException
      * @throws InterruptedException
      */
-    public RedditComponent(String subreddit) throws IOException, InterruptedException {
-        this.subreddit = subreddit;
+    public RedditAPI(String user) throws IOException, InterruptedException {
+        this.user = user;
     }
 
     //getter
 
-    public String getSubreddit() {
-        return subreddit;
+    public String getUser() {
+        return user;
+    }
+    public String getToken() {
+        return token;
     }
 
     //setter
 
-    public void setSubreddit(String subreddit) {
-        this.subreddit = subreddit;
+    public void setUser(String subreddit) {
+        this.user = user;
+    }
+    public void setToken(String subreddit) {
+        this.token = token;
     }
 
     /**
@@ -62,19 +71,36 @@ public class RedditComponent {
      * Sets access token and expiration time
      * @throws IOException
      */
-    public void connect() throws IOException {
-        Connection conn = Jsoup.connect(BASE_URL + "/api/v1/access_token").ignoreContentType(true).ignoreHttpErrors(true).method(Method.POST).userAgent(userAgent);
-        conn.data("grant_type", "client_credentials");
-
-        String combination = clientId + ":" + clientSecret;
-        combination = Base64.getEncoder().encodeToString(combination.getBytes());
-        conn.header("Authorization", "Basic " + combination);
-
-        Response res = conn.execute();
-        JsonObject object = JsonParser.parseString(res.body()).getAsJsonObject();
-
-        this.token = object.get("access_token").getAsString();
-        this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
+    public void connect() throws IOException, SQLException {
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        //String dbUrl = "jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/da2g0o7m136sp5?password=7b04e1735374fcb6ba8f984fdcbcaaf5bada71f4d85df12c0e62cab2ca2b4022&sslmode=require&user=fzbeyehwmqhuxn";
+        java.sql.Connection sql = DriverManager.getConnection(dbUrl);
+        Statement stmt = sql.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM api");
+        while (rs.next()) {
+            this.tokenDb = rs.getString(1);
+            this.expirationDateDb = Long.parseLong(rs.getString(2));
+        }
+        if (Instant.now().getEpochSecond() < expirationDateDb) {
+            this.token = tokenDb;
+            this.expirationDate = expirationDateDb;
+        } else {
+            Connection conn = Jsoup.connect(BASE_URL + "/api/v1/access_token").ignoreContentType(true).ignoreHttpErrors(true).method(Method.POST).userAgent(userAgent);
+            conn.data("grant_type", "client_credentials");
+            String combination = clientId + ":" + clientSecret;
+            combination = Base64.getEncoder().encodeToString(combination.getBytes());
+            conn.header("Authorization", "Basic " + combination);
+            Response res = conn.execute();
+            JsonObject object = JsonParser.parseString(res.body()).getAsJsonObject();
+            this.token = object.get("access_token").getAsString();
+            this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
+            System.out.println(conn.response().body());
+            String delToken = "DELETE FROM api WHERE token='" + this.tokenDb + "'";
+            stmt.executeUpdate(delToken);
+            String stm = "INSERT INTO api (token, expiration) VALUES ('" + this.token + "', '" + this.expirationDate + "')";
+            stmt.executeUpdate(stm);
+        }
+        sql.close();
     }
 
     /**
@@ -84,7 +110,7 @@ public class RedditComponent {
      * @throws IOException
      * @throws InterruptedException
      */
-    public JsonObject useEndpoint(String endpointPath) throws IOException, InterruptedException {
+    public JsonObject useEndpoint(String endpointPath) throws IOException, InterruptedException, SQLException {
         ensureConnection();
         Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
         connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
@@ -98,7 +124,7 @@ public class RedditComponent {
      * @throws IOException
      * @throws InterruptedException
      */
-    public JsonArray useEndpointSubmission(String endpointPath) throws IOException, InterruptedException {
+    public JsonArray useEndpointSubmission(String endpointPath) throws IOException, InterruptedException, SQLException {
         ensureConnection();
         Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
         connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
@@ -111,13 +137,9 @@ public class RedditComponent {
      * @throws InterruptedException
      * @throws AuthenticationException
      */
-    public void ensureConnection() throws IOException, InterruptedException, AuthenticationException {
+    public void ensureConnection() throws IOException, InterruptedException, AuthenticationException, SQLException {
         // There is no token
-        if (token == null) {
-            connect();
-        }
-        // The token is expired
-        if (Instant.now().getEpochSecond() > expirationDate) {
+        if (token == null || Instant.now().getEpochSecond() > expirationDate) {
             connect();
         }
     }
@@ -126,14 +148,11 @@ public class RedditComponent {
      * Get username from input validate it
      * @returns username
      */
-    public String readInput(String input) throws IOException, InterruptedException {
+    public String readInput(String input) throws IOException, InterruptedException, SQLException {
         String user = "";
         String endpoint = "";
         if (!input.contains("/")) {
             user = input;
-        }
-        if (input.startsWith("t2_")) {
-            //fullname
         }
         if (input.startsWith("u/") || input.contains("/u/") || input.contains("/user/")) {
             String[] e = input.split("u/");
@@ -184,34 +203,9 @@ public class RedditComponent {
                 user = author.replace("\"", "");
             }
         }
+        this.user = user;
         return user;
     }
-
-    /**
-     * Finding similarities between comments (referenced as Strings)
-     * @param x String 1 to compare to
-     * @param y String 2 to compare to
-     * @return
-     */
-    public static double findSimilarity(String x, String y) {
-        double maxLength = Double.max(x.length(), y.length());
-        if (maxLength > 0)
-            return (maxLength - StringUtils.getLevenshteinDistance(x, y)) / maxLength;
-        return 0.0;
-    }
-
-    public String random() throws IOException, InterruptedException {
-        JsonObject random = useEndpoint("/r/all/comments?sort=random");
-        JsonObject data = (JsonObject) random.get("data");
-        JsonArray children = data.getAsJsonArray("children");
-        String author = null;
-        for (JsonElement item : children) {
-            JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
-            author = String.valueOf(dat.getAsJsonObject().get("author"));
-        }
-        return author.substring(1,author.length()-1);
-    }
-
     /**
      * Send results to string
      * @return BASE_URL, OAUTH_URL, clientId, clientSecret, userAgent, token, expirationDate, and subreddit
@@ -226,7 +220,6 @@ public class RedditComponent {
                 ", userAgent='" + userAgent + '\'' +
                 ", token='" + token + '\'' +
                 ", expirationDate=" + expirationDate +
-                ", subreddit='" + subreddit + '\'' +
                 '}';
     }
 }

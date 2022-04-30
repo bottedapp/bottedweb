@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.text.StringEscapeUtils;
+
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
@@ -32,8 +34,8 @@ public class UserComments extends UserAccount {
      * @throws IOException
      * @throws InterruptedException
      */
-    public UserComments(String user) throws IOException, InterruptedException {
-        super(user);
+    public UserComments(String user) throws IOException, InterruptedException, SQLException {
+        this.user = user;
         analyze();
     }
 
@@ -46,7 +48,7 @@ public class UserComments extends UserAccount {
      * @throws IOException
      * @throws InterruptedException
      */
-    public UserComments(String user, List commentSubreddits, Map<String, String> commentMap, Map<String, List<Object>> userComments) throws IOException, InterruptedException {
+    public UserComments(String user, List commentSubreddits, Map<String, String> commentMap, Map<String, List<Object>> userComments) throws IOException, InterruptedException, SQLException {
         super(user);
         this.commentSubreddits = commentSubreddits;
         this.commentMap = commentMap;
@@ -81,16 +83,14 @@ public class UserComments extends UserAccount {
      * @throws InterruptedException
      */
     @Override
-    public void analyze() throws IOException, InterruptedException {
+    public void analyze() throws IOException, InterruptedException, SQLException {
         commentSubreddits = new ArrayList<>();
         commentMap = new HashMap<>();
         userComments = new HashMap<>();
 
-        JsonObject comments = useEndpoint("/user/" + user + "/comments");
-        JsonObject data = comments.getAsJsonObject("data");
-        JsonArray children = data.getAsJsonArray("children");
+        JsonArray comments = useEndpoint("/user/" + user + "/comments").getAsJsonObject("data").getAsJsonArray("children");
 
-        for (JsonElement item : children) {
+        for (JsonElement item : comments) {
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
             String id = String.valueOf(dat.getAsJsonObject().get("id"));
             String subreddit = String.valueOf(dat.getAsJsonObject().get("subreddit_name_prefixed"));

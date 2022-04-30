@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.text.StringEscapeUtils;
+
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
@@ -34,8 +36,8 @@ public class UserSubmissions extends UserAccount {
      * @throws IOException
      * @throws InterruptedException
      */
-    public UserSubmissions(String user) throws IOException, InterruptedException {
-        super(user);
+    public UserSubmissions(String user) throws IOException, InterruptedException, SQLException {
+        this.user = user;
         analyze();
     }
 
@@ -49,7 +51,7 @@ public class UserSubmissions extends UserAccount {
      * @throws IOException
      * @throws InterruptedException
      */
-    public UserSubmissions(String user, List submissionSubreddits, Map<String, String> submissionMap, Map<String, List<Object>> userSubmissions) throws IOException, InterruptedException {
+    public UserSubmissions(String user, List submissionSubreddits, Map<String, String> submissionMap, Map<String, List<Object>> userSubmissions) throws IOException, InterruptedException, SQLException {
         super(user);
         this.submissionSubreddits = submissionSubreddits;
         this.submissionMap = submissionMap;
@@ -91,16 +93,14 @@ public class UserSubmissions extends UserAccount {
      * @throws InterruptedException
      */
     @Override
-    public void analyze() throws IOException, InterruptedException {
+    public void analyze() throws IOException, InterruptedException, SQLException {
         submissionSubreddits = new ArrayList();
         submissionMap = new HashMap<>();
         userSubmissions = new HashMap<>();
 
-        JsonObject submitted = useEndpoint("/user/" + user + "/submitted");
-        JsonObject data = (JsonObject) submitted.get("data");
-        JsonArray children = (JsonArray) data.get("children");
+        JsonArray submitted = useEndpoint("/user/" + user + "/submitted").getAsJsonObject("data").getAsJsonArray("children");
 
-        for (JsonElement item : children) {
+        for (JsonElement item : submitted) {
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
             String id = String.valueOf(dat.getAsJsonObject().get("id"));
             String subreddit = String.valueOf(dat.getAsJsonObject().get("subreddit_name_prefixed"));

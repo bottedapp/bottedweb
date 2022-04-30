@@ -198,7 +198,18 @@ padding:.5%;
     color: #000000;
     min-width:69px;
 }
-
+.about {
+    font-family: Noto Sans,Arial,sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: unset;
+    line-height: 17px;
+    text-transform: unset;
+    color:#d7dadc;
+    width:400px;
+    margin-left:auto;
+    margin-right:auto;
+}
 .hamburger {
 	width: 21px;
 	height: 14px;
@@ -266,7 +277,6 @@ padding:.5%;
 	transform: translateX(200px);
 	transition: 0.1s all ease;
 	z-index: 5;
-
 }
 
 .menu_body.open {
