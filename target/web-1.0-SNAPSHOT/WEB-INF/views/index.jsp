@@ -12,7 +12,7 @@
 	<link rel="manifest" href="/images/favicon/site.webmanifest">
 	<link rel="mask-icon" href="/images/favicon/safari-pinned-tab.svg" color="#eb5528">
 	<meta name="msapplication-TileColor" content="#eb5528">
-	<meta name="theme-color" content="#eb5528">
+	<meta name="theme-color" content="#1a1a1b">
 	<link rel="stylesheet" href="/css/stylesheet.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
 	<script src="/js/botted.js" defer></script>

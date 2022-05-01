@@ -4,11 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.text.StringEscapeUtils;
-
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class UserComments extends UserAccount {
 

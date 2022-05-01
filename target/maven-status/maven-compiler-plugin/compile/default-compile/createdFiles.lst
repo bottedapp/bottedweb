@@ -1,3 +1,4 @@
 app/botted/controller/WebController.class
 app/botted/web.class
 app/botted/Model.class
+app/botted/RedditComponent.class

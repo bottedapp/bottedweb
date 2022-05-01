@@ -3,12 +3,9 @@ package app.botted;
 import com.google.gson.*;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-
-import java.io.IOException;
 import java.time.Instant;
 import java.util.Base64;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.IOException;
 
 public class BottedRequest {
 
@@ -26,8 +23,8 @@ public class BottedRequest {
     public static void main(String[] args) throws IOException, InterruptedException {
         BottedRequest r = new BottedRequest();
         r.userConnect();
-        r.analyze();
-        r.commentConnect();
+        r.getComments();
+        r.getSubmissions();
     }
 
     //getters
@@ -82,58 +79,112 @@ public class BottedRequest {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void analyze() throws IOException, InterruptedException {
+    public void getSubmissions() throws IOException, InterruptedException {
         JsonObject posts = (JsonObject) useEndpoint("/r/all/search?q=bottedapp");
         JsonObject data = posts.getAsJsonObject("data");
         JsonArray children = (JsonArray) data.get("children");
 
-        Map<String, String> summonMap = new LinkedHashMap<>();
         for (JsonElement item : children) {
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
-            String author = String.valueOf(dat.getAsJsonObject().get("author"));
-            String id = String.valueOf(dat.getAsJsonObject().get("id"));
-            String fullname = String.valueOf(dat.getAsJsonObject().get("author_fullname"));
-            String selftext = String.valueOf(dat.getAsJsonObject().get("selftext"));
-            summonMap.put(id, selftext);
-            System.out.println(author + " " + fullname + id + " " + selftext);
+            String id = String.valueOf(dat.getAsJsonObject().get("id")).replace("\"","");
+            System.out.println(id);
+            if (scanReplies("/comments/" + id + ".json")) {
+                System.out.println("replied");
+            } else {
+                System.out.println("not replied");
+                //get username ex: bottedapp <username>
+                //see if is a bot
+                // reply to comment with result
+            }
+        }
+    }
+    public void getComments() throws IOException, InterruptedException {
+        Connection conn = Jsoup.connect("https://api.pushshift.io/reddit/search/comment/?q=bottedapp").ignoreContentType(true).ignoreHttpErrors(true);
+        Connection.Response res = conn.execute();
+        JsonArray object = JsonParser.parseString(res.body()).getAsJsonObject().getAsJsonArray("data");
+
+        for (JsonElement item : object) {
+            String parent = String.valueOf(item.getAsJsonObject().get("parent_id")).replace("\"","").substring(3);
+            String id = String.valueOf(item.getAsJsonObject().get("id")).replace("\"","");
+            String body = String.valueOf(item.getAsJsonObject().get("body"));
+            System.out.println(parent + " " + id + " " + body);
+            if (scanReplies("/comments/" + parent + ".json?comment=" + id)) {
+                System.out.println("replied");
+            } else {
+                System.out.println("not replied");
+                //get username ex: bottedapp <username>
+                //see if is a bot
+                // reply to comment with result
+            }
         }
     }
 
-    /**
-     *
-     * @param endpointPath
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    public JsonElement useEndpoint(String endpointPath) throws IOException, InterruptedException {
-        Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
-        connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
-        return JsonParser.parseString(connection.execute().body()).getAsJsonObject();
+    public boolean scanReplies(String endpoint) throws IOException, InterruptedException {
+        JsonArray comments = (JsonArray) useEndpointArray(endpoint);
+        for (JsonElement item : comments) {
+            JsonArray data = item.getAsJsonObject().getAsJsonObject("data").getAsJsonArray("children");
+            for (JsonElement ite : data) {
+                JsonObject dat = ite.getAsJsonObject().getAsJsonObject("data");
+                if (dat.has("replies")) {
+                    if (dat.get("replies").isJsonPrimitive()) {
+                    } else {
+                        JsonObject da = dat.getAsJsonObject("replies");
+                        JsonArray d = da.getAsJsonObject().getAsJsonObject("data").getAsJsonArray("children");
+                        for (JsonElement it : d) {
+                            JsonObject p = it.getAsJsonObject().getAsJsonObject("data");
+                            String author = String.valueOf(p.getAsJsonObject().get("author"));
+                            if (author.equals("\"bottedapp\"")) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
-    public void replyComment() throws IOException, InterruptedException {
-        System.out.println("a");
-    }
+        /**
+         *
+         * @param endpointPath
+         * @return
+         * @throws IOException
+         * @throws InterruptedException
+         */
+        public JsonElement useEndpoint (String endpointPath) throws IOException, InterruptedException {
+            Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
+            connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
+            return JsonParser.parseString(connection.execute().body()).getAsJsonObject();
+        }
 
-    public String userComments(String comment) {
-        //send request to reddit backend for comments
-        return comment;
-    }
+        public JsonElement useEndpointArray(String endpointPath) throws IOException, InterruptedException {
+            Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
+            connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
+            return JsonParser.parseString(connection.execute().body()).getAsJsonArray();
+        }
 
-    public String getBody(String comment) {
-        //send request to reddit backend for comment contents
-        return userComments(comment);
-    }
+        public void replyComment() throws IOException, InterruptedException {
+            System.out.println("a");
+        }
 
-    public static void reply(Object responses) {
-        //send reply to reddit backend
+        public String userComments (String comment){
+            //send request to reddit backend for comments
+            return comment;
+        }
+
+        public String getBody (String comment){
+            //send request to reddit backend for comment contents
+            return userComments(comment);
+        }
+
+        public static void reply (Object responses){
+            //send reply to reddit backend
+        }
+        public void commentConnect () throws IOException {
+            Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
+                    .data("api_type", "json")
+                    .data("text", "test")
+                    .data("thing_id", "t1_i5kycps");
+            connect.header("Authorization", "bearer " + token).userAgent(userAgent).post();
+        }
     }
-    public void commentConnect() throws IOException {
-        Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
-                .data("api_type", "json")
-                .data("text", "test")
-                .data("thing_id", "t1_i5kycps");
-        connect.header("Authorization", "bearer " + token).userAgent(userAgent).post();
-    }
-}
