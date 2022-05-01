@@ -14,7 +14,7 @@ import java.util.Base64;
 import java.io.IOException;
 import com.google.gson.*;
 
-public class RedditAPI {
+public class RedditComponent {
 
     /**
      * Protected and private variables
@@ -33,7 +33,7 @@ public class RedditAPI {
      * @throws IOException
      * @throws InterruptedException
      */
-    public RedditAPI() throws IOException, InterruptedException {
+    public RedditComponent() throws IOException, InterruptedException {
     }
 
     /**
@@ -42,7 +42,7 @@ public class RedditAPI {
      * @throws IOException
      * @throws InterruptedException
      */
-    public RedditAPI(String user) throws IOException, InterruptedException {
+    public RedditComponent(String user) throws IOException, InterruptedException {
         this.user = user;
     }
 

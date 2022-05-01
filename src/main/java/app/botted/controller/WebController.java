@@ -39,9 +39,9 @@ public class WebController {
         }
         else if (random !=  null) {
 
-            RedditAPI reddit = new RedditAPI();
+            RedditComponent reddit = new RedditComponent();
             String redditor = new UserAccount().random();
-            RedditAPI user = new UserAccount(redditor);
+            RedditComponent user = new UserAccount(redditor);
             UserAccount comments = new UserComments(redditor);
             UserAccount submissions = new UserSubmissions(redditor);
             String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.isBot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
@@ -55,9 +55,9 @@ public class WebController {
             return "result";
         }
         else {
-            RedditAPI reddit = new RedditAPI();
+            RedditComponent reddit = new RedditComponent();
             String redditor = reddit.readInput(name);
-            RedditAPI user = new UserAccount(redditor);
+            RedditComponent user = new UserAccount(redditor);
             UserAccount comments = new UserComments(redditor);
             UserAccount submissions = new UserSubmissions(redditor);
             UserAccount bot = new BotAccount();

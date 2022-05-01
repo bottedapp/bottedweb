@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
 
-public class UserAccount extends RedditAPI {
+public class UserAccount extends RedditComponent {
 
     /**
      * Protected and private variables
