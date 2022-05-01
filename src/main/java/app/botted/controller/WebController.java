@@ -23,17 +23,6 @@ public class WebController {
     @RequestMapping("/")
     public String index(Model m, @RequestParam(value = "u", required = false) String name, String random) throws IOException, InterruptedException, SQLException {
 
-        ArrayList keyPhrase = new ArrayList();
-        keyPhrase.add("Hi! Thank you for summoning me! It would appear that this account is run by a bot!" +
-                "Here is a link to my webpage if you would like a more detailed analysis!" +
-                "\nhttps://botted.app/");
-        keyPhrase.add("Hi! Thank you for summoning me! It would appear that this account is run by a human!" +
-                "Here is a link to my webpage if you would like a more detailed analysis!" +
-                "\nhttps://botted.app/");
-        keyPhrase.add("Hi! Thank you for summoning me! Hm... my apologies, for some reason I am unsure whether or not this account is run by a bot." +
-                "Here is a link to my webpage if you would like a more detailed analysis!" +
-                "\nhttps://botted.app/");
-
         if (name == null && random == null) {
             return "index";
         }

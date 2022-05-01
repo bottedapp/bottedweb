@@ -12,6 +12,7 @@ public class BotAccount extends UserAccount {
      * Private variables
      */
     private boolean bot;
+    static ArrayList keyPhrase = new ArrayList();
 
     /**
      * Default constructor
@@ -54,14 +55,38 @@ public class BotAccount extends UserAccount {
     public static String isBot(String name, double commentScore, double submissionScore) {
         String user = name.toLowerCase(Locale.ROOT);
         if (user.contains("_bot") || user.contains("bot_"))
-            return user + " is a bot";
+            return name + " is a bot";
         if (commentScore >= 0.35 || submissionScore >= 0.6)
-            return user + " is a bot";
+            return name + " is a bot";
         if (commentScore > 0.25 && commentScore < 0.4 || submissionScore >= 0.35 && submissionScore >= 0.6)
-            return user + " might be a bot";
+            return name + " might be a bot";
         if (commentScore <= 0.25 && submissionScore <= 0.4)
-            return user + " is not a bot";
+            return name + " is not a bot";
         return "";
+    }
+    public static String BotOrNot(String name, double commentScore, double submissionScore) {
+        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + name + " is run by a bot!" +
+                "\nHere is a link to my webpage if you would like a more detailed analysis!" +
+                "\nhttps://botted.app/?u=" + name);
+        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + name + " might be run by a bot!" +
+                "\nHere is a link to my webpage if you would like a more detailed analysis!" +
+                "\nhttps://botted.app/?u=" + name);
+        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + name + " is run by a human!" +
+                "\nHere is a link to my webpage if you would like a more detailed analysis!" +
+                "\nhttps://botted.app/?u=" + name);
+        keyPhrase.add("Hi! Thank you for summoning me! Hm... my apologies, for some reason I am unsure whether or not this account is run by a bot." +
+                "\nHere is a link to my webpage if you would like a more detailed analysis!" +
+                "\nhttps://botted.app/?u=" + name);
+        String user = name.toLowerCase(Locale.ROOT);
+        if (user.contains("_bot") || user.contains("bot_"))
+            return (String) keyPhrase.get(0);
+        if (commentScore >= 0.35 || submissionScore >= 0.6)
+            return (String) keyPhrase.get(0);
+        if (commentScore > 0.25 && commentScore < 0.4 || submissionScore >= 0.35 && submissionScore >= 0.6)
+            return (String) keyPhrase.get(1);
+        if (commentScore <= 0.25 && submissionScore <= 0.4)
+            return (String) keyPhrase.get(2);
+        return (String) keyPhrase.get(3);
     }
 
     //getters

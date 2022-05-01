@@ -1,8 +1,11 @@
 package app.botted;
 
 import com.google.gson.*;
+import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Base64;
 import java.io.IOException;
@@ -19,8 +22,10 @@ public class BottedRequest {
     private String token;
     private long expirationDate;
     protected String subreddit;
+    static RedditComponent reddit;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, SQLException {
+        reddit = new RedditComponent();
         BottedRequest r = new BottedRequest();
         r.userConnect();
         r.getComments();
@@ -79,42 +84,81 @@ public class BottedRequest {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void getSubmissions() throws IOException, InterruptedException {
+    public void getSubmissions() throws IOException, InterruptedException, SQLException {
         JsonObject posts = (JsonObject) useEndpoint("/r/all/search?q=bottedapp");
         JsonObject data = posts.getAsJsonObject("data");
         JsonArray children = (JsonArray) data.get("children");
 
+        String result;
         for (JsonElement item : children) {
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
+            String author = String.valueOf(dat.getAsJsonObject().get("author")).replace("\"","");
             String id = String.valueOf(dat.getAsJsonObject().get("id")).replace("\"","");
-            System.out.println(id);
-            if (scanReplies("/comments/" + id + ".json")) {
-                System.out.println("replied");
-            } else {
-                System.out.println("not replied");
-                //get username ex: bottedapp <username>
-                //see if is a bot
-                // reply to comment with result
+            String body = StringEscapeUtils.unescapeJava(String.valueOf(dat.getAsJsonObject().get("selftext")));
+            System.out.println(author + " " + id + " " + body);
+
+            if (body.contains("bottedapp ")) {
+                if (scanReplies("/comments/" + id)) {
+                    System.out.println("replied");
+                } else {
+                    System.out.println("not replied");
+                    String[] split = body.split("bottedapp ");
+                    String input[] = split[1].replace("\"","").split(" ");
+                    try {
+                        String username = reddit.readInput(input[0]);
+                        RedditComponent user = new UserAccount(username);
+                        UserAccount comments = new UserComments(username);
+                        UserAccount submissions = new UserSubmissions(username);
+                        result = BotAccount.BotOrNot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore());
+                        System.out.println(result);
+                    } catch (Exception e){
+                        System.out.println("error");
+                        result = "Hi! Thank you for summoning me! Hm... my apologies, I am unable to locate the account." +
+                                "\nHere is a link to my webpage if you would like a more detailed analysis!" +
+                                "\nhttps://botted.app";
+                        System.out.println(result);
+                    }
+                    replyComment(id, result);
+                }
             }
         }
     }
-    public void getComments() throws IOException, InterruptedException {
+    public void getComments() throws IOException, InterruptedException, SQLException {
         Connection conn = Jsoup.connect("https://api.pushshift.io/reddit/search/comment/?q=bottedapp").ignoreContentType(true).ignoreHttpErrors(true);
         Connection.Response res = conn.execute();
         JsonArray object = JsonParser.parseString(res.body()).getAsJsonObject().getAsJsonArray("data");
 
+        String result;
         for (JsonElement item : object) {
             String parent = String.valueOf(item.getAsJsonObject().get("parent_id")).replace("\"","").substring(3);
             String id = String.valueOf(item.getAsJsonObject().get("id")).replace("\"","");
             String body = String.valueOf(item.getAsJsonObject().get("body"));
-            System.out.println(parent + " " + id + " " + body);
-            if (scanReplies("/comments/" + parent + ".json?comment=" + id)) {
-                System.out.println("replied");
-            } else {
-                System.out.println("not replied");
-                //get username ex: bottedapp <username>
-                //see if is a bot
-                // reply to comment with result
+            String author = String.valueOf(item.getAsJsonObject().get("author")).replace("\"","");
+            System.out.println(author + " " + parent + " " + id + " " + body);
+
+            if (body.contains("bottedapp ")) {
+                if (scanReplies("/comments/" + parent + ".json?comment=" + id)) {
+                    System.out.println("replied");
+                } else {
+                    System.out.println("not replied");
+                    String[] split = body.split("bottedapp ");
+                    String input[] = split[1].replace("\"","").split(" ");
+                    try {
+                        String username = reddit.readInput(input[0]);
+                        RedditComponent user = new UserAccount(username);
+                        UserAccount comments = new UserComments(username);
+                        UserAccount submissions = new UserSubmissions(username);
+                        result = BotAccount.BotOrNot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore());
+                        System.out.println(result);
+                    } catch (Exception e){
+                        System.out.println("error");
+                        result = "Hi! Thank you for summoning me! Hm... my apologies, I am unable to locate the account." +
+                                "\nHere is a link to my webpage if you would like a more detailed analysis!" +
+                                "\nhttps://botted.app";
+                        System.out.println(result);
+                    }
+                    replyComment(id, result);
+                }
             }
         }
     }
@@ -163,8 +207,12 @@ public class BottedRequest {
             return JsonParser.parseString(connection.execute().body()).getAsJsonArray();
         }
 
-        public void replyComment() throws IOException, InterruptedException {
-            System.out.println("a");
+        public void replyComment(String id, String result) throws IOException, InterruptedException {
+            Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
+                    .data("api_type", "json")
+                    .data("text", result)
+                    .data("thing_id", "t1_" + id);
+            connect.header("Authorization", "bearer " + token).userAgent(userAgent).post();
         }
 
         public String userComments (String comment){
@@ -179,12 +227,5 @@ public class BottedRequest {
 
         public static void reply (Object responses){
             //send reply to reddit backend
-        }
-        public void commentConnect () throws IOException {
-            Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
-                    .data("api_type", "json")
-                    .data("text", "test")
-                    .data("thing_id", "t1_i5kycps");
-            connect.header("Authorization", "bearer " + token).userAgent(userAgent).post();
         }
     }
