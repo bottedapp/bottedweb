@@ -5,7 +5,10 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Instant;
 import java.util.Base64;
 import java.io.IOException;
@@ -19,8 +22,8 @@ public class BottedRequest {
     private final String userAgent = "botted 0.0.1";
     private final String username = "bottedapp";
     private final String password = "mc3.edu!";
-    private String token;
-    private long expirationDate;
+    private String token, tokenDb;
+    private long expirationDate, expirationDateDb;
     protected String subreddit;
     RedditComponent reddit;
 
@@ -59,22 +62,42 @@ public class BottedRequest {
         this.subreddit = subreddit;
     }
 
+
     /**
      *
      * @throws IOException
+     * @throws InterruptedException
+     * @throws SQLException
      */
-    public void userConnect() throws IOException, InterruptedException {
-        Connection conn = Jsoup.connect(BASE_URL + "/api/v1/access_token").ignoreContentType(true).ignoreHttpErrors(true).method(Connection.Method.POST).userAgent(userAgent);
-        conn.data("grant_type", "password");
-        conn.data("username", username).data("password", password);
-        String combination = clientId + ":" + clientSecret;
-        combination = Base64.getEncoder().encodeToString(combination.getBytes());
-        conn.header("Authorization", "Basic " + combination);
-
-        Connection.Response res = conn.execute();
-        JsonObject object = JsonParser.parseString(res.body()).getAsJsonObject();
-        this.token = object.get("access_token").getAsString();
-        this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
+    public void userConnect() throws IOException, InterruptedException, SQLException {
+        //String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        String dbUrl = "jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/da2g0o7m136sp5?password=7b04e1735374fcb6ba8f984fdcbcaaf5bada71f4d85df12c0e62cab2ca2b4022&sslmode=require&user=fzbeyehwmqhuxn";
+        java.sql.Connection sql = DriverManager.getConnection(dbUrl);
+        Statement stmt = sql.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM bot");
+        while (rs.next()) {
+            this.tokenDb = rs.getString(1);
+            this.expirationDateDb = Long.parseLong(rs.getString(2));
+        }
+        if (Instant.now().getEpochSecond() < expirationDateDb) {
+            this.token = tokenDb;
+            this.expirationDate = expirationDateDb;
+        } else {
+            Connection conn = Jsoup.connect(BASE_URL + "/api/v1/access_token").ignoreContentType(true).ignoreHttpErrors(true).method(Connection.Method.POST).userAgent(userAgent);
+            conn.data("grant_type", "password");
+            conn.data("username", username).data("password", password);
+            String combination = clientId + ":" + clientSecret;
+            combination = Base64.getEncoder().encodeToString(combination.getBytes());
+            conn.header("Authorization", "Basic " + combination);
+            Connection.Response res = conn.execute();
+            JsonObject object = JsonParser.parseString(res.body()).getAsJsonObject();
+            String delToken = "DELETE FROM api WHERE token='" + this.tokenDb + "'";
+            stmt.executeUpdate(delToken);
+            this.token = object.get("access_token").getAsString();
+            this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
+            String stm = "INSERT INTO bot (token, expiration) VALUES ('" + this.token + "', '" + this.expirationDate + "')";
+            stmt.executeUpdate(stm);
+        }
     }
 
     /**
@@ -89,11 +112,11 @@ public class BottedRequest {
 
         for (JsonElement item : children) {
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
-            String author = String.valueOf(dat.getAsJsonObject().get("author")).replace("\"","");
-            String id = String.valueOf(dat.getAsJsonObject().get("id")).replace("\"","");
+            String author = String.valueOf(dat.getAsJsonObject().get("author")).replace("\"", "");
+            String id = String.valueOf(dat.getAsJsonObject().get("id")).replace("\"", "");
             String body = StringEscapeUtils.unescapeJava(String.valueOf(dat.getAsJsonObject().get("selftext")));
 
-            if (body.startsWith("\"!bottedapp ") || body.startsWith("\"u/bottedapp ") ) {
+            if (body.startsWith("\"!bottedapp ") || body.startsWith("\"u/bottedapp ")) {
                 if (scanReplies("/comments/" + id)) {
                     //replied
                 } else {
@@ -122,10 +145,8 @@ public class BottedRequest {
     }
     public void getResult(String body,String id) throws IOException, InterruptedException, SQLException {
         try {
-            String[] split = {"",""};
-            split = body.split("bottedapp ");
-            String[] input = {"",""};
-            input = split[1].replace("\"","").replace("\\","").split(" ");
+            String[] split = body.split("bottedapp ");
+            String[] input = split[1].replace("\"","").replace("\\","").split(" ");
             String username = new RedditComponent().readInput(input[0]);
             System.out.println(username);
             replyComment(id, new BotAccount(username).BotOrNot((new UserComments(username).getScore()), (new UserSubmissions(username).getScore())));
@@ -182,10 +203,10 @@ public class BottedRequest {
             return JsonParser.parseString(connection.execute().body()).getAsJsonArray();
         }
 
-        public void replyComment(String id, String respon) throws IOException, InterruptedException {
+        public void replyComment(String id, String response) throws IOException, InterruptedException {
             Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
                     .data("api_type", "json")
-                    .data("text", respon)
+                    .data("text", response)
                     .data("thing_id", "t1_" + id);
             connect.header("Authorization", "bearer " + token).userAgent(userAgent).post();
         }

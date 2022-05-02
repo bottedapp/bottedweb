@@ -118,13 +118,13 @@ public class RedditComponent {
     }
 
     /**
-     * Use end point submission for connection
+     * Use end point for connection with JSON array return value
      * @param endpointPath Path for end point
-     * @return The end point submission
+     * @return The end point response array
      * @throws IOException
      * @throws InterruptedException
      */
-    public JsonArray useEndpointSubmission(String endpointPath) throws IOException, InterruptedException, SQLException {
+    public JsonArray useEndpointArray(String endpointPath) throws IOException, InterruptedException, SQLException {
         ensureConnection();
         Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
         connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
@@ -169,7 +169,7 @@ public class RedditComponent {
             String[] d = c[1].split("/");
             if (d.length <= 5) // submission
                 endpoint = "/r/" + d[1] + "/comments/" + d[3];
-            JsonArray submissionInfo = useEndpointSubmission(endpoint);
+            JsonArray submissionInfo = useEndpointArray(endpoint);
             JsonObject array0 = submissionInfo.get(0).getAsJsonObject();
             JsonObject submissionData = (JsonObject) array0.getAsJsonObject().get("data");
             JsonArray submissionChildren = submissionData.getAsJsonArray("children");
