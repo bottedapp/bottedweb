@@ -49,7 +49,7 @@ public class WebController {
             RedditComponent user = new UserAccount(redditor);
             UserAccount comments = new UserComments(redditor);
             UserAccount submissions = new UserSubmissions(redditor);
-            UserAccount bot = new BotAccount();
+            BotAccount bot = new BotAccount();
             UserAccount human = new HumanAccount();
             String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.isBot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
 

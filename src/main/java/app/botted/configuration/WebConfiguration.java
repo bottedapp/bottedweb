@@ -1,13 +1,18 @@
 package app.botted.configuration;
 
+import app.botted.BottedRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.apache.commons.dbcp2.BasicDataSource;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 @Configuration
 public class WebConfiguration {
@@ -52,8 +57,14 @@ public class WebConfiguration {
         basicDataSource.setUrl(dbUrl);
         return basicDataSource;
     }
-    public String getDbUrl () {
+
+    public String getDbUrl() {
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
         return dbUrl;
+    }
+
+    @Scheduled(fixedDelay = 120000)
+    public void scheduleFixedDelayTask() throws SQLException, IOException, InterruptedException {
+        new BottedRequest();
     }
 }

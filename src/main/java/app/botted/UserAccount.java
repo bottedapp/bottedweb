@@ -270,6 +270,7 @@ public class UserAccount extends RedditComponent {
         Date date = new Date(utc * 1000);
         SimpleDateFormat sdf = new SimpleDateFormat("MMMMM dd, yyyy");
         created = sdf.format(date);
+        this.user = name;
     }
 
     public double compareScore(Map<String, String> scoreMap) {

@@ -22,14 +22,13 @@ public class BottedRequest {
     private String token;
     private long expirationDate;
     protected String subreddit;
-    static RedditComponent reddit;
+    RedditComponent reddit;
 
-    public static void main(String[] args) throws IOException, InterruptedException, SQLException {
+    public BottedRequest() throws IOException, InterruptedException, SQLException {
         reddit = new RedditComponent();
-        BottedRequest r = new BottedRequest();
-        r.userConnect();
-        r.getComments();
-        r.getSubmissions();
+        userConnect();
+        getComments();
+        getSubmissions();
     }
 
     //getters
@@ -76,7 +75,6 @@ public class BottedRequest {
         JsonObject object = JsonParser.parseString(res.body()).getAsJsonObject();
         this.token = object.get("access_token").getAsString();
         this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
-        System.out.println(res.body());
     }
 
     /**
@@ -89,36 +87,17 @@ public class BottedRequest {
         JsonObject data = posts.getAsJsonObject("data");
         JsonArray children = (JsonArray) data.get("children");
 
-        String result;
         for (JsonElement item : children) {
             JsonObject dat = (JsonObject) item.getAsJsonObject().get("data");
             String author = String.valueOf(dat.getAsJsonObject().get("author")).replace("\"","");
             String id = String.valueOf(dat.getAsJsonObject().get("id")).replace("\"","");
             String body = StringEscapeUtils.unescapeJava(String.valueOf(dat.getAsJsonObject().get("selftext")));
-            System.out.println(author + " " + id + " " + body);
 
-            if (body.contains("bottedapp ")) {
+            if (body.startsWith("\"!bottedapp ") || body.startsWith("\"u/bottedapp ") ) {
                 if (scanReplies("/comments/" + id)) {
-                    System.out.println("replied");
+                    //replied
                 } else {
-                    System.out.println("not replied");
-                    String[] split = body.split("bottedapp ");
-                    String input[] = split[1].replace("\"","").split(" ");
-                    try {
-                        String username = reddit.readInput(input[0]);
-                        RedditComponent user = new UserAccount(username);
-                        UserAccount comments = new UserComments(username);
-                        UserAccount submissions = new UserSubmissions(username);
-                        result = BotAccount.BotOrNot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore());
-                        System.out.println(result);
-                    } catch (Exception e){
-                        System.out.println("error");
-                        result = "Hi! Thank you for summoning me! Hm... my apologies, I am unable to locate the account." +
-                                "\nHere is a link to my webpage if you would like a more detailed analysis!" +
-                                "\nhttps://botted.app";
-                        System.out.println(result);
-                    }
-                    replyComment(id, result);
+                    getResult(body, id);
                 }
             }
         }
@@ -128,38 +107,34 @@ public class BottedRequest {
         Connection.Response res = conn.execute();
         JsonArray object = JsonParser.parseString(res.body()).getAsJsonObject().getAsJsonArray("data");
 
-        String result;
         for (JsonElement item : object) {
             String parent = String.valueOf(item.getAsJsonObject().get("parent_id")).replace("\"","").substring(3);
             String id = String.valueOf(item.getAsJsonObject().get("id")).replace("\"","");
             String body = String.valueOf(item.getAsJsonObject().get("body"));
-            String author = String.valueOf(item.getAsJsonObject().get("author")).replace("\"","");
-            System.out.println(author + " " + parent + " " + id + " " + body);
-
-            if (body.contains("bottedapp ")) {
+            if (body.startsWith("\"!bottedapp ") || body.startsWith("\"u/bottedapp ") ) {
                 if (scanReplies("/comments/" + parent + ".json?comment=" + id)) {
-                    System.out.println("replied");
+                    //replied
                 } else {
-                    System.out.println("not replied");
-                    String[] split = body.split("bottedapp ");
-                    String input[] = split[1].replace("\"","").split(" ");
-                    try {
-                        String username = reddit.readInput(input[0]);
-                        RedditComponent user = new UserAccount(username);
-                        UserAccount comments = new UserComments(username);
-                        UserAccount submissions = new UserSubmissions(username);
-                        result = BotAccount.BotOrNot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore());
-                        System.out.println(result);
-                    } catch (Exception e){
-                        System.out.println("error");
-                        result = "Hi! Thank you for summoning me! Hm... my apologies, I am unable to locate the account." +
-                                "\nHere is a link to my webpage if you would like a more detailed analysis!" +
-                                "\nhttps://botted.app";
-                        System.out.println(result);
-                    }
-                    replyComment(id, result);
+                    getResult(body, id);
                 }
             }
+        }
+    }
+    public void getResult(String body,String id) throws IOException, InterruptedException, SQLException {
+        try {
+            String[] split = {"",""};
+            split = body.split("bottedapp ");
+            String[] input = {"",""};
+            input = split[1].replace("\"","").replace("\\","").split(" ");
+            String username = new RedditComponent().readInput(input[0]);
+            System.out.println(username);
+            replyComment(id, new BotAccount(username).BotOrNot((new UserComments(username).getScore()), (new UserSubmissions(username).getScore())));
+            System.out.println(new BotAccount(username).BotOrNot((new UserComments(username).getScore()), (new UserSubmissions(username).getScore())));
+        } catch (Exception e){
+            String result = "Hi! Thank you for summoning me! Hm... my apologies, I am unable to locate the account." +
+                    "\nHere is a link to my webpage if you would like a more detailed analysis!" +
+                    "\nhttps://botted.app";
+            replyComment(id, result);
         }
     }
 
@@ -207,10 +182,10 @@ public class BottedRequest {
             return JsonParser.parseString(connection.execute().body()).getAsJsonArray();
         }
 
-        public void replyComment(String id, String result) throws IOException, InterruptedException {
+        public void replyComment(String id, String respon) throws IOException, InterruptedException {
             Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
                     .data("api_type", "json")
-                    .data("text", result)
+                    .data("text", respon)
                     .data("thing_id", "t1_" + id);
             connect.header("Authorization", "bearer " + token).userAgent(userAgent).post();
         }

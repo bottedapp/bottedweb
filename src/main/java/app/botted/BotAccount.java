@@ -9,8 +9,9 @@ public class BotAccount extends UserAccount {
     /**
      * Private variables
      */
+    private String user;
     private boolean bot;
-    static ArrayList keyPhrase = new ArrayList();
+    private ArrayList keyPhrase = new ArrayList();
 
     /**
      * Default constructor
@@ -19,6 +20,9 @@ public class BotAccount extends UserAccount {
      */
     public BotAccount() throws IOException, InterruptedException {
         super();
+    }
+    public BotAccount(String user) throws IOException, InterruptedException {
+        this.user = user;
     }
 
     /**
@@ -53,30 +57,30 @@ public class BotAccount extends UserAccount {
     public static String isBot(String name, double commentScore, double submissionScore) {
         String user = name.toLowerCase(Locale.ROOT);
         if (user.contains("_bot") || user.contains("bot_"))
-            return name + " is a bot";
+            return name + " is a bot!";
         if (commentScore >= 0.35 || submissionScore >= 0.6)
-            return name + " is a bot";
+            return name + " is a bot!";
         if (commentScore > 0.25 && commentScore < 0.4 || submissionScore >= 0.35 && submissionScore >= 0.6)
-            return name + " might be a bot";
+            return name + " might be a bot!";
         if (commentScore <= 0.25 && submissionScore <= 0.4)
-            return name + " is not a bot";
+            return name + " is a human!";
         return "";
     }
-    public static String BotOrNot(String name, double commentScore, double submissionScore) {
-        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + name + " is run by a bot!" +
+    public String BotOrNot(double commentScore, double submissionScore) {
+        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + user + " is run by a bot!" +
                 "\nHere is a link to my webpage if you would like a more detailed analysis!" +
-                "\nhttps://botted.app/?u=" + name);
-        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + name + " might be run by a bot!" +
+                "\nhttps://botted.app/?u=" + user);
+        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + user + " might be run by a bot!" +
                 "\nHere is a link to my webpage if you would like a more detailed analysis!" +
-                "\nhttps://botted.app/?u=" + name);
-        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + name + " is run by a human!" +
+                "\nhttps://botted.app/?u=" + user);
+        keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + user + " is run by a human!" +
                 "\nHere is a link to my webpage if you would like a more detailed analysis!" +
-                "\nhttps://botted.app/?u=" + name);
+                "\nhttps://botted.app/?u=" + user);
         keyPhrase.add("Hi! Thank you for summoning me! Hm... my apologies, for some reason I am unsure whether or not this account is run by a bot." +
                 "\nHere is a link to my webpage if you would like a more detailed analysis!" +
-                "\nhttps://botted.app/?u=" + name);
-        String user = name.toLowerCase(Locale.ROOT);
-        if (user.contains("_bot") || user.contains("bot_"))
+                "\nhttps://botted.app/?u=" + user);
+        String uname = user.toLowerCase(Locale.ROOT);
+        if (uname.contains("_bot") || user.contains("bot_"))
             return (String) keyPhrase.get(0);
         if (commentScore >= 0.35 || submissionScore >= 0.6)
             return (String) keyPhrase.get(0);
