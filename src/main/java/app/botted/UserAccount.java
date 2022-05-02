@@ -4,11 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
-
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class UserAccount extends RedditComponent {
 
@@ -18,7 +17,6 @@ public class UserAccount extends RedditComponent {
     protected String name, id, user, icon, url, description, created;
     protected Boolean verified, has_verified_email, is_gold, is_mod, is_employee;
     protected int awardee_karma, awarder_karma, link_karma, comment_karma, total_karma;
-    ArrayList keyPhrase;
 
     Boolean upvote, downvote;
     String post;
@@ -374,23 +372,6 @@ public class UserAccount extends RedditComponent {
         }
         return author.substring(1,author.length()-1);
     }
-
-    /**
-     * Return correct response according to results
-     * @param keyPhrase Phrase to signal to our bot for an action
-     * @return
-     */
-    public String responses(ArrayList<String> keyPhrase) {
-
-        String response = keyPhrase.get(2);
-
-        return response;
-    }
-
-    public static Object responses() {
-        return responses();
-    }
-
 
     /**
      * Send results to string

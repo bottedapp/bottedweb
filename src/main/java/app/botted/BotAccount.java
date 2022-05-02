@@ -11,7 +11,6 @@ public class BotAccount extends UserAccount {
      */
     private String user;
     private boolean bot;
-    private ArrayList keyPhrase = new ArrayList();
 
     /**
      * Default constructor
@@ -54,6 +53,12 @@ public class BotAccount extends UserAccount {
         this.bot = bot;
     }
 
+    /**
+     * @param name username of redditor to scan
+     * @param commentScore similarity score of comments
+     * @param submissionScore similarity score of submissions
+     * @return whether user is a bot or human
+     */
     public static String isBot(String name, double commentScore, double submissionScore) {
         String user = name.toLowerCase(Locale.ROOT);
         if (user.contains("_bot") || user.contains("bot_"))
@@ -66,7 +71,14 @@ public class BotAccount extends UserAccount {
             return name + " is a human!";
         return "";
     }
+
+     /**
+     * Return correct response according to results
+     * @param keyPhrase Phrase to signal to our bot for an action
+     * @return
+     */
     public String BotOrNot(double commentScore, double submissionScore) {
+        ArrayList keyPhrase = new ArrayList();
         keyPhrase.add("Hi! Thank you for summoning me! It would appear that " + user + " is run by a bot!" +
                 "\nHere is a link to my webpage if you would like a more detailed analysis!" +
                 "\nhttps://botted.app/?u=" + user);
@@ -104,23 +116,6 @@ public class BotAccount extends UserAccount {
     }
 
     /**
-     * Return correct response according to results
-     * @param keyPhrase Phrase to signal to our bot for an action
-     * @return
-     */
-    @Override
-    public String responses(ArrayList<String> keyPhrase) {
-
-        String response = keyPhrase.get(0);
-
-        return response;
-    }
-
-    public static Object responses() {
-        return responses();
-    }
-
-    /**
      * Send results to string
      * @return bot, goodBot, and badBot
      */
@@ -130,5 +125,4 @@ public class BotAccount extends UserAccount {
                 "bot=" + bot +
                 '}';
     }
-
 }
