@@ -1,0 +1,9 @@
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
