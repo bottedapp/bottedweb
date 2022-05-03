@@ -59,7 +59,7 @@ public class BotAccount extends UserAccount {
      * @param submissionScore similarity score of submissions
      * @return whether user is a bot or human
      */
-    public static String isBot(String name, double commentScore, double submissionScore) {
+    public static String BotOrNot(String name, double commentScore, double submissionScore) {
         String user = name.toLowerCase(Locale.ROOT);
         if (user.contains("_bot") || user.contains("bot_"))
             return name + " is a bot!";

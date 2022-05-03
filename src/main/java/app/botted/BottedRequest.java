@@ -91,7 +91,7 @@ public class BottedRequest {
             conn.header("Authorization", "Basic " + combination);
             Connection.Response res = conn.execute();
             JsonObject object = JsonParser.parseString(res.body()).getAsJsonObject();
-            String delToken = "DELETE FROM api WHERE token='" + this.tokenDb + "'";
+            String delToken = "DELETE FROM bot WHERE token='" + this.tokenDb + "'";
             stmt.executeUpdate(delToken);
             this.token = object.get("access_token").getAsString();
             this.expirationDate = object.get("expires_in").getAsInt() + Instant.now().getEpochSecond();
@@ -116,7 +116,7 @@ public class BottedRequest {
             String id = String.valueOf(dat.getAsJsonObject().get("id")).replace("\"", "");
             String body = StringEscapeUtils.unescapeJava(String.valueOf(dat.getAsJsonObject().get("selftext")));
 
-            if (body.startsWith("\"!bottedapp ") || body.startsWith("\"u/bottedapp ")) {
+            if (!(author == "[deleted]") && body.startsWith("\"!bottedapp ") || body.startsWith("\"u/bottedapp ")) {
                 if (scanReplies("/comments/" + id)) {
                     //replied
                 } else {
@@ -126,15 +126,16 @@ public class BottedRequest {
         }
     }
     public void getComments() throws IOException, InterruptedException, SQLException {
-        Connection conn = Jsoup.connect("https://api.pushshift.io/reddit/search/comment/?q=bottedapp").ignoreContentType(true).ignoreHttpErrors(true);
+        Connection conn = Jsoup.connect("https://api.pushshift.io/reddit/search/comment/?q=bottedapp&after=2h").ignoreContentType(true).ignoreHttpErrors(true);
         Connection.Response res = conn.execute();
         JsonArray object = JsonParser.parseString(res.body()).getAsJsonObject().getAsJsonArray("data");
 
         for (JsonElement item : object) {
-            String parent = String.valueOf(item.getAsJsonObject().get("parent_id")).replace("\"","").substring(3);
+            String parent = String.valueOf(item.getAsJsonObject().get("link_id")).replace("\"","").substring(3);
             String id = String.valueOf(item.getAsJsonObject().get("id")).replace("\"","");
             String body = String.valueOf(item.getAsJsonObject().get("body"));
-            if (body.startsWith("\"!bottedapp ") || body.startsWith("\"u/bottedapp ") ) {
+            String author = String.valueOf(item.getAsJsonObject().get("author")).replace("\"", "");
+            if (!(author == "[deleted]") && body.startsWith("\"!bottedapp ") || body.startsWith("\"u/bottedapp ") ) {
                 if (scanReplies("/comments/" + parent + ".json?comment=" + id)) {
                     //replied
                 } else {
@@ -173,7 +174,7 @@ public class BottedRequest {
                         for (JsonElement it : d) {
                             JsonObject p = it.getAsJsonObject().getAsJsonObject("data");
                             String author = String.valueOf(p.getAsJsonObject().get("author"));
-                            if (author.equals("\"bottedapp\"")) {
+                            if (author.equals("\"bottedapp\"") || author.equals("\"[deleted]\"")) {
                                 return true;
                             }
                         }
@@ -181,47 +182,44 @@ public class BottedRequest {
                 }
             }
         }
+        System.out.println("false");
         return false;
     }
 
-        /**
-         *
-         * @param endpointPath
-         * @return
-         * @throws IOException
-         * @throws InterruptedException
-         */
-        public JsonElement useEndpoint (String endpointPath) throws IOException, InterruptedException {
+    /**
+     *
+     * @param endpointPath
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public JsonElement useEndpoint (String endpointPath) throws IOException, InterruptedException {
+        try {
             Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
             connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
             return JsonParser.parseString(connection.execute().body()).getAsJsonObject();
-        }
+        } catch (Exception e) {
 
-        public JsonElement useEndpointArray(String endpointPath) throws IOException, InterruptedException {
+        }
+        return null;
+    }
+
+    public JsonElement useEndpointArray(String endpointPath) throws IOException, InterruptedException {
+        try {
             Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
             connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
             return JsonParser.parseString(connection.execute().body()).getAsJsonArray();
-        }
+        } catch (Exception e) {
 
-        public void replyComment(String id, String response) throws IOException, InterruptedException {
-            Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
-                    .data("api_type", "json")
-                    .data("text", response)
-                    .data("thing_id", "t1_" + id);
-            connect.header("Authorization", "bearer " + token).userAgent(userAgent).post();
         }
-
-        public String userComments (String comment){
-            //send request to reddit backend for comments
-            return comment;
-        }
-
-        public String getBody (String comment){
-            //send request to reddit backend for comment contents
-            return userComments(comment);
-        }
-
-        public static void reply (Object responses){
-            //send reply to reddit backend
-        }
+        return null;
     }
+
+    public void replyComment(String id, String response) throws IOException, InterruptedException {
+        Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
+                .data("api_type", "json")
+                .data("text", response)
+                .data("thing_id", "t1_" + id);
+        connect.header("Authorization", "bearer " + token).userAgent(userAgent).post();
+    }
+}

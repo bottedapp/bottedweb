@@ -14,12 +14,9 @@ public class UserAccount extends RedditComponent {
     /**
      * Protected and private variables
      */
-    protected String name, id, user, icon, url, description, created;
-    protected Boolean verified, has_verified_email, is_gold, is_mod, is_employee;
+    protected String name, id, user, icon, url, description, created, post;
+    protected boolean verified, has_verified_email, is_gold, is_mod, is_employee, upvote, downvote;
     protected int awardee_karma, awarder_karma, link_karma, comment_karma, total_karma;
-
-    Boolean upvote, downvote;
-    String post;
 
     /**
      * Default constructor
@@ -80,7 +77,7 @@ public class UserAccount extends RedditComponent {
      * @throws IOException
      * @throws InterruptedException
      */
-    public UserAccount(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException {
+    public UserAccount(String subreddit, String name, String id, String user, boolean verified, boolean has_verified_email, boolean is_gold, boolean is_mod, boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException {
         super(subreddit);
         this.name = name;
         this.id = id;
@@ -115,23 +112,23 @@ public class UserAccount extends RedditComponent {
         return user;
     }
 
-    public Boolean getVerified() {
+    public boolean getVerified() {
         return verified;
     }
 
-    public Boolean getHas_verified_email() {
+    public boolean getHas_verified_email() {
         return has_verified_email;
     }
 
-    public Boolean getIs_gold() {
+    public boolean getIs_gold() {
         return is_gold;
     }
 
-    public Boolean getIs_mod() {
+    public boolean getIs_mod() {
         return is_mod;
     }
 
-    public Boolean getIs_employee() {
+    public boolean getIs_employee() {
         return is_employee;
     }
 
@@ -185,23 +182,23 @@ public class UserAccount extends RedditComponent {
         this.user = user;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(boolean verified) {
         this.verified = verified;
     }
 
-    public void setHas_verified_email(Boolean has_verified_email) {
+    public void setHas_verified_email(boolean has_verified_email) {
         this.has_verified_email = has_verified_email;
     }
 
-    public void setIs_gold(Boolean is_gold) {
+    public void setIs_gold(boolean is_gold) {
         this.is_gold = is_gold;
     }
 
-    public void setIs_mod(Boolean is_mod) {
+    public void setIs_mod(boolean is_mod) {
         this.is_mod = is_mod;
     }
 
-    public void setIs_employee(Boolean is_employee) {
+    public void setIs_employee(boolean is_employee) {
         this.is_employee = is_employee;
     }
 
@@ -361,7 +358,7 @@ public class UserAccount extends RedditComponent {
             return (maxLength - StringUtils.getLevenshteinDistance(x, y)) / maxLength;
         return 0.0;
     }
-    public String random() throws IOException, InterruptedException, SQLException {
+    public String randomUser() throws IOException, InterruptedException, SQLException {
         JsonObject random = useEndpoint("/r/all/comments?sort=random");
         JsonObject data = (JsonObject) random.get("data");
         JsonArray children = data.getAsJsonArray("children");

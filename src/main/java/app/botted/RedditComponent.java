@@ -72,8 +72,8 @@ public class RedditComponent {
      * @throws IOException
      */
     public void connect() throws IOException, SQLException {
-        String dbUrl = System.getenv("JDBC_DATABASE_URL");
-        //String dbUrl = "jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/da2g0o7m136sp5?password=7b04e1735374fcb6ba8f984fdcbcaaf5bada71f4d85df12c0e62cab2ca2b4022&sslmode=require&user=fzbeyehwmqhuxn";
+        //String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        String dbUrl = "jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/da2g0o7m136sp5?password=7b04e1735374fcb6ba8f984fdcbcaaf5bada71f4d85df12c0e62cab2ca2b4022&sslmode=require&user=fzbeyehwmqhuxn";
         java.sql.Connection sql = DriverManager.getConnection(dbUrl);
         Statement stmt = sql.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM api");
@@ -104,34 +104,6 @@ public class RedditComponent {
     }
 
     /**
-     * Use end point to ensure connection
-     * @param endpointPath Path for end point
-     * @return The end point
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    public JsonObject useEndpoint(String endpointPath) throws IOException, InterruptedException, SQLException {
-        ensureConnection();
-        Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
-        connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
-        return JsonParser.parseString(connection.execute().body()).getAsJsonObject();
-    }
-
-    /**
-     * Use end point for connection with JSON array return value
-     * @param endpointPath Path for end point
-     * @return The end point response array
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    public JsonArray useEndpointArray(String endpointPath) throws IOException, InterruptedException, SQLException {
-        ensureConnection();
-        Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
-        connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
-        return JsonParser.parseString(connection.execute().body()).getAsJsonArray();
-    }
-
-    /**
      * Ensure the connection is authenticated
      * @throws IOException
      * @throws InterruptedException
@@ -142,6 +114,44 @@ public class RedditComponent {
         if (token == null || Instant.now().getEpochSecond() > expirationDate) {
             connect();
         }
+    }
+
+    /**
+     * Use end point to ensure connection
+     * @param endpointPath Path for end point
+     * @return The end point
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public JsonObject useEndpoint(String endpointPath) throws IOException, InterruptedException, SQLException {
+        try {
+            ensureConnection();
+            Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
+            connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
+            return JsonParser.parseString(connection.execute().body()).getAsJsonObject();
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
+    /**
+     * Use end point for connection with JSON array return value
+     * @param endpointPath Path for end point
+     * @return The end point response array
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public JsonArray useEndpointArray(String endpointPath) throws IOException, InterruptedException, SQLException {
+       try {
+           ensureConnection();
+           Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
+           connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
+           return JsonParser.parseString(connection.execute().body()).getAsJsonArray();
+       } catch (Exception e) {
+
+       }
+       return null;
     }
 
     /**

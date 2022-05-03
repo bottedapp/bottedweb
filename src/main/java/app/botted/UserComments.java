@@ -143,7 +143,7 @@ public class UserComments extends UserAccount {
     /**
      * @return Comment Score
      */
-    public Double getScore() {
+    public double getScore() {
         return compareScore(commentMap);
     }
 

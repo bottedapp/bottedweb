@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 @Controller
 public class WebController {
@@ -29,11 +28,11 @@ public class WebController {
         else if (random !=  null) {
 
             RedditComponent reddit = new RedditComponent();
-            String redditor = new UserAccount().random();
+            String redditor = new UserAccount().randomUser();
             RedditComponent user = new UserAccount(redditor);
             UserAccount comments = new UserComments(redditor);
             UserAccount submissions = new UserSubmissions(redditor);
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.isBot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.BotOrNot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
@@ -51,7 +50,7 @@ public class WebController {
             UserAccount submissions = new UserSubmissions(redditor);
             BotAccount bot = new BotAccount();
             UserAccount human = new HumanAccount();
-            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.isBot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
+            String isaBot = "<h1 style=\"font-family:system-ui;color:#ffffff\">" + BotAccount.BotOrNot(((UserAccount) user).getName(), ((UserComments) comments).getScore(), ((UserSubmissions) submissions).getScore()) + "</h1>";
 
             m.addAttribute("uname", name);
             m.addAttribute("user", user);
