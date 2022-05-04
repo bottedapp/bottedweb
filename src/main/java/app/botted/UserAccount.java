@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class UserAccount extends RedditComponent {
 
     /**
-     * Protected and private variables
+     * Protected variables
      */
     protected String name, id, user, icon, url, description, created, post;
     protected boolean verified, has_verified_email, is_gold, is_mod, is_employee, upvote, downvote;
@@ -98,7 +98,9 @@ public class UserAccount extends RedditComponent {
         this.downvote = downvote;
     }
 
-    //getters
+    /**
+     * Getters
+     */
 
     public String getName() {
         return name;
@@ -168,7 +170,9 @@ public class UserAccount extends RedditComponent {
         return downvote;
     }
 
-    //setters
+    /**
+     * Setters
+     */
 
     public void setName(String name) {
         this.name = name;
@@ -268,6 +272,12 @@ public class UserAccount extends RedditComponent {
         this.user = name;
     }
 
+
+    /**
+     * Compares text from each comment and post to determine similarity score
+     * @param scoreMap Map of comments/submissions to compare
+     * @return Similarity score
+     */
     public double compareScore(Map<String, String> scoreMap) {
         double score = 0;
         int scoreCount = 0;
@@ -288,6 +298,11 @@ public class UserAccount extends RedditComponent {
         return score / scoreCount;
     }
 
+    /**
+     * Calculate total upvotes from all comments/submissions
+     * @param postMap Map of comments or submissions data
+     * @return
+     */
     public int upvotes(Map<String, List<Object>> postMap) {
         int ups = 0;
         for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
@@ -295,6 +310,11 @@ public class UserAccount extends RedditComponent {
         return ups;
     }
 
+    /**
+     * Calculate total downvotes from all comments/submissions
+     * @param postMap Map of comments or submissions data
+     * @return
+     */
     public int downvotes(Map<String, List<Object>> postMap) {
         int downs = 0;
         for (Map.Entry<String, List<Object>> comment : postMap.entrySet())
@@ -302,6 +322,11 @@ public class UserAccount extends RedditComponent {
         return downs;
     }
 
+    /**
+     * List of subreddits the user has commented and posted in
+     * @param userSubreddits  Map of comments or submissions data
+     * @return
+     */
     public String subredditsList(Map<String, List<Object>> userSubreddits) {
         int i = 1;
         String userSubs = "";
@@ -316,6 +341,11 @@ public class UserAccount extends RedditComponent {
         return userSubs;
     }
 
+    /**
+     * Finds most frequent subreddit user comments/posts in
+     * @param subreddits List of subreddits
+     * @return most popular subreddit of user
+     */
     public String popularSubreddit(List subreddits) {
         String popularSubreddit = "";
         int subredditCount = 0;
@@ -332,6 +362,11 @@ public class UserAccount extends RedditComponent {
         return popularSubreddit;
     }
 
+    /**
+     * Determines number of times user has commented/posted in most frequent subreddit
+     * @param subreddits List of subreddits
+     * @return times posted in most popular subreddit of user
+     */
     public int popularSubredditCount(List subreddits) {
         int subredditCount = 0;
         if (subreddits.size() < 1) {
@@ -358,6 +393,14 @@ public class UserAccount extends RedditComponent {
             return (maxLength - StringUtils.getLevenshteinDistance(x, y)) / maxLength;
         return 0.0;
     }
+
+    /**
+     * Generate random user from reddit
+     * @return random username of reddit user
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws SQLException
+     */
     public String randomUser() throws IOException, InterruptedException, SQLException {
         JsonObject random = useEndpoint("/r/all/comments?sort=random");
         JsonObject data = (JsonObject) random.get("data");

@@ -17,7 +17,7 @@ import com.google.gson.*;
 public class RedditComponent {
 
     /**
-     * Protected and private variables
+     * Private variables
      */
     private final String BASE_URL = "https://www.reddit.com";
     private final String OAUTH_URL = "https://oauth.reddit.com";
@@ -46,21 +46,27 @@ public class RedditComponent {
         this.user = user;
     }
 
-    //getter
+    /**
+     * Getters
+     */
 
     public String getUser() {
         return user;
     }
+
     public String getToken() {
         return token;
     }
 
-    //setter
+    /**
+     * Setters
+     */
 
-    public void setUser(String subreddit) {
+    public void setUser(String user) {
         this.user = user;
     }
-    public void setToken(String subreddit) {
+
+    public void setToken(String token) {
         this.token = token;
     }
 
@@ -72,8 +78,8 @@ public class RedditComponent {
      * @throws IOException
      */
     public void connect() throws IOException, SQLException {
-        //String dbUrl = System.getenv("JDBC_DATABASE_URL");
-        String dbUrl = "jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/da2g0o7m136sp5?password=7b04e1735374fcb6ba8f984fdcbcaaf5bada71f4d85df12c0e62cab2ca2b4022&sslmode=require&user=fzbeyehwmqhuxn";
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        //String dbUrl = "jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/da2g0o7m136sp5?password=7b04e1735374fcb6ba8f984fdcbcaaf5bada71f4d85df12c0e62cab2ca2b4022&sslmode=require&user=fzbeyehwmqhuxn";
         java.sql.Connection sql = DriverManager.getConnection(dbUrl);
         Statement stmt = sql.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM api");
@@ -117,9 +123,9 @@ public class RedditComponent {
     }
 
     /**
-     * Use end point to ensure connection
+     * Send reddit endpoint request to reddit api and get Json result
      * @param endpointPath Path for end point
-     * @return The end point
+     * @return JsonObject with reddit api data
      * @throws IOException
      * @throws InterruptedException
      */
@@ -155,8 +161,8 @@ public class RedditComponent {
     }
 
     /**
-     * Get username from input validate it
-     * @returns username
+     * Get input in form of username/comment/submission/url
+     * @returns username of user
      */
     public String readInput(String input) throws IOException, InterruptedException, SQLException {
         String user = "";

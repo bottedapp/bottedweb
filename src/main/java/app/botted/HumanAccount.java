@@ -6,9 +6,11 @@ import java.util.ArrayList;
 public class HumanAccount extends UserAccount {
 
     /**
-     * Private variable
+     * Private variables
      */
+    private String user;
     private boolean human;
+
 
     /**
      * Default constructor
@@ -34,13 +36,17 @@ public class HumanAccount extends UserAccount {
         this.human = human;
     }
 
-    //getter
+    /**
+     * Getter
+     */
 
     public boolean isHuman() {
         return human;
     }
 
-    //setter
+    /**
+     * Setter
+     */
 
     public void setHuman(boolean human) {
         this.human = human;

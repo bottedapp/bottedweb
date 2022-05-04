@@ -20,6 +20,13 @@ public class BotAccount extends UserAccount {
     public BotAccount() throws IOException, InterruptedException {
         super();
     }
+
+    /**
+     * Constructor
+     * @param user
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public BotAccount(String user) throws IOException, InterruptedException {
         this.user = user;
     }
@@ -54,6 +61,7 @@ public class BotAccount extends UserAccount {
     }
 
     /**
+     * Determines if user is a bot and returns result
      * @param name username of redditor to scan
      * @param commentScore similarity score of comments
      * @param submissionScore similarity score of submissions
@@ -72,10 +80,11 @@ public class BotAccount extends UserAccount {
         return "";
     }
 
-     /**
-     * Return correct response according to results
-     * @param keyPhrase Phrase to signal to our bot for an action
-     * @return
+    /**
+     * Determines if user is a bot and returns keyphrase to BottedRequest
+     * @param commentScore similarity score of comments
+     * @param submissionScore similarity score of submissions
+     * @return keyPhrase
      */
     public String BotOrNot(double commentScore, double submissionScore) {
         ArrayList keyPhrase = new ArrayList();
@@ -103,13 +112,17 @@ public class BotAccount extends UserAccount {
         return (String) keyPhrase.get(3);
     }
 
-    //getters
+    /**
+     * Getters
+     */
 
     public boolean isBot() {
         return bot;
     }
 
-    //setters
+    /**
+     * Setters
+     */
 
     public void setBot(boolean bot) {
         this.bot = bot;

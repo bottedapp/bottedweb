@@ -94,8 +94,8 @@ public class UserSubmissions extends UserAccount {
     @Override
     public void analyze() throws IOException, InterruptedException, SQLException {
         submissionSubreddits = new ArrayList();
-        submissionMap = new HashMap<>();
-        userSubmissions = new HashMap<>();
+        submissionMap = new LinkedHashMap<>();
+        userSubmissions = new LinkedHashMap<>();
 
         JsonArray submitted = useEndpoint("/user/" + user + "/submitted").getAsJsonObject("data").getAsJsonArray("children");
 
@@ -151,6 +151,7 @@ public class UserSubmissions extends UserAccount {
     }
 
     /**
+     * Get list of user submissions
      * @param userSubmissions Map of all user submission data
      * @return List of all user submissions
      */
@@ -169,6 +170,10 @@ public class UserSubmissions extends UserAccount {
         return submissionList;
     }
 
+    /**
+     * Get submission similarity score from compareScore method
+     * @return Comment Score
+     */
     public double getScore() {
         return compareScore(submissionMap);
     }

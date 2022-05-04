@@ -54,7 +54,9 @@ public class UserComments extends UserAccount {
         this.userComments = userComments;
     }
 
-    //getters
+    /**
+     * Getters
+     */
 
     public List getCommentSubreddits() {
         return commentSubreddits;
@@ -64,7 +66,9 @@ public class UserComments extends UserAccount {
 
     public Map<String, List<Object>> getUserComments() { return userComments; }
 
-    //setters
+    /**
+     * Setters
+     */
 
     public void setCommentSubreddits(List commentSubreddits) {
         this.commentSubreddits = commentSubreddits;
@@ -77,15 +81,14 @@ public class UserComments extends UserAccount {
 
     /**
      * Retrieves and assigns all comments data from Reddit API
-     *
      * @throws IOException
      * @throws InterruptedException
      */
     @Override
     public void analyze() throws IOException, InterruptedException, SQLException {
         commentSubreddits = new ArrayList<>();
-        commentMap = new HashMap<>();
-        userComments = new HashMap<>();
+        commentMap = new LinkedHashMap<>();
+        userComments = new LinkedHashMap<>();
 
         JsonArray comments = useEndpoint("/user/" + user + "/comments").getAsJsonObject("data").getAsJsonArray("children");
 
@@ -123,11 +126,13 @@ public class UserComments extends UserAccount {
     }
 
     /**
+     * Get list of user comments
      * @param userComments Map of all user comments data
      * @return List of all user comments
      */
     public String commentsList(Map<String, List<Object>> userComments) {
         String commentList = "<table style=\"width:100%;max-width:100%;display:block;word-wrap:break-word;\"><tbody style=\"width: 100%;max-width: 100%;display: block;word-wrap: break-word;\">";
+
         for (Map.Entry<String, List<Object>> comment : userComments.entrySet()) {
             commentList += "<tr style=\"display:block; border-bottom: #363636 solid 15px;\"\">" +
                     "<td style=\"background:#1A1A1B;width: 100%;max-width: 100%;display:block;word-wrap: break-word;color:#d7dadc;border: #d7dadc solid 1px;\">" +
@@ -141,6 +146,7 @@ public class UserComments extends UserAccount {
     }
 
     /**
+     * Get comments similarity score from compareScore method
      * @return Comment Score
      */
     public double getScore() {
