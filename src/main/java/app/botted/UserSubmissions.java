@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class UserSubmissions extends UserAccount {
 
     /**
-     * private variables
+     * Private variables
      */
     private List submissionSubreddits;
     private Map<String, String> submissionMap;
@@ -30,7 +30,6 @@ public class UserSubmissions extends UserAccount {
 
     /**
      * Constructor with parameters
-     *
      * @param user The username
      * @throws IOException
      * @throws InterruptedException
@@ -42,7 +41,6 @@ public class UserSubmissions extends UserAccount {
 
     /**
      * Constructor
-     *
      * @param user The username
      * @param submissionSubreddits Subreddits commented in
      * @param submissionMap 25 latest submissions by user
@@ -57,7 +55,9 @@ public class UserSubmissions extends UserAccount {
         this.userSubmissions = userSubmissions;
     }
 
-    //getters
+    /**
+     * Getters
+     */
 
     public List getSubmissionSubreddits() {
         return submissionSubreddits;
@@ -71,7 +71,9 @@ public class UserSubmissions extends UserAccount {
         return userSubmissions;
     }
 
-    //setters
+    /**
+     * Setters
+     */
 
     public void setSubmissionSubreddits(List submissionSubreddits) {
         this.submissionSubreddits = submissionSubreddits;
@@ -87,7 +89,6 @@ public class UserSubmissions extends UserAccount {
 
     /**
      * Retrieves and assigns all submission data from Reddit API
-     *
      * @throws IOException
      * @throws InterruptedException
      */
