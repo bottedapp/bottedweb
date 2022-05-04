@@ -27,8 +27,8 @@ public class BottedRequest {
     private final String password = "mc3.edu!";
     private String token, tokenDb;
     private long expirationDate, expirationDateDb;
-    protected String subreddit;
-    RedditComponent reddit;
+    private String subreddit;
+    private RedditComponent reddit;
 
     /**
      * Default Constructor
