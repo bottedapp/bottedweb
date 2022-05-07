@@ -4,35 +4,45 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Bot Account class
+ */
 public class BotAccount extends UserAccount {
 
     /**
      * Private variables
      */
+
+    /**
+     * The username
+     */
     private String user;
+    /**
+     * Whether it is a bot account
+     */
     private boolean bot;
 
     /**
      * Default constructor
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
      */
     public BotAccount() throws IOException, InterruptedException {
         super();
     }
 
     /**
-     * Constructor
-     * @param user
-     * @throws IOException
-     * @throws InterruptedException
+     * Constructor with user parameter
+     * @param user the username
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
      */
     public BotAccount(String user) throws IOException, InterruptedException {
         this.user = user;
     }
 
     /**
-     * Constructor
+     * Constructor with parameters
      * @param subreddit The specific subreddit
      * @param name The name associated with the account
      * @param id The account ID
@@ -52,16 +62,16 @@ public class BotAccount extends UserAccount {
      * @param upvote An upvote on a post or comment
      * @param downvote A downvote on a post or comment
      * @param bot Whether this is a bot
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
      */
-    public BotAccount(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote, boolean bot, boolean goodBot, boolean badBot) throws IOException, InterruptedException {
+    public BotAccount(String subreddit, String name, String id, String user, Boolean verified, Boolean has_verified_email, Boolean is_gold, Boolean is_mod, Boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote, boolean bot) throws IOException, InterruptedException {
         super(subreddit, name, id, user, verified, has_verified_email, is_gold, is_mod, is_employee, awardee_karma, awarder_karma, link_karma, comment_karma, total_karma, created, comment, upvote, downvote);
         this.bot = bot;
     }
 
     /**
-     * Determines if user is a bot and returns result
+     * Determines if user is a bot and returns result to web app
      * @param name username of redditor to scan
      * @param commentScore similarity score of comments
      * @param submissionScore similarity score of submissions
@@ -113,24 +123,22 @@ public class BotAccount extends UserAccount {
     }
 
     /**
-     * Getters
+     * Boolean value to determine if is user is a bot
+     * @return if user is a bot
      */
-
-    public boolean isBot() {
-        return bot;
-    }
+    public boolean isBot() { return bot; }
 
     /**
-     * Setters
+     * Set boolean value to determine if is user is a bot
+     * @param bot is user is a bot
      */
-
     public void setBot(boolean bot) {
         this.bot = bot;
     }
 
     /**
      * Send results to string
-     * @return bot, goodBot, and badBot
+     * @return bot
      */
     @Override
     public String toString() {

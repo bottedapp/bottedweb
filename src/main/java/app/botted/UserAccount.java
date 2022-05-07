@@ -8,30 +8,109 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.IOException;
 import java.sql.SQLException;
-
+/**
+ * User Account class
+ */
 public class UserAccount extends RedditComponent {
 
     /**
      * Protected variables
      */
-    protected String name, id, user, icon, url, description, created, post;
-    protected boolean verified, has_verified_email, is_gold, is_mod, is_employee, upvote, downvote;
-    protected int awardee_karma, awarder_karma, link_karma, comment_karma, total_karma;
+
+    /**
+     * The name associated with the account
+     */
+    protected String name;
+    /**
+     * The account ID
+     */
+    protected String id;
+    /**
+     * The username
+     */
+    protected String user;
+    /**
+     * Avatar of user
+     */
+    protected String icon;
+    /**
+     * Url of reddit profile
+     */
+    protected String url;
+    /**
+     * Users description
+     */
+    protected String description;
+    /**
+     * Date account was created
+     */
+    protected String created;
+    /**
+     * Comments/submissions
+     */
+    protected String post;
+    /**
+     * If account is verified
+     */
+    protected boolean verified;
+    /**
+     * If E-mail has been verified on account
+     */
+    protected boolean has_verified_email;
+    /**
+     * If account has gold status
+     */
+    protected boolean is_gold;
+    /**
+     * Is user a moderator
+     */
+    protected boolean is_mod;
+    /**
+     * Is user an employee
+     */
+    protected boolean is_employee;
+    /**
+     * An upvote on a post or comment
+     */
+    protected boolean upvote;
+    /**
+     * A downvote on a post or comment
+     */
+    protected boolean downvote;
+    /**
+     * Karma gained from awardee
+     */
+    protected int awardee_karma;
+    /**
+     * arma gained from awarder
+     */
+    protected int awarder_karma;
+    /**
+     * Karma gained from link
+     */
+    protected int link_karma;
+    /**
+     * Karma gained from comment
+     */
+    protected int comment_karma;
+    /**
+     * Total karma on account
+     */
+    protected int total_karma;
 
     /**
      * Default constructor
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public UserAccount() throws IOException, InterruptedException {
+    public UserAccount() {
         super();
     }
 
     /**
-     * Constructor with parameters
+     * Constructor with user parameter
      * @param user The username
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
+     * @throws SQLException SQL Exception
      */
     public UserAccount(String user) throws IOException, InterruptedException, SQLException {
         this.user = user;
@@ -44,10 +123,8 @@ public class UserAccount extends RedditComponent {
      * @param comment A comment on a post
      * @param upvote An upvote on a post or comment
      * @param downvote A downvote on a post or comment
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public UserAccount(String subreddit, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException { // human
+    public UserAccount(String subreddit, String comment, boolean upvote, boolean downvote) { // human
         super();
         this.post = comment;
         this.upvote = upvote;
@@ -55,7 +132,7 @@ public class UserAccount extends RedditComponent {
     }
 
     /**
-     * Constructor
+     * Constructor with parameters
      * @param subreddit The specific subreddit
      * @param name The name associated with the account
      * @param id The account ID
@@ -74,10 +151,8 @@ public class UserAccount extends RedditComponent {
      * @param comment A comment on a post
      * @param upvote An upvote on a post or comment
      * @param downvote A downvote on a post or comment
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public UserAccount(String subreddit, String name, String id, String user, boolean verified, boolean has_verified_email, boolean is_gold, boolean is_mod, boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote) throws IOException, InterruptedException {
+    public UserAccount(String subreddit, String name, String id, String user, boolean verified, boolean has_verified_email, boolean is_gold, boolean is_mod, boolean is_employee, int awardee_karma, int awarder_karma, int link_karma, int comment_karma, int total_karma, String created, String comment, boolean upvote, boolean downvote) {
         super(subreddit);
         this.name = name;
         this.id = id;
@@ -102,70 +177,122 @@ public class UserAccount extends RedditComponent {
      * Getters
      */
 
+    /**
+     * Get The name associated with the account
+     * @return The name associated with the account
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * Get the account ID
+     * @return The account ID
+     */
     public String getId() {
         return id;
     }
-
+    /**
+     * Get the username
+     * @return The username
+     */
     public String getUser() {
         return user;
     }
-
+    /**
+     * Check if account is verified
+     * @return If account is verified
+     */
     public boolean getVerified() {
         return verified;
     }
-
+    /**
+     * Check if e-mail has been verified on account
+     * @return If e-mail has been verified on account
+     */
     public boolean getHas_verified_email() {
         return has_verified_email;
     }
-
+    /**
+     * Check if account has gold status
+     * @return If account has gold status
+     */
     public boolean getIs_gold() {
         return is_gold;
     }
-
+    /**
+     * Check if user is a moderator
+     * @return If user is a moderator
+     */
     public boolean getIs_mod() {
         return is_mod;
     }
-
+    /**
+     * Check if user is an employee
+     * @return If user is an employee
+     */
     public boolean getIs_employee() {
         return is_employee;
     }
-
+    /**
+     * Get karma gained from awardee
+     * @return Karma gained from awardee
+     */
     public int getAwardee_karma() {
         return awardee_karma;
     }
-
+    /**
+     * Get karma gained from awardee
+     * @return Karma gained from awardee
+     */
     public int getAwarder_karma() {
         return awarder_karma;
     }
-
+    /**
+     * Get karma gained from link
+     * @return Karma gained from link
+     */
     public int getLink_karma() {
         return link_karma;
     }
-
+    /**
+     * Get karma gained from post
+     * @return Karma gained from post
+     */
     public int getComment_karma() {
         return comment_karma;
     }
-
+    /**
+     * Get total karma on account
+     * @return Total karma on account
+     */
     public int getTotal_karma() {
         return total_karma;
     }
-
+    /**
+     * Get date account was created
+     * @return Date account was created
+     */
     public String getCreated() {
         return created;
     }
-
+    /**
+     * Get a comment on a post
+     * @return comment on a post
+     */
     public String getComment() {
         return post;
     }
-
+    /**
+     * Upvote on a post or comment
+     * @return Upvote on a post or comment
+     */
     public boolean isUpvote() {
         return upvote;
     }
-
+    /**
+     * Downvote on a post or comment
+     * @return Downvote on a post or comment
+     */
     public boolean isDownvote() {
         return downvote;
     }
@@ -174,79 +301,131 @@ public class UserAccount extends RedditComponent {
      * Setters
      */
 
+    /**
+     * Set the name associated with the account
+     * @param name The name associated with the account
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * Set the account ID
+     * @param id The account ID
+     */
     public void setId(String id) {
         this.id = id;
     }
-
+    /**
+     * Set the username
+     * @param user The username
+     */
     public void setUser(String user) {
         this.user = user;
     }
-
+    /**
+     * Set if account is verified
+     * @param verified If account is verified
+     */
     public void setVerified(boolean verified) {
         this.verified = verified;
     }
-
+    /**
+     * Set if e-mail has been verified on account
+     * @param has_verified_email If e-mail has been verified on account
+     */
     public void setHas_verified_email(boolean has_verified_email) {
         this.has_verified_email = has_verified_email;
     }
-
+    /**
+     * Set if account has gold status
+     * @param is_gold If account has gold status
+     */
     public void setIs_gold(boolean is_gold) {
         this.is_gold = is_gold;
     }
-
+    /**
+     * Set if user is a moderator
+     * @param is_mod If user is a moderator
+     */
     public void setIs_mod(boolean is_mod) {
         this.is_mod = is_mod;
     }
-
+    /**
+     * Set if user is an employee
+     * @param is_employee If user is an employee
+     */
     public void setIs_employee(boolean is_employee) {
         this.is_employee = is_employee;
     }
-
+    /**
+     * Set karma gained from awardee
+     * @param awardee_karma Karma gained from awardee
+     */
     public void setAwardee_karma(int awardee_karma) {
         this.awardee_karma = awardee_karma;
     }
-
+    /**
+     * Set karma gained from awarder
+     * @param awarder_karma Karma gained from awarder
+     */
     public void setAwarder_karma(int awarder_karma) {
         this.awarder_karma = awarder_karma;
     }
-
+    /**
+     * Set karma gained from link
+     * @param link_karma Karma gained from link
+     */
     public void setLink_karma(int link_karma) {
         this.link_karma = link_karma;
     }
-
+    /**
+     * Set karma gained from comment
+     * @param comment_karma Karma gained from comment
+     */
     public void setComment_karma(int comment_karma) {
         this.comment_karma = comment_karma;
     }
-
+    /**
+     * Set total karma on account
+     * @param total_karma Total karma on account
+     */
     public void setTotal_karma(int total_karma) {
         this.total_karma = total_karma;
     }
-
+    /**
+     * Set date when the account was created
+     * @param created Date when the account was created
+     */
     public void setCreated(String created) {
         this.created = created;
     }
-
+    /**
+     * Set a comment on a post
+     * @param comment A comment on a post
+     */
     public void setComment(String comment) {
         this.post = comment;
     }
-
+    /**
+     * Set an upvote on a post or comment
+     * @param upvote An upvote on a post or comment
+     */
     public void setUpvote(boolean upvote) {
         this.upvote = upvote;
     }
-
+    /**
+     * Set a downvote on a post or comment
+     * @param downvote A downvote on a post or comment
+     */
     public void setDownvote(boolean downvote) {
         this.downvote = downvote;
     }
 
+
     /**
      * Collects information about user and user account
-     * @throws InterruptedException
      */
-    public void analyze() throws InterruptedException, IOException, SQLException {
+    public void analyze() {
         JsonObject about = useEndpoint("/user/" + user +"/about");
         JsonObject data = (JsonObject) about.get("data");
 
@@ -301,7 +480,7 @@ public class UserAccount extends RedditComponent {
     /**
      * Calculate total upvotes from all comments/submissions
      * @param postMap Map of comments or submissions data
-     * @return
+     * @return total upvotes from all comments/submissions
      */
     public int upvotes(Map<String, List<Object>> postMap) {
         int ups = 0;
@@ -313,7 +492,7 @@ public class UserAccount extends RedditComponent {
     /**
      * Calculate total downvotes from all comments/submissions
      * @param postMap Map of comments or submissions data
-     * @return
+     * @return all downvotes from all comments/submissions
      */
     public int downvotes(Map<String, List<Object>> postMap) {
         int downs = 0;
@@ -325,7 +504,7 @@ public class UserAccount extends RedditComponent {
     /**
      * List of subreddits the user has commented and posted in
      * @param userSubreddits  Map of comments or submissions data
-     * @return
+     * @return List of subreddits the user has commented and posted in
      */
     public String subredditsList(Map<String, List<Object>> userSubreddits) {
         int i = 1;
@@ -382,10 +561,10 @@ public class UserAccount extends RedditComponent {
     }
 
     /**
-     * Finding similarities between comments (referenced as Strings)
+     * Finding similarities between comments/submissions (referenced as Strings)
      * @param x String 1 to compare to
      * @param y String 2 to compare to
-     * @return
+     * @return Similarity score between comments/submissions
      */
     public static double findSimilarity(String x, String y) {
         double maxLength = Double.max(x.length(), y.length());
@@ -397,11 +576,8 @@ public class UserAccount extends RedditComponent {
     /**
      * Generate random user from reddit
      * @return random username of reddit user
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws SQLException
      */
-    public String randomUser() throws IOException, InterruptedException, SQLException {
+    public String randomUser() {
         JsonObject random = useEndpoint("/r/all/comments?sort=random");
         JsonObject data = (JsonObject) random.get("data");
         JsonArray children = data.getAsJsonArray("children");

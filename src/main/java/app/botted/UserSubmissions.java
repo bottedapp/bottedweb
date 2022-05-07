@@ -9,30 +9,43 @@ import java.util.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * User Submissions class
+ */
 public class UserSubmissions extends UserAccount {
 
     /**
      * Private variables
      */
+
+    /**
+     * List of submission subreddits
+     */
     private List submissionSubreddits;
+    /**
+     * Map of submission id and submission body
+     */
     private Map<String, String> submissionMap;
+    /**
+     * Map of all submission data
+     */
     private Map<String, List<Object>> userSubmissions;
 
     /**
      * Default constructor
-     *
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
      */
     public UserSubmissions() throws IOException, InterruptedException {
         super();
     }
 
     /**
-     * Constructor with parameters
+     * Constructor with user parameter
      * @param user The username
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
+     * @throws SQLException SQL Exception
      */
     public UserSubmissions(String user) throws IOException, InterruptedException, SQLException {
         this.user = user;
@@ -40,13 +53,14 @@ public class UserSubmissions extends UserAccount {
     }
 
     /**
-     * Constructor
+     * Constructor with parameters
      * @param user The username
      * @param submissionSubreddits Subreddits commented in
      * @param submissionMap 25 latest submissions by user
      * @param userSubmissions Map of all user submission data
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
+     * @throws SQLException SQL Exception
      */
     public UserSubmissions(String user, List submissionSubreddits, Map<String, String> submissionMap, Map<String, List<Object>> userSubmissions) throws IOException, InterruptedException, SQLException {
         super(user);
@@ -59,14 +73,25 @@ public class UserSubmissions extends UserAccount {
      * Getters
      */
 
+    /**
+     * Get List of all submission subreddits
+     * @return Submission subreddits
+     */
     public List getSubmissionSubreddits() {
         return submissionSubreddits;
     }
-
+    /**
+     * Get Map of submmissions
+     * @return Submission map
+     */
     public Map<String, String> getSubmissionMap() {
         return submissionMap;
     }
 
+    /**
+     * Get Map of all submission data
+     * @return Map of User submission data
+     */
     public Map<String, List<Object>> getUserSubmissions() {
         return userSubmissions;
     }
@@ -75,25 +100,33 @@ public class UserSubmissions extends UserAccount {
      * Setters
      */
 
+    /**
+     * Set List of all submission subreddits
+     * @param submissionSubreddits List of all submission subreddits
+     */
     public void setSubmissionSubreddits(List submissionSubreddits) {
         this.submissionSubreddits = submissionSubreddits;
     }
-
+    /**
+     * Set Map of submission id and submission body
+     * @param submissionMap Map of submission id and submission body
+     */
     public void setSubmissionMap(Map<String, String> submissionMap) {
         this.submissionMap = submissionMap;
     }
-
+    /**
+     * Set Map of all submission data
+     * @param userSubmissions Map of all submission data
+     */
     public void setUserSubmissions(Map<String, List<Object>> userSubmissions) {
         this.userSubmissions = userSubmissions;
     }
 
     /**
      * Retrieves and assigns all submission data from Reddit API
-     * @throws IOException
-     * @throws InterruptedException
      */
     @Override
-    public void analyze() throws IOException, InterruptedException, SQLException {
+    public void analyze() {
         submissionSubreddits = new ArrayList();
         submissionMap = new LinkedHashMap<>();
         userSubmissions = new LinkedHashMap<>();

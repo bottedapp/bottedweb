@@ -14,11 +14,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Spring Boot Web Controller class
+ */
 @Controller
 public class WebController {
+    /**
+     * SQL Database source
+     */
     @Autowired
     private DataSource dataSource;
 
+    /**
+     * Index page / Result page
+     * @param m model
+     * @param name the username
+     * @param random generate random username
+     * @return index page or result page
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
+     * @throws SQLException SQL Exception
+     */
     @RequestMapping("/")
     public String index(Model m, @RequestParam(value = "u", required = false) String name, String random) throws IOException, InterruptedException, SQLException {
 
@@ -61,18 +77,14 @@ public class WebController {
             return "result";
         }
     }
+
+    /**
+     * About page
+     * @return about page
+     */
     @GetMapping("/about")
     public String about() {
         return "about";
-    }
-    private void db() throws SQLException {
-            Statement stmt = dataSource.getConnection().createStatement();
-            //stmt.executeUpdate("CREATE TABLE ticks (tick timestamp)");
-            //stmt.executeUpdate("INSERT INTO ticks VALUES (now())");
-            ResultSet rs = stmt.executeQuery("SELECT * FROM prepro_data");
-            while (rs.next()) {
-                System.out.println(rs.getString(1));
-            }
     }
 }
 

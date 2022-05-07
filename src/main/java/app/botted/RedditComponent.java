@@ -14,35 +14,59 @@ import java.util.Base64;
 import java.io.IOException;
 import com.google.gson.*;
 
+/**
+ * Reddit API Component class
+ */
 public class RedditComponent {
 
     /**
      * Private variables
      */
+
+    /**
+     * Reddit Base Url
+     */
     private final String BASE_URL = "https://www.reddit.com";
+    /**
+     * Reddit OAUTH Url
+     */
     private final String OAUTH_URL = "https://oauth.reddit.com";
+    /**
+     * Client ID
+     */
     private final String clientId = "GgPNctP2KQdth-iX6aMGUQ";
+    /**
+     * Client Secret
+     */
     private final String clientSecret = "6zov1gDWJ8Ij60yH3L7q6N_LnPUZHA";
+    /**
+     * User Agent
+     */
     private final String userAgent = "botted 0.0.1";
+    /**
+     * Reddit API Token
+     */
     private String token, tokenDb;
+    /**
+     * Reddit API Token Expiration Date
+     */
     private long expirationDate, expirationDateDb;
+    /**
+     * Username
+     */
     private String user;
 
     /**
      * Default constructor
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public RedditComponent() throws IOException, InterruptedException {
+    public RedditComponent() {
     }
 
     /**
-     * Constructor with parameters
+     * Constructor with user parameter
      * @param user The reddit user
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public RedditComponent(String user) throws IOException, InterruptedException {
+    public RedditComponent(String user) {
         this.user = user;
     }
 
@@ -50,10 +74,17 @@ public class RedditComponent {
      * Getters
      */
 
+    /**
+     * Get username
+     * @return user
+     */
     public String getUser() {
         return user;
     }
-
+    /**
+     * Get auth token
+     * @return token
+     */
     public String getToken() {
         return token;
     }
@@ -62,10 +93,17 @@ public class RedditComponent {
      * Setters
      */
 
+    /**
+     * Set username
+     * @param user the username
+     */
     public void setUser(String user) {
         this.user = user;
     }
-
+    /**
+     * Set auth token
+     * @param token the auth token
+     */
     public void setToken(String token) {
         this.token = token;
     }
@@ -75,7 +113,8 @@ public class RedditComponent {
      * Generates authorization header
      * Opens the connection and gets response from the server
      * Sets access token and expiration time
-     * @throws IOException
+     * @throws IOException I/O exception
+     * @throws SQLException SQL Exception
      */
     public void connect() throws IOException, SQLException {
         //String dbUrl = System.getenv("JDBC_DATABASE_URL");
@@ -111,11 +150,10 @@ public class RedditComponent {
 
     /**
      * Ensure the connection is authenticated
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws AuthenticationException
+     * @throws IOException I/O exception
+     * @throws SQLException SQL exception
      */
-    public void ensureConnection() throws IOException, InterruptedException, AuthenticationException, SQLException {
+    public void ensureConnection() throws IOException, SQLException {
         // There is no token
         if (token == null || Instant.now().getEpochSecond() > expirationDate) {
             connect();
@@ -123,13 +161,11 @@ public class RedditComponent {
     }
 
     /**
-     * Send reddit endpoint request to reddit api and get Json result
+     * Send reddit endpoint request to reddit api and get Json Object result
      * @param endpointPath Path for end point
      * @return JsonObject with reddit api data
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public JsonObject useEndpoint(String endpointPath) throws IOException, InterruptedException, SQLException {
+    public JsonObject useEndpoint(String endpointPath) {
         try {
             ensureConnection();
             Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
@@ -145,10 +181,8 @@ public class RedditComponent {
      * Use end point for connection with JSON array return value
      * @param endpointPath Path for end point
      * @return The end point response array
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public JsonArray useEndpointArray(String endpointPath) throws IOException, InterruptedException, SQLException {
+    public JsonArray useEndpointArray(String endpointPath) {
        try {
            ensureConnection();
            Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
@@ -162,9 +196,10 @@ public class RedditComponent {
 
     /**
      * Get input in form of username/comment/submission/url
-     * @returns username of user
+     * @param input input entered
+     * @return the username
      */
-    public String readInput(String input) throws IOException, InterruptedException, SQLException {
+    public String readInput(String input) {
         String user = "";
         String endpoint = "";
         if (!input.contains("/")) {

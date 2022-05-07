@@ -13,28 +13,65 @@ import java.time.Instant;
 import java.util.Base64;
 import java.io.IOException;
 
+/**
+ * Botted Request class
+ */
 public class BottedRequest {
 
     /**
      * Private and protected variables
      */
+
+    /**
+     * Reddit Base Url
+     */
     private final String BASE_URL = "https://www.reddit.com";
+    /**
+     * Reddit OAUTH Url
+     */
     private final String OAUTH_URL = "https://oauth.reddit.com";
+    /**
+     * Client ID
+     */
     private final String clientId = "_JW4OUQt7_krXZd420ycuw";
+    /**
+     * Client Secret
+     */
     private final String clientSecret = "BJFz2IB-EMvu_ye3EZ66oOcoDzWgwg";
-    private final String userAgent = "botted 0.0.1";
+    /**
+     * User Agent
+     */
+    private final String userAgent = "botted 1.0";
+    /**
+     * Username
+     */
     private final String username = "bottedapp";
+    /**
+     * Password
+     */
     private final String password = "mc3.edu!";
+    /**
+     * Reddit API Token
+     */
     private String token, tokenDb;
+    /**
+     * Reddit API Token Expiration Date
+     */
     private long expirationDate, expirationDateDb;
+    /**
+     * Reddit Subreddit
+     */
     private String subreddit;
+    /**
+     * RedditComponent
+     */
     private RedditComponent reddit;
 
     /**
      * Default Constructor
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws SQLException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
+     * @throws SQLException SQL Exception
      */
     public BottedRequest() throws IOException, InterruptedException, SQLException {
         reddit = new RedditComponent();
@@ -47,14 +84,25 @@ public class BottedRequest {
      * Getters
      */
 
+    /**
+     * Get Reddit API Token
+     * @return auth token
+     */
     public String getToken() {
         return token;
     }
+    /**
+     * Get Reddit API Token Expiration Date
+     * @return auth token expiration date
+     */
 
     public long getExpirationDate() {
         return expirationDate;
     }
-
+    /**
+     * Get Reddit Subreddit
+     * @return Reddit subreddit
+     */
     public String getSubreddit() {
         return subreddit;
     }
@@ -63,14 +111,24 @@ public class BottedRequest {
      * Setters
      */
 
+    /**
+     * Set Reddit API Token
+     * @param token Auth token
+     */
     public void setToken(String token) {
         this.token = token;
     }
-
+    /**
+     * Set Reddit API Token Expiration
+     * @param expirationDate Auth token expiration date
+     */
     public void setExpirationDate(long expirationDate) {
         this.expirationDate = expirationDate;
     }
-
+    /**
+     * Set Reddit Subreddit
+     * @param subreddit Reddit subreddit
+     */
     public void setSubreddit(String subreddit) {
         this.subreddit = subreddit;
     }
@@ -78,11 +136,10 @@ public class BottedRequest {
 
     /**
      * Connect to Reddit API using bottedapp user
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws SQLException
+     * @throws IOException I/O Exception
+     * @throws SQLException SQL Exception
      */
-    public void userConnect() throws IOException, InterruptedException, SQLException {
+    public void userConnect() throws IOException, SQLException {
         //String dbUrl = System.getenv("JDBC_DATABASE_URL");
         String dbUrl = "jdbc:postgresql://ec2-34-194-158-176.compute-1.amazonaws.com:5432/da2g0o7m136sp5?password=7b04e1735374fcb6ba8f984fdcbcaaf5bada71f4d85df12c0e62cab2ca2b4022&sslmode=require&user=fzbeyehwmqhuxn";
         java.sql.Connection sql = DriverManager.getConnection(dbUrl);
@@ -115,10 +172,10 @@ public class BottedRequest {
 
     /**
      * Get submissions summoning bottedapp
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
      */
-    public void getSubmissions() throws IOException, InterruptedException, SQLException {
+    public void getSubmissions() throws IOException, InterruptedException {
         JsonObject posts = (JsonObject) useEndpoint("/r/all/search?q=bottedapp");
         JsonObject data = posts.getAsJsonObject("data");
         JsonArray children = (JsonArray) data.get("children");
@@ -141,11 +198,10 @@ public class BottedRequest {
 
     /**
      * Get comments summoning bottedapp
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws SQLException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
      */
-    public void getComments() throws IOException, InterruptedException, SQLException {
+    public void getComments() throws IOException, InterruptedException{
         Connection conn = Jsoup.connect("https://api.pushshift.io/reddit/search/comment/?q=bottedapp&after=2h").ignoreContentType(true).ignoreHttpErrors(true);
         Connection.Response res = conn.execute();
         JsonArray object = JsonParser.parseString(res.body()).getAsJsonObject().getAsJsonArray("data");
@@ -169,11 +225,10 @@ public class BottedRequest {
      * get username/comment/submission from reddit comment/post
      * @param body text of post
      * @param id id of post
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws SQLException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
      */
-    public void getResult(String body,String id) throws IOException, InterruptedException, SQLException {
+    public void getResult(String body,String id) throws IOException, InterruptedException {
         try {
             String[] split = body.split("bottedapp ");
             String[] input = split[1].replace("\"","").replace("\\","").split(" ");
@@ -191,12 +246,10 @@ public class BottedRequest {
 
     /**
      * Scan comment/submission to check if bottedapp has already replied
-     * @param endpoint
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
+     * @param endpoint endpoint of Reddit api comment/submission json
+     * @return if comment has already been replied to
      */
-    public boolean scanReplies(String endpoint) throws IOException, InterruptedException {
+    public boolean scanReplies(String endpoint) {
         JsonArray comments = (JsonArray) useEndpointArray(endpoint);
         for (JsonElement item : comments) {
             JsonArray data = item.getAsJsonObject().getAsJsonObject("data").getAsJsonArray("children");
@@ -225,10 +278,8 @@ public class BottedRequest {
      * Send reddit endpoint request to reddit api and get Json result
      * @param endpointPath endpoint of comment/post
      * @return JsonObject with reddit api data
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public JsonElement useEndpoint (String endpointPath) throws IOException, InterruptedException {
+    public JsonElement useEndpoint (String endpointPath) {
         try {
             Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
             connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
@@ -243,10 +294,8 @@ public class BottedRequest {
      * Send reddit endpoint request to reddit api and get Json result
      * @param endpointPath endpoint of comment/post
      * @return JsonArray with reddit api data
-     * @throws IOException
-     * @throws InterruptedException
      */
-    public JsonElement useEndpointArray(String endpointPath) throws IOException, InterruptedException {
+    public JsonElement useEndpointArray(String endpointPath) {
         try {
             Connection connection = Jsoup.connect(OAUTH_URL + endpointPath);
             connection.header("Authorization", "bearer " + token).ignoreContentType(true).userAgent(userAgent);
@@ -261,10 +310,9 @@ public class BottedRequest {
      * Reply to comment/post with result of whether user is a bot or human
      * @param id is of comment/post
      * @param response response of whether user is bot or human
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
      */
-    public void replyComment(String id, String response) throws IOException, InterruptedException {
+    public void replyComment(String id, String response) throws IOException {
         Connection connect = Jsoup.connect(OAUTH_URL + "/api/comment").ignoreContentType(true).ignoreHttpErrors(true).postDataCharset("UTF-8")
                 .data("api_type", "json")
                 .data("text", response)

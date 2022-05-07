@@ -9,29 +9,43 @@ import java.util.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * User Comments class
+ */
 public class UserComments extends UserAccount {
 
     /**
      * Private variables
      */
+
+    /**
+     * List of comment subreddits
+     */
     private List commentSubreddits;
+    /**
+     * Map of comment id and comment selftext
+     */
     private Map<String, String> commentMap;
+    /**
+     * Map of all comment data
+     */
     private Map<String, List<Object>> userComments;
 
     /**
      * Default constructor
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
      */
     public UserComments() throws IOException, InterruptedException {
         super();
     }
 
     /**
-     * Constructor with parameters
+     * Constructor with user parameter
      * @param user The username
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
+     * @throws SQLException SQL Exception
      */
     public UserComments(String user) throws IOException, InterruptedException, SQLException {
         this.user = user;
@@ -39,13 +53,14 @@ public class UserComments extends UserAccount {
     }
 
     /**
-     * Constructor
+     * Constructor with parameters
      * @param user The username
      * @param commentSubreddits Subreddits commented in
-     * @param commentSubreddits 25 latest comments by user
+     * @param commentMap Map of comment id and comment selftext
      * @param userComments Map of all user comment data
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException I/O Exception
+     * @throws InterruptedException Interrupted Exception
+     * @throws SQLException SQL Exception
      */
     public UserComments(String user, List commentSubreddits, Map<String, String> commentMap, Map<String, List<Object>> userComments) throws IOException, InterruptedException, SQLException {
         super(user);
@@ -57,35 +72,52 @@ public class UserComments extends UserAccount {
     /**
      * Getters
      */
-
+    /**
+     * Get list of all comment subreddits
+     * @return Comment subreddits
+     */
     public List getCommentSubreddits() {
         return commentSubreddits;
     }
-
+    /**
+     * Get Map of comments
+     * @return Map of comments
+     */
     public Map<String, String> getCommentMap() { return commentMap; }
-
+    /**
+     * Get Map of all comment data
+     * @return Map of all comment data
+     */
     public Map<String, List<Object>> getUserComments() { return userComments; }
 
     /**
      * Setters
      */
 
+    /**
+     * Set List of all comment subreddits
+     * @param commentSubreddits List of all comment subreddits
+     */
     public void setCommentSubreddits(List commentSubreddits) {
         this.commentSubreddits = commentSubreddits;
     }
-
+    /**
+     * Set Map of comment id and comment selftext
+     * @param commentMap Map of comment id and comment selftext
+     */
     public void setCommentMap(Map<String, String> commentMap) { this.commentMap = commentMap; }
-
+    /**
+     * Set Map of all comment data
+     * @param userComments Map of all comment data
+     */
     public void setUserComments(Map<String, List<Object>> userComments) { this.userComments = userComments; }
 
 
     /**
      * Retrieves and assigns all comments data from Reddit API
-     * @throws IOException
-     * @throws InterruptedException
      */
     @Override
-    public void analyze() throws IOException, InterruptedException, SQLException {
+    public void analyze() {
         commentSubreddits = new ArrayList<>();
         commentMap = new LinkedHashMap<>();
         userComments = new LinkedHashMap<>();
