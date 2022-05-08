@@ -34,8 +34,9 @@
 			<div class="menu_body_item_wrapper">
 				<ul class="menu_list">
 					<li><a href="https://botted.app">Home</a></li>
-					<li><a href="/about">About</a></li>
-					<li><a href="http://github.com/bottedapp/botted">Github</a></li>
+					<li><a href="https://botted.app/about">About</a></li>
+					<li><a href="http://github.com/bottedapp/bottedweb">Github</a></li>
+					<li><a href="https://botted.app/javadoc">Javadoc</a></li>
 					<li><a href="mailto:bottedapp@gmail.com">Contact Us</a></li>
 				</ul>
 			</div>
