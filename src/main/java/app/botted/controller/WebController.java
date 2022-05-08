@@ -40,9 +40,7 @@ public class WebController {
 
         if (name == null && random == null) {
             return "index";
-        }
-        else if (random !=  null) {
-
+        } else if (random !=  null) {
             RedditComponent reddit = new RedditComponent();
             String redditor = new UserAccount().randomUser();
             RedditComponent user = new UserAccount(redditor);
@@ -57,8 +55,7 @@ public class WebController {
             m.addAttribute("isBot", isaBot);
 
             return "result";
-        }
-        else {
+        } else {
             RedditComponent reddit = new RedditComponent();
             String redditor = reddit.readInput(name);
             RedditComponent user = new UserAccount(redditor);
@@ -74,6 +71,7 @@ public class WebController {
             m.addAttribute("submissions", submissions);
             m.addAttribute("isBot", isaBot);
             m.addAttribute("db", "");
+
             return "result";
         }
     }
@@ -86,6 +84,11 @@ public class WebController {
     public String about() {
         return "about";
     }
+
+    /**
+     * Javadoc Page
+     * @return Javadoc Documentation
+     */
     @GetMapping("/javadoc")
     public String javadoc() {
         return "javadoc";
