@@ -9,4 +9,4 @@ Botted - https://botted.app \
 GitHub - https://github.com/bottedapp/bottedweb \
 Heroku – https://bottedapp.herokuapp.com \
 Javadoc - https://botted.app/javadoc \
-Contact - bottedapp@gmail.com | https://reddit.com/user/bottedapp \
+Contact - bottedapp@gmail.com | https://reddit.com/user/bottedapp
