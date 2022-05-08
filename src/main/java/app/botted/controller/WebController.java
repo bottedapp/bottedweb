@@ -86,5 +86,10 @@ public class WebController {
     public String about() {
         return "about";
     }
+    @GetMapping("/javadoc")
+    public String javadoc() {
+        return "javadoc";
+    }
+
 }
 

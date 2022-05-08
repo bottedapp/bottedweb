@@ -226,9 +226,8 @@ public class BottedRequest {
      * @param body text of post
      * @param id id of post
      * @throws IOException I/O Exception
-     * @throws InterruptedException Interrupted Exception
      */
-    public void getResult(String body,String id) throws IOException, InterruptedException {
+    public void getResult(String body,String id) throws IOException {
         try {
             String[] split = body.split("bottedapp ");
             String[] input = split[1].replace("\"","").replace("\\","").split(" ");
